@@ -190,10 +190,33 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
   const bd = { ...outerBd, ...innerBd };
   const vi = (bd.visual_identity as Record<string, unknown>) || (outerBd.visual_identity as Record<string, unknown>) || {};
   const bv = (bd.brand_voice as Record<string, unknown>) || (outerBd.brand_voice as Record<string, unknown>) || {};
+  const messaging = (bd.messaging as Record<string, unknown>) || {};
   const toneKw = Array.isArray(bv.tone_keywords) ? (bv.tone_keywords as string[]) : [];
   const bdValues = Array.isArray(bd.values) ? (bd.values as string[]) : toneKw;
-  const keyMessages = Array.isArray(bd.key_messages) ? (bd.key_messages as string[]) : [];
-  const usps = Array.isArray(bd.usps) ? (bd.usps as string[]) : [];
+  // Key messages: try bd.key_messages, then messaging.key_messages, then build from messaging.primary/secondary/value_props
+  let keyMessages: string[] = [];
+  if (Array.isArray(bd.key_messages)) {
+    keyMessages = bd.key_messages as string[];
+  } else if (Array.isArray(messaging.key_messages)) {
+    keyMessages = messaging.key_messages as string[];
+  } else {
+    // Build from messaging object fields
+    const msgParts: string[] = [];
+    if (messaging.primary && typeof messaging.primary === 'string') msgParts.push(messaging.primary as string);
+    if (messaging.secondary && typeof messaging.secondary === 'string') msgParts.push(messaging.secondary as string);
+    if (Array.isArray(messaging.value_props)) {
+      msgParts.push(...(messaging.value_props as any[]).map((v: any) => typeof v === 'string' ? v : safeStr(v)));
+    }
+    if (msgParts.length > 0) keyMessages = msgParts;
+  }
+  // USPs: try bd.usps, then messaging.value_props
+  let usps: string[] = [];
+  if (Array.isArray(bd.usps)) {
+    usps = bd.usps as string[];
+  } else if (Array.isArray(messaging.value_props) && keyMessages.length === 0) {
+    // Only use value_props as USPs if they weren't already used as key messages
+    usps = (messaging.value_props as any[]).map((v: any) => typeof v === 'string' ? v : safeStr(v));
+  }
   // Personas can be array or dict
   let personas: any[] = [];
   if (Array.isArray(bd.target_personas)) {
@@ -242,6 +265,18 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
         <IntelCard>
           <IntelLabel>Brand Voice</IntelLabel>
           <p style={{ color: '#aaa', fontSize: 13, lineHeight: 1.6 }}>{safeStr(bv.description || bv.tone || bd.voice)}</p>
+          {bv.personality && (
+            <div style={{ marginTop: 8 }}>
+              <span style={{ color: '#555', fontSize: 11 }}>Personality: </span>
+              <span style={{ color: '#ccc', fontSize: 13 }}>{safeStr(bv.personality)}</span>
+            </div>
+          )}
+          {bv.language_style && (
+            <div style={{ marginTop: 6 }}>
+              <span style={{ color: '#555', fontSize: 11 }}>Style: </span>
+              <span style={{ color: '#ccc', fontSize: 13 }}>{safeStr(bv.language_style)}</span>
+            </div>
+          )}
           {bdValues.length > 0 && (
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 10 }}>
               {bdValues.map((v: string, i: number) => (
@@ -334,17 +369,22 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
           <IntelLabel>Brand Archetypes</IntelLabel>
           {Array.isArray(bd.brand_archetypes) ? (
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-              {(bd.brand_archetypes as any[]).map((arch: any, i: number) => (
-                <div key={i} style={{ background: '#0d0d0d', border: `1px solid ${i === 0 ? 'rgba(0,212,255,0.3)' : '#1a1a1a'}`, borderRadius: 8, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                    <div style={{ color: '#fff', fontSize: 15, fontWeight: 700 }}>{arch.name || arch.archetype || 'Archetype'}</div>
-                    <span style={{ background: i === 0 ? 'rgba(0,212,255,0.1)' : 'rgba(255,255,255,0.04)', border: `1px solid ${i === 0 ? 'rgba(0,212,255,0.3)' : '#1a1a1a'}`, color: i === 0 ? '#00d4ff' : '#666', padding: '2px 10px', borderRadius: 20, fontSize: 10, fontWeight: 600 }}>
-                      {i === 0 ? 'Primary' : 'Secondary'}
-                    </span>
+              {(bd.brand_archetypes as any[]).map((arch: any, i: number) => {
+                const isString = typeof arch === 'string';
+                const name = isString ? arch : (arch.name || arch.archetype || 'Archetype');
+                const desc = isString ? '' : (arch.description || arch.fit || '');
+                return (
+                  <div key={i} style={{ background: '#0d0d0d', border: `1px solid ${i === 0 ? 'rgba(0,212,255,0.3)' : '#1a1a1a'}`, borderRadius: 8, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: desc ? 8 : 0 }}>
+                      <div style={{ color: '#fff', fontSize: 15, fontWeight: 700 }}>{name}</div>
+                      <span style={{ background: i === 0 ? 'rgba(0,212,255,0.1)' : 'rgba(255,255,255,0.04)', border: `1px solid ${i === 0 ? 'rgba(0,212,255,0.3)' : '#1a1a1a'}`, color: i === 0 ? '#00d4ff' : '#666', padding: '2px 10px', borderRadius: 20, fontSize: 10, fontWeight: 600 }}>
+                        {i === 0 ? 'Primary' : 'Secondary'}
+                      </span>
+                    </div>
+                    {desc && <p style={{ color: '#888', fontSize: 12, lineHeight: 1.6, margin: 0 }}>{desc}</p>}
                   </div>
-                  <p style={{ color: '#888', fontSize: 12, lineHeight: 1.6, margin: 0 }}>{arch.description || arch.fit || ''}</p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : typeof bd.brand_archetypes === 'object' ? (
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
@@ -385,10 +425,10 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
           <p style={{ color: '#aaa', fontSize: 13, lineHeight: 1.6 }}>{safeStr(bd.positioning)}</p>
         </IntelCard>
       ) : null}
-      {bd.tagline ? (
+      {(bd.tagline || messaging.tagline || (messaging.primary && typeof messaging.primary === 'string')) ? (
         <IntelCard style={{ gridColumn: '1/-1' }}>
           <IntelLabel>Tagline</IntelLabel>
-          <p style={{ color: '#fff', fontSize: 18, fontWeight: 700, fontStyle: 'italic' }}>&ldquo;{safeStr(bd.tagline)}&rdquo;</p>
+          <p style={{ color: '#fff', fontSize: 18, fontWeight: 700, fontStyle: 'italic' }}>&ldquo;{safeStr(bd.tagline || messaging.tagline || messaging.primary)}&rdquo;</p>
         </IntelCard>
       ) : null}
     </div>
