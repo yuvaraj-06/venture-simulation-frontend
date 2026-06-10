@@ -213,6 +213,11 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
   } else if (rawPalette && typeof rawPalette === 'object') {
     // Extract color values from palette object
     colors = Object.values(rawPalette as Record<string, string>).filter(v => typeof v === 'string' && v.startsWith('#')).slice(0, 6);
+  } else if (Array.isArray(vi.primary_colors) || Array.isArray(vi.secondary_colors)) {
+    // Handle primary_colors + secondary_colors format
+    const primary = Array.isArray(vi.primary_colors) ? (vi.primary_colors as string[]) : [];
+    const secondary = Array.isArray(vi.secondary_colors) ? (vi.secondary_colors as string[]) : [];
+    colors = [...primary, ...secondary].filter(v => typeof v === 'string' && (v.startsWith('#') || v.startsWith('rgb'))).slice(0, 8);
   } else {
     colors = [vi.primary_color, vi.secondary_color, vi.accent_color].filter(Boolean) as string[];
   }
