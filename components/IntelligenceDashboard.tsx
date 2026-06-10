@@ -4,6 +4,22 @@
 import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 
+// Safe render helper: ensures a value is always a string for JSX rendering
+function safeStr(val: any): string {
+  if (val === null || val === undefined) return '';
+  if (typeof val === 'string') return val;
+  if (typeof val === 'number' || typeof val === 'boolean') return String(val);
+  if (Array.isArray(val)) return val.filter(v => typeof v === 'string').join(', ');
+  if (typeof val === 'object') {
+    // Try common string fields
+    const s = val.position_statement || val.statement || val.description || val.summary || val.text || val.message || val.name || val.title || val.primary_font || val.primary || '';
+    if (s) return String(s);
+    // Fallback to JSON
+    try { return JSON.stringify(val); } catch { return '[complex object]'; }
+  }
+  return String(val);
+}
+
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 interface IntelligenceData {
@@ -188,8 +204,18 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
       description: val?.pain_point || val?.description || val?.company_type || JSON.stringify(val).slice(0, 150),
     }));
   }
-  const themes = Array.isArray(bd.content_themes) ? (bd.content_themes as string[]) : [];
-  const colors = Array.isArray(vi.color_palette) ? (vi.color_palette as string[]) : [vi.primary_color, vi.secondary_color, vi.accent_color].filter(Boolean) as string[];
+  const themesRaw = Array.isArray(bd.content_themes) ? (bd.content_themes as any[]) : [];
+  const themes: string[] = themesRaw.map((t: any) => typeof t === 'string' ? t : (t?.theme || t?.name || t?.title || safeStr(t)));
+  const rawPalette = vi.color_palette;
+  let colors: string[] = [];
+  if (Array.isArray(rawPalette)) {
+    colors = rawPalette as string[];
+  } else if (rawPalette && typeof rawPalette === 'object') {
+    // Extract color values from palette object
+    colors = Object.values(rawPalette as Record<string, string>).filter(v => typeof v === 'string' && v.startsWith('#')).slice(0, 6);
+  } else {
+    colors = [vi.primary_color, vi.secondary_color, vi.accent_color].filter(Boolean) as string[];
+  }
 
   return (
     <div className="sim-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
@@ -202,15 +228,15 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
               <div key={i} style={{ width: 32, height: 32, borderRadius: 6, background: c, border: '1px solid rgba(255,255,255,0.1)' }} title={c} />
             ))}
           </div>
-          {vi.typography && <p style={{ color: '#888', fontSize: 12, lineHeight: 1.5 }}>{String(vi.typography)}</p>}
+          {vi.typography && <p style={{ color: '#888', fontSize: 12, lineHeight: 1.5 }}>{safeStr(vi.typography)}</p>}
         </IntelCard>
       )}
 
       {/* Brand Voice */}
-      {(bv.description || bd.voice) && (
+      {(bv.description || bv.tone || bd.voice) && (
         <IntelCard>
           <IntelLabel>Brand Voice</IntelLabel>
-          <p style={{ color: '#aaa', fontSize: 13, lineHeight: 1.6 }}>{String(bv.description || bd.voice)}</p>
+          <p style={{ color: '#aaa', fontSize: 13, lineHeight: 1.6 }}>{safeStr(bv.description || bv.tone || bd.voice)}</p>
           {bdValues.length > 0 && (
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 10 }}>
               {bdValues.map((v: string, i: number) => (
@@ -254,8 +280,8 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             {personas.map((p: any, i: number) => (
               <div key={i} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 8, padding: 16, flex: '1 1 250px', minWidth: 200 }}>
-                <div style={{ color: '#fff', fontSize: 14, fontWeight: 600, marginBottom: 6 }}>{String(p.name || '')}</div>
-                <div style={{ color: '#888', fontSize: 12, lineHeight: 1.5 }}>{String(p.description || '')}</div>
+                <div style={{ color: '#fff', fontSize: 14, fontWeight: 600, marginBottom: 6 }}>{safeStr(p.name || '')}</div>
+                <div style={{ color: '#888', fontSize: 12, lineHeight: 1.5 }}>{safeStr(p.description || '')}</div>
               </div>
             ))}
           </div>
@@ -266,7 +292,24 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
       {bd.competitive_positioning && (
         <IntelCard style={{ gridColumn: '1/-1' }}>
           <IntelLabel>Competitive Positioning</IntelLabel>
-          <p style={{ color: '#aaa', fontSize: 13, lineHeight: 1.6 }}>{String(bd.competitive_positioning)}</p>
+          {typeof bd.competitive_positioning === 'object' && !Array.isArray(bd.competitive_positioning) ? (
+            <div>
+              {(bd.competitive_positioning as any).position_statement && <p style={{ color: '#aaa', fontSize: 13, lineHeight: 1.6, marginBottom: 10 }}>{String((bd.competitive_positioning as any).position_statement)}</p>}
+              {(bd.competitive_positioning as any).category && <span style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', color: '#00d4ff', padding: '3px 10px', borderRadius: 20, fontSize: 11, marginRight: 8 }}>{String((bd.competitive_positioning as any).category)}</span>}
+              {Array.isArray((bd.competitive_positioning as any).differentiators) && (
+                <div style={{ marginTop: 10 }}>
+                  {((bd.competitive_positioning as any).differentiators as any[]).slice(0, 5).map((d: any, i: number) => (
+                    <div key={i} style={{ display: 'flex', gap: 8, padding: '4px 0' }}>
+                      <span style={{ color: '#00ff88', fontSize: 12 }}>✓</span>
+                      <span style={{ color: '#888', fontSize: 12 }}>{typeof d === 'string' ? d : (d?.feature || d?.name || d?.title || safeStr(d))}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <p style={{ color: '#aaa', fontSize: 13, lineHeight: 1.6 }}>{safeStr(bd.competitive_positioning)}</p>
+          )}
         </IntelCard>
       )}
 
@@ -281,42 +324,66 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
       )}
 
       {/* Brand Archetypes */}
-      {Array.isArray(bd.brand_archetypes) && bd.brand_archetypes.length > 0 && (
+      {bd.brand_archetypes && (
         <IntelCard style={{ gridColumn: '1/-1' }}>
           <IntelLabel>Brand Archetypes</IntelLabel>
-          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-            {(bd.brand_archetypes as any[]).map((arch: any, i: number) => (
-              <div key={i} style={{ background: '#0d0d0d', border: `1px solid ${i === 0 ? 'rgba(0,212,255,0.3)' : '#1a1a1a'}`, borderRadius: 8, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                  <div style={{ color: '#fff', fontSize: 15, fontWeight: 700 }}>{arch.name || arch.archetype || 'Archetype'}</div>
-                  <span style={{ background: i === 0 ? 'rgba(0,212,255,0.1)' : 'rgba(255,255,255,0.04)', border: `1px solid ${i === 0 ? 'rgba(0,212,255,0.3)' : '#1a1a1a'}`, color: i === 0 ? '#00d4ff' : '#666', padding: '2px 10px', borderRadius: 20, fontSize: 10, fontWeight: 600 }}>
-                    {i === 0 ? 'Primary' : 'Secondary'}
-                  </span>
+          {Array.isArray(bd.brand_archetypes) ? (
+            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+              {(bd.brand_archetypes as any[]).map((arch: any, i: number) => (
+                <div key={i} style={{ background: '#0d0d0d', border: `1px solid ${i === 0 ? 'rgba(0,212,255,0.3)' : '#1a1a1a'}`, borderRadius: 8, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                    <div style={{ color: '#fff', fontSize: 15, fontWeight: 700 }}>{arch.name || arch.archetype || 'Archetype'}</div>
+                    <span style={{ background: i === 0 ? 'rgba(0,212,255,0.1)' : 'rgba(255,255,255,0.04)', border: `1px solid ${i === 0 ? 'rgba(0,212,255,0.3)' : '#1a1a1a'}`, color: i === 0 ? '#00d4ff' : '#666', padding: '2px 10px', borderRadius: 20, fontSize: 10, fontWeight: 600 }}>
+                      {i === 0 ? 'Primary' : 'Secondary'}
+                    </span>
+                  </div>
+                  <p style={{ color: '#888', fontSize: 12, lineHeight: 1.6, margin: 0 }}>{arch.description || arch.fit || ''}</p>
                 </div>
-                <p style={{ color: '#888', fontSize: 12, lineHeight: 1.6, margin: 0 }}>{arch.description || arch.fit || ''}</p>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : typeof bd.brand_archetypes === 'object' ? (
+            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+              {(bd.brand_archetypes as any).primary && (
+                <div style={{ background: '#0d0d0d', border: '1px solid rgba(0,212,255,0.3)', borderRadius: 8, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                    <div style={{ color: '#fff', fontSize: 15, fontWeight: 700 }}>{String((bd.brand_archetypes as any).primary)}</div>
+                    <span style={{ background: 'rgba(0,212,255,0.1)', border: '1px solid rgba(0,212,255,0.3)', color: '#00d4ff', padding: '2px 10px', borderRadius: 20, fontSize: 10, fontWeight: 600 }}>Primary</span>
+                  </div>
+                </div>
+              )}
+              {(bd.brand_archetypes as any).secondary && (
+                <div style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 8, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                    <div style={{ color: '#fff', fontSize: 15, fontWeight: 700 }}>{String((bd.brand_archetypes as any).secondary)}</div>
+                    <span style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1a1a1a', color: '#666', padding: '2px 10px', borderRadius: 20, fontSize: 10, fontWeight: 600 }}>Secondary</span>
+                  </div>
+                </div>
+              )}
+              {(bd.brand_archetypes as any).rationale && (
+                <p style={{ color: '#888', fontSize: 12, lineHeight: 1.6, width: '100%' }}>{String((bd.brand_archetypes as any).rationale)}</p>
+              )}
+            </div>
+          ) : null}
         </IntelCard>
       )}
 
       {/* Legacy flat format fallback */}
-      {bd.personality && !bv.description ? (
+      {bd.personality && !bv.description && !bv.tone ? (
         <IntelCard>
           <IntelLabel>Personality</IntelLabel>
-          <p style={{ color: '#aaa', fontSize: 13, lineHeight: 1.6 }}>{String(bd.personality)}</p>
+          <p style={{ color: '#aaa', fontSize: 13, lineHeight: 1.6 }}>{safeStr(bd.personality)}</p>
         </IntelCard>
       ) : null}
       {bd.positioning && !bd.competitive_positioning ? (
         <IntelCard>
           <IntelLabel>Market Positioning</IntelLabel>
-          <p style={{ color: '#aaa', fontSize: 13, lineHeight: 1.6 }}>{String(bd.positioning)}</p>
+          <p style={{ color: '#aaa', fontSize: 13, lineHeight: 1.6 }}>{safeStr(bd.positioning)}</p>
         </IntelCard>
       ) : null}
       {bd.tagline ? (
         <IntelCard style={{ gridColumn: '1/-1' }}>
           <IntelLabel>Tagline</IntelLabel>
-          <p style={{ color: '#fff', fontSize: 18, fontWeight: 700, fontStyle: 'italic' }}>&ldquo;{String(bd.tagline)}&rdquo;</p>
+          <p style={{ color: '#fff', fontSize: 18, fontWeight: 700, fontStyle: 'italic' }}>&ldquo;{safeStr(bd.tagline)}&rdquo;</p>
         </IntelCard>
       ) : null}
     </div>
@@ -607,7 +674,7 @@ function PatentsGrantsSection({ patents, grants }: { patents: Record<string, unk
                   {g.amount && <span style={{ color: '#00ff88', fontSize: 11, fontWeight: 600 }}>{g.amount}</span>}
                   {g.deadline && (
                     <span style={{ color: new Date(g.deadline) < new Date() ? '#ff3333' : '#ff8800', fontSize: 11 }}>
-                      Deadline: {g.deadline}
+                      Deadline: {safeStr(g.deadline)}
                     </span>
                   )}
                   {g.category && <span style={{ background: 'rgba(255,255,255,0.04)', color: '#666', padding: '1px 6px', borderRadius: 3, fontSize: 10 }}>{g.category}</span>}
@@ -1200,7 +1267,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
 
                       {/* Update text */}
                       <div style={{ color: '#bbb', fontSize: 13, lineHeight: 1.6, marginBottom: 8 }}>
-                        {item.update}
+                        {safeStr(item.update)}
                       </div>
 
                       {/* Images */}
@@ -1617,7 +1684,7 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
                 }}>
                   {/* Description */}
                   <p style={{ color: '#888', fontSize: 13, lineHeight: 1.6, margin: '14px 0' }}>
-                    {item.description}
+                    {safeStr(item.description)}
                   </p>
 
                   {/* Actionable steps */}
