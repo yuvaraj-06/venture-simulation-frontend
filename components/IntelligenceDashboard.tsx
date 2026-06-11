@@ -2027,6 +2027,14 @@ function CompanyOverviewSection({ companyInfo, domain }: { companyInfo: Record<s
     );
   }
   const ci = companyInfo as any;
+  // Fix URL: sharelabs.ai domains use hyphens not underscores
+  const websiteUrl = (() => {
+    const raw = ci.url || ci.website || '';
+    if (raw.includes('.sharelabs.ai') && raw.includes('_')) {
+      return raw.replace(/_/g, '-');
+    }
+    return raw;
+  })();
   const products = Array.isArray(ci.products) ? ci.products : [];
   const techStack = Array.isArray(ci.tech_stack) ? ci.tech_stack : [];
   const socialLinks = ci.social_links || {};
@@ -2045,8 +2053,8 @@ function CompanyOverviewSection({ companyInfo, domain }: { companyInfo: Record<s
               {ci.team_size && <span style={{ color: '#666', fontSize: 12 }}>👥 {ci.team_size}</span>}
             </div>
           </div>
-          {ci.url && (
-            <a href={ci.url} target="_blank" rel="noopener noreferrer" style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', color: '#00d4ff', padding: '6px 16px', borderRadius: 6, fontSize: 12, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+          {websiteUrl && (
+            <a href={websiteUrl} target="_blank" rel="noopener noreferrer" style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', color: '#00d4ff', padding: '6px 16px', borderRadius: 6, fontSize: 12, textDecoration: 'none', whiteSpace: 'nowrap' }}>
               Visit ↗
             </a>
           )}
