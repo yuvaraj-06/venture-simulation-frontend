@@ -11,11 +11,14 @@ interface LockedSectionProps {
   teaserHeight?: number;
   /** Optional label for the unlock button */
   label?: string;
+  /** ventureId for on-demand checkout creation */
+  ventureId?: string;
 }
 
 /**
  * Wraps a section with a glassmorphism paywall overlay.
  * Shows `teaserHeight` px of content clearly, then fades into blur + lock button.
+ * If no checkoutUrl exists, clicking Unlock creates one on-demand via POST.
  */
 export default function LockedSection({
   isLocked,
@@ -23,9 +26,16 @@ export default function LockedSection({
   children,
   teaserHeight = 180,
   label = 'Unlock Full Analysis',
+  ventureId,
 }: LockedSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState(400);
+  const [creating, setCreating] = useState(false);
+  const [localCheckoutUrl, setLocalCheckoutUrl] = useState<string | null>(checkoutUrl);
+
+  useEffect(() => {
+    setLocalCheckoutUrl(checkoutUrl);
+  }, [checkoutUrl]);
 
   useEffect(() => {
     if (containerRef.current) {
@@ -39,6 +49,41 @@ export default function LockedSection({
 
   const visibleHeight = Math.min(teaserHeight, contentHeight);
   const clampedHeight = Math.max(visibleHeight + 120, 280);
+
+  async function handleUnlock() {
+    // If we have a URL, just open it
+    if (localCheckoutUrl) {
+      window.open(localCheckoutUrl, '_blank');
+      return;
+    }
+
+    // No URL — create one on-demand
+    if (!ventureId || creating) return;
+    setCreating(true);
+
+    try {
+      const res = await fetch(`/api/venture-status/${ventureId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const data = await res.json();
+
+      if (data.checkout_url) {
+        setLocalCheckoutUrl(data.checkout_url);
+        window.open(data.checkout_url, '_blank');
+      } else if (data.features_unlocked) {
+        // Already unlocked — reload
+        window.location.reload();
+      }
+    } catch (err) {
+      console.error('Failed to create checkout:', err);
+    } finally {
+      setCreating(false);
+    }
+  }
+
+  const hasUrl = !!localCheckoutUrl;
+  const buttonReady = hasUrl || !!ventureId;
 
   return (
     <div style={{ position: 'relative', overflow: 'hidden', height: clampedHeight, borderRadius: 12 }}>
@@ -93,43 +138,40 @@ export default function LockedSection({
 
         {/* Unlock button */}
         <button
-          onClick={() => {
-            if (checkoutUrl) {
-              window.open(checkoutUrl, '_blank');
-            }
-          }}
-          disabled={!checkoutUrl}
+          onClick={handleUnlock}
+          disabled={!buttonReady || creating}
           style={{
-            background: checkoutUrl
+            background: buttonReady
               ? 'linear-gradient(135deg, #00d4ff, #0066ff)'
               : 'rgba(255,255,255,0.05)',
-            color: checkoutUrl ? '#fff' : '#555',
+            color: buttonReady ? '#fff' : '#555',
             border: 'none',
             borderRadius: 8,
             padding: '12px 28px',
             fontSize: 14,
             fontWeight: 700,
-            cursor: checkoutUrl ? 'pointer' : 'not-allowed',
+            cursor: buttonReady && !creating ? 'pointer' : 'not-allowed',
             letterSpacing: '0.02em',
             transition: 'all 0.2s',
-            boxShadow: checkoutUrl ? '0 4px 20px rgba(0,212,255,0.2)' : 'none',
+            boxShadow: buttonReady ? '0 4px 20px rgba(0,212,255,0.2)' : 'none',
+            opacity: creating ? 0.7 : 1,
           }}
           onMouseOver={(e) => {
-            if (checkoutUrl) {
+            if (buttonReady && !creating) {
               (e.target as HTMLButtonElement).style.transform = 'scale(1.03)';
               (e.target as HTMLButtonElement).style.boxShadow = '0 6px 30px rgba(0,212,255,0.35)';
             }
           }}
           onMouseOut={(e) => {
             (e.target as HTMLButtonElement).style.transform = 'scale(1)';
-            (e.target as HTMLButtonElement).style.boxShadow = checkoutUrl ? '0 4px 20px rgba(0,212,255,0.2)' : 'none';
+            (e.target as HTMLButtonElement).style.boxShadow = buttonReady ? '0 4px 20px rgba(0,212,255,0.2)' : 'none';
           }}
         >
-          🔒 {checkoutUrl ? label : 'Coming Soon'}
+          {creating ? '⏳ Creating checkout...' : `🔒 ${label}`}
         </button>
 
         <div style={{ color: '#444', fontSize: 11, marginTop: 4 }}>
-          {checkoutUrl ? 'One-time payment to unlock all premium features' : 'Payment link generating...'}
+          One-time payment to unlock all premium features
         </div>
       </div>
     </div>
