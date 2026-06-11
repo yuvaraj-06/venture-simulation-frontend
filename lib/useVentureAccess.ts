@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 interface VentureAccess {
   isUnlocked: boolean;
   checkoutUrl: string | null;
+  pipelineRunning: boolean;
   loading: boolean;
 }
 
@@ -12,12 +13,13 @@ export function useVentureAccess(ventureId: string): VentureAccess {
   const [state, setState] = useState<VentureAccess>({
     isUnlocked: false,
     checkoutUrl: null,
+    pipelineRunning: false,
     loading: true,
   });
 
   useEffect(() => {
     if (!ventureId) {
-      setState({ isUnlocked: true, checkoutUrl: null, loading: false });
+      setState({ isUnlocked: true, checkoutUrl: null, pipelineRunning: false, loading: false });
       return;
     }
 
@@ -27,12 +29,12 @@ export function useVentureAccess(ventureId: string): VentureAccess {
         setState({
           isUnlocked: data.features_unlocked === true,
           checkoutUrl: data.checkout_url || null,
+          pipelineRunning: data.pipeline_running === true,
           loading: false,
         });
       })
       .catch(() => {
-        // On error, default to unlocked (don't block users)
-        setState({ isUnlocked: true, checkoutUrl: null, loading: false });
+        setState({ isUnlocked: true, checkoutUrl: null, pipelineRunning: false, loading: false });
       });
   }, [ventureId]);
 

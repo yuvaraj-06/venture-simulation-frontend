@@ -3382,7 +3382,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
   const [feedData, setFeedData] = useState<any>(null);
   const [adsData, setAdsData] = useState<any>(null);
   const [hnData, setHnData] = useState<any>(null);
-  const { isUnlocked, checkoutUrl } = __useVentureAccess(ventureId);
+  const { isUnlocked, checkoutUrl, pipelineRunning } = __useVentureAccess(ventureId);
   const [redditData, setRedditData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -3474,7 +3474,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Brand DNA */}
         <section id="intel-brand">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Brand DNA</div>
-          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} teaserHeight={120} label="Unlock Brand DNA">
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={120} label="Unlock Brand DNA">
             <BrandDNASection data={data.brandDna} />
           </LockedSection>
         </section>
@@ -3484,7 +3484,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Market & Metrics */}
         <section id="intel-market">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Market & Metrics</div>
-          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} teaserHeight={120} label="Unlock Market Data">
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={120} label="Unlock Market Data">
             <MarketMetricsSection competitors={data.competitors} metrics={data.metrics} />
           </LockedSection>
         </section>
@@ -3494,7 +3494,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Analytics Overview (Tabbed) */}
         <section id="intel-analytics">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Analytics Overview</div>
-          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} teaserHeight={120} label="Unlock Analytics">
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={120} label="Unlock Analytics">
             <AnalyticsOverviewSection seo={data.seoData} geo={data.geoData} />
           </LockedSection>
         </section>
@@ -3504,7 +3504,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Competitors Chips */}
         <section id="intel-competitors">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Competitors</div>
-          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} teaserHeight={140} label="Unlock Competitor Intel">
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={140} label="Unlock Competitor Intel">
             <CompetitorChipsSection competitors={data.competitors} onAction={openChat} />
           </LockedSection>
         </section>
@@ -3514,7 +3514,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Patents & Grants */}
         <section id="intel-ip">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Patents & Grants</div>
-          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} teaserHeight={80} label="Unlock IP Intelligence">
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock IP Intelligence">
             <PatentsGrantsSection patents={data.patents} grants={data.grants} />
           </LockedSection>
         </section>
@@ -3524,7 +3524,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Documents */}
         <section id="intel-docs">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Documents</div>
-          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} teaserHeight={80} label="Unlock Documents">
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock Documents">
             <DocumentsSection documents={data.documents} />
           </LockedSection>
         </section>
@@ -3534,7 +3534,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Social */}
         <section id="intel-social">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Social Analytics</div>
-          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} teaserHeight={100} label="Unlock Social">
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={100} label="Unlock Social">
             <SocialSection social={data.social} />
           </LockedSection>
         </section>
@@ -3544,7 +3544,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Emails */}
         <section id="intel-emails">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Emails Drafted</div>
-          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} teaserHeight={80} label="Unlock Email Drafts">
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock Email Drafts">
             <EmailsDraftedSection brandDna={data.brandDna} companyInfo={data.companyInfo} onAction={openChat} />
           </LockedSection>
         </section>
@@ -3554,7 +3554,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* LinkedIn */}
         <section id="intel-linkedin">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>LinkedIn Posts</div>
-          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} teaserHeight={100} label="Unlock LinkedIn">
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={100} label="Unlock LinkedIn">
             <LinkedInDraftedSection brandDna={data.brandDna} companyInfo={data.companyInfo} goals={data.goals} onAction={openChat} />
           </LockedSection>
         </section>
@@ -3564,7 +3564,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Ads */}
         <section id="intel-ads">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Ads</div>
-          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} teaserHeight={80} label="Unlock Ads">
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock Ads">
             <AdsFromDBSection ads={adsData} onAction={openChat} />
           </LockedSection>
         </section>
@@ -3574,7 +3574,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Goals */}
         <section id="intel-goals">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Goals Overview</div>
-          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} teaserHeight={100} label="Unlock Goals">
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={100} label="Unlock Goals">
             <GoalsSection goals={data.goals} />
           </LockedSection>
         </section>
@@ -3584,7 +3584,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Investors */}
         <section id="intel-investors">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Investor Pipeline</div>
-          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} teaserHeight={80} label="Unlock Investors">
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock Investors">
             <InvestorSection investors={data.investors} />
           </LockedSection>
         </section>
@@ -3594,7 +3594,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* AI CMO Feed */}
         <section id="intel-cmo">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>AI CMO Feed</div>
-          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} teaserHeight={100} label="Unlock AI CMO">
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={100} label="Unlock AI CMO">
             <AICMOFeedSection feed={data.feed} seo={data.seoData} geo={data.geoData} goals={data.goals} storedCmo={feedData?.cmo_feed} onAction={openChat} companyInfo={data.companyInfo} brandDna={data.brandDna} storedHn={hnData?.items} storedReddit={redditData?.items} />
           </LockedSection>
         </section>
@@ -3604,7 +3604,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Activity Feed */}
         <section id="intel-feed">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Activity Feed</div>
-          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} teaserHeight={100} label="Unlock Activity Feed">
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={100} label="Unlock Activity Feed">
             <ActivityFeedSection feed={data.feed} updates={data.updates} goals={data.goals} seo={data.seoData} geo={data.geoData} storedFeed={feedData?.feed_items} onAction={openChat} />
           </LockedSection>
         </section>
@@ -3614,7 +3614,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* ClawOS Updates */}
         <section id="intel-updates">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>ClawOS Updates</div>
-          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} teaserHeight={80} label="Unlock Updates">
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock Updates">
             <ClawOSUpdatesSection updates={data.updates} />
           </LockedSection>
         </section>
@@ -3624,7 +3624,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Hiring */}
         <section id="intel-hiring">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Team & Hiring</div>
-          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} teaserHeight={80} label="Unlock Hiring">
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock Hiring">
             <HiringSection hiring={data.hiring} />
           </LockedSection>
         </section>

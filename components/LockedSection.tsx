@@ -13,6 +13,8 @@ interface LockedSectionProps {
   label?: string;
   /** ventureId for on-demand checkout creation */
   ventureId?: string;
+  /** Pipeline is still processing — show Coming Soon instead of Unlock */
+  pipelineRunning?: boolean;
 }
 
 /**
@@ -27,6 +29,7 @@ export default function LockedSection({
   teaserHeight = 180,
   label = 'Unlock Full Analysis',
   ventureId,
+  pipelineRunning = false,
 }: LockedSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState(400);
@@ -83,7 +86,7 @@ export default function LockedSection({
   }
 
   const hasUrl = !!localCheckoutUrl;
-  const buttonReady = hasUrl || !!ventureId;
+  const buttonReady = !pipelineRunning && (hasUrl || !!ventureId);
 
   return (
     <div style={{ position: 'relative', overflow: 'hidden', height: clampedHeight, borderRadius: 12 }}>
@@ -125,53 +128,70 @@ export default function LockedSection({
             width: 48,
             height: 48,
             borderRadius: '50%',
-            background: 'rgba(0,212,255,0.08)',
-            border: '1px solid rgba(0,212,255,0.2)',
+            background: pipelineRunning ? 'rgba(255,136,0,0.08)' : 'rgba(0,212,255,0.08)',
+            border: `1px solid ${pipelineRunning ? 'rgba(255,136,0,0.2)' : 'rgba(0,212,255,0.2)'}`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: 20,
           }}
         >
-          🔒
+          {pipelineRunning ? '⏳' : '🔒'}
         </div>
 
-        {/* Unlock button */}
-        <button
-          onClick={handleUnlock}
-          disabled={!buttonReady || creating}
-          style={{
-            background: buttonReady
-              ? 'linear-gradient(135deg, #00d4ff, #0066ff)'
-              : 'rgba(255,255,255,0.05)',
-            color: buttonReady ? '#fff' : '#555',
-            border: 'none',
+        {/* Unlock button or Coming Soon */}
+        {pipelineRunning ? (
+          <div style={{
+            background: 'rgba(255,136,0,0.08)',
+            color: '#ff8800',
+            border: '1px solid rgba(255,136,0,0.2)',
             borderRadius: 8,
             padding: '12px 28px',
             fontSize: 14,
             fontWeight: 700,
-            cursor: buttonReady && !creating ? 'pointer' : 'not-allowed',
             letterSpacing: '0.02em',
-            transition: 'all 0.2s',
-            boxShadow: buttonReady ? '0 4px 20px rgba(0,212,255,0.2)' : 'none',
-            opacity: creating ? 0.7 : 1,
-          }}
-          onMouseOver={(e) => {
-            if (buttonReady && !creating) {
-              (e.target as HTMLButtonElement).style.transform = 'scale(1.03)';
-              (e.target as HTMLButtonElement).style.boxShadow = '0 6px 30px rgba(0,212,255,0.35)';
-            }
-          }}
-          onMouseOut={(e) => {
-            (e.target as HTMLButtonElement).style.transform = 'scale(1)';
-            (e.target as HTMLButtonElement).style.boxShadow = buttonReady ? '0 4px 20px rgba(0,212,255,0.2)' : 'none';
-          }}
-        >
-          {creating ? '⏳ Creating checkout...' : `🔒 ${label}`}
-        </button>
+          }}>
+            ⏳ Coming Soon
+          </div>
+        ) : (
+          <button
+            onClick={handleUnlock}
+            disabled={!buttonReady || creating}
+            style={{
+              background: buttonReady
+                ? 'linear-gradient(135deg, #00d4ff, #0066ff)'
+                : 'rgba(255,255,255,0.05)',
+              color: buttonReady ? '#fff' : '#555',
+              border: 'none',
+              borderRadius: 8,
+              padding: '12px 28px',
+              fontSize: 14,
+              fontWeight: 700,
+              cursor: buttonReady && !creating ? 'pointer' : 'not-allowed',
+              letterSpacing: '0.02em',
+              transition: 'all 0.2s',
+              boxShadow: buttonReady ? '0 4px 20px rgba(0,212,255,0.2)' : 'none',
+              opacity: creating ? 0.7 : 1,
+            }}
+            onMouseOver={(e) => {
+              if (buttonReady && !creating) {
+                (e.target as HTMLButtonElement).style.transform = 'scale(1.03)';
+                (e.target as HTMLButtonElement).style.boxShadow = '0 6px 30px rgba(0,212,255,0.35)';
+              }
+            }}
+            onMouseOut={(e) => {
+              (e.target as HTMLButtonElement).style.transform = 'scale(1)';
+              (e.target as HTMLButtonElement).style.boxShadow = buttonReady ? '0 4px 20px rgba(0,212,255,0.2)' : 'none';
+            }}
+          >
+            {creating ? '⏳ Creating checkout...' : `🔒 ${label}`}
+          </button>
+        )}
 
         <div style={{ color: '#444', fontSize: 11, marginTop: 4 }}>
-          One-time payment to unlock all premium features
+          {pipelineRunning
+            ? 'Your venture is being analyzed. Unlock will be available shortly.'
+            : 'One-time payment to unlock all premium features'}
         </div>
       </div>
     </div>
