@@ -51,7 +51,7 @@ export default function SimulationPage() {
   // If simulation data exists, show full dashboard
   if (data) {
     const SimDash = require('@/components/SimulationDashboard').default;
-    return <SimDash simulation={data} />;
+    return <SimDash simulation={data} ventureId={ventureId} />;
   }
 
   // If no simulation but venture may have intelligence data — show intelligence-only view

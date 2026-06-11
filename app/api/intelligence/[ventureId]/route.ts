@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const CLAWAPI = 'https://clawapi.shareos.ai';
 
 function extractDomain(website: string): string {
@@ -9,7 +12,7 @@ function extractDomain(website: string): string {
 
 async function fetchSafe(url: string) {
   try {
-    const res = await fetch(url, { next: { revalidate: 300 } });
+    const res = await fetch(url, { cache: 'no-store' });
     if (!res.ok) return null;
     return await res.json();
   } catch {
@@ -45,6 +48,11 @@ export async function GET(
 
     // Try multiple domain variants for polsia lookups (case-insensitive)
     const domainVariants = [domain, domain.toLowerCase()];
+    // Add underscore/hyphen variants (cmny_id may use _ but domain uses -)
+    const hyphenDomain = domain.replace(/_/g, '-');
+    const underscoreDomain = domain.replace(/-/g, '_');
+    if (hyphenDomain !== domain) domainVariants.push(hyphenDomain);
+    if (underscoreDomain !== domain) domainVariants.push(underscoreDomain);
     if (!website) {
       // Also try just ventureId as domain (legacy entries) - both cases
       domainVariants.push(canonicalId, ventureId, ventureId.toLowerCase());
@@ -55,6 +63,11 @@ export async function GET(
     } else {
       // Also try sharelabs.ai variant
       domainVariants.push(`${canonicalId}.sharelabs.ai`, `${ventureId}.sharelabs.ai`);
+      // And hyphen/underscore variants of sharelabs domain
+      const ventureHyphen = ventureId.replace(/_/g, '-');
+      const ventureUnderscore = ventureId.replace(/-/g, '_');
+      if (ventureHyphen !== ventureId) domainVariants.push(`${ventureHyphen}.sharelabs.ai`);
+      if (ventureUnderscore !== ventureId) domainVariants.push(`${ventureUnderscore}.sharelabs.ai`);
     }
 
     // Helper: find polsia doc by trying domain variants (case-insensitive)
@@ -128,7 +141,10 @@ export async function GET(
     return NextResponse.json({
       domain,
       ventureId,
-      brandDna: brandDnaDoc,
+      // Normalize: if brand_dna is nested inside doc, unwrap it to top level
+      brandDna: brandDnaDoc?.brand_dna
+        ? { ...brandDnaDoc, ...brandDnaDoc.brand_dna, brand_dna: undefined }
+        : brandDnaDoc,
       companyInfo: companyInfoDoc,
       seoData: seoDataDoc,
       geoData: geoDataDoc,

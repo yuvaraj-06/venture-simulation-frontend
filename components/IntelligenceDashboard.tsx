@@ -3,6 +3,8 @@
 
 import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
+import LockedSection from './LockedSection';
+import { useVentureAccess as __useVentureAccess } from '@/lib/useVentureAccess';
 
 // Safe render helper: ensures a value is always a string for JSX rendering
 function safeStr(val: any): string {
@@ -3380,6 +3382,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
   const [feedData, setFeedData] = useState<any>(null);
   const [adsData, setAdsData] = useState<any>(null);
   const [hnData, setHnData] = useState<any>(null);
+  const { isUnlocked, checkoutUrl } = __useVentureAccess(ventureId);
   const [redditData, setRedditData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -3460,7 +3463,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
-        {/* Company Overview */}
+        {/* Company Overview — FREE (always visible) */}
         <section id="intel-overview">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Company Overview</div>
           <CompanyOverviewSection companyInfo={data.companyInfo} domain={data.domain} />
@@ -3471,7 +3474,9 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Brand DNA */}
         <section id="intel-brand">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Brand DNA</div>
-          <BrandDNASection data={data.brandDna} />
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={120} label="Unlock Brand DNA">
+            <BrandDNASection data={data.brandDna} />
+          </LockedSection>
         </section>
 
         <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
@@ -3479,7 +3484,9 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Market & Metrics */}
         <section id="intel-market">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Market & Metrics</div>
-          <MarketMetricsSection competitors={data.competitors} metrics={data.metrics} />
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={120} label="Unlock Market Data">
+            <MarketMetricsSection competitors={data.competitors} metrics={data.metrics} />
+          </LockedSection>
         </section>
 
         <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
@@ -3487,7 +3494,9 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Analytics Overview (Tabbed) */}
         <section id="intel-analytics">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Analytics Overview</div>
-          <AnalyticsOverviewSection seo={data.seoData} geo={data.geoData} />
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={120} label="Unlock Analytics">
+            <AnalyticsOverviewSection seo={data.seoData} geo={data.geoData} />
+          </LockedSection>
         </section>
 
         <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
@@ -3495,7 +3504,9 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Competitors Chips */}
         <section id="intel-competitors">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Competitors</div>
-          <CompetitorChipsSection competitors={data.competitors} onAction={openChat} />
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={140} label="Unlock Competitor Intel">
+            <CompetitorChipsSection competitors={data.competitors} onAction={openChat} />
+          </LockedSection>
         </section>
 
         <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
@@ -3503,7 +3514,9 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Patents & Grants */}
         <section id="intel-ip">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Patents & Grants</div>
-          <PatentsGrantsSection patents={data.patents} grants={data.grants} />
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={80} label="Unlock IP Intelligence">
+            <PatentsGrantsSection patents={data.patents} grants={data.grants} />
+          </LockedSection>
         </section>
 
         <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
@@ -3511,7 +3524,9 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Documents */}
         <section id="intel-docs">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Documents</div>
-          <DocumentsSection documents={data.documents} />
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={80} label="Unlock Documents">
+            <DocumentsSection documents={data.documents} />
+          </LockedSection>
         </section>
 
         <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
@@ -3519,7 +3534,9 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Social */}
         <section id="intel-social">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Social Analytics</div>
-          <SocialSection social={data.social} />
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={100} label="Unlock Social">
+            <SocialSection social={data.social} />
+          </LockedSection>
         </section>
 
         <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
@@ -3527,7 +3544,9 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Emails */}
         <section id="intel-emails">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Emails Drafted</div>
-          <EmailsDraftedSection brandDna={data.brandDna} companyInfo={data.companyInfo} onAction={openChat} />
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={80} label="Unlock Email Drafts">
+            <EmailsDraftedSection brandDna={data.brandDna} companyInfo={data.companyInfo} onAction={openChat} />
+          </LockedSection>
         </section>
 
         <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
@@ -3535,7 +3554,9 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* LinkedIn */}
         <section id="intel-linkedin">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>LinkedIn Posts</div>
-          <LinkedInDraftedSection brandDna={data.brandDna} companyInfo={data.companyInfo} goals={data.goals} onAction={openChat} />
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={100} label="Unlock LinkedIn">
+            <LinkedInDraftedSection brandDna={data.brandDna} companyInfo={data.companyInfo} goals={data.goals} onAction={openChat} />
+          </LockedSection>
         </section>
 
         <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
@@ -3543,7 +3564,9 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Ads */}
         <section id="intel-ads">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Ads</div>
-          <AdsFromDBSection ads={adsData} onAction={openChat} />
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={80} label="Unlock Ads">
+            <AdsFromDBSection ads={adsData} onAction={openChat} />
+          </LockedSection>
         </section>
 
         <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
@@ -3551,7 +3574,9 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Goals */}
         <section id="intel-goals">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Goals Overview</div>
-          <GoalsSection goals={data.goals} />
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={100} label="Unlock Goals">
+            <GoalsSection goals={data.goals} />
+          </LockedSection>
         </section>
 
         <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
@@ -3559,7 +3584,9 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Investors */}
         <section id="intel-investors">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Investor Pipeline</div>
-          <InvestorSection investors={data.investors} />
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={80} label="Unlock Investors">
+            <InvestorSection investors={data.investors} />
+          </LockedSection>
         </section>
 
         <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
@@ -3567,7 +3594,9 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* AI CMO Feed */}
         <section id="intel-cmo">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>AI CMO Feed</div>
-          <AICMOFeedSection feed={data.feed} seo={data.seoData} geo={data.geoData} goals={data.goals} storedCmo={feedData?.cmo_feed} onAction={openChat} companyInfo={data.companyInfo} brandDna={data.brandDna} storedHn={hnData?.items} storedReddit={redditData?.items} />
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={100} label="Unlock AI CMO">
+            <AICMOFeedSection feed={data.feed} seo={data.seoData} geo={data.geoData} goals={data.goals} storedCmo={feedData?.cmo_feed} onAction={openChat} companyInfo={data.companyInfo} brandDna={data.brandDna} storedHn={hnData?.items} storedReddit={redditData?.items} />
+          </LockedSection>
         </section>
 
         <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
@@ -3575,7 +3604,9 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Activity Feed */}
         <section id="intel-feed">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Activity Feed</div>
-          <ActivityFeedSection feed={data.feed} updates={data.updates} goals={data.goals} seo={data.seoData} geo={data.geoData} storedFeed={feedData?.feed_items} onAction={openChat} />
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={100} label="Unlock Activity Feed">
+            <ActivityFeedSection feed={data.feed} updates={data.updates} goals={data.goals} seo={data.seoData} geo={data.geoData} storedFeed={feedData?.feed_items} onAction={openChat} />
+          </LockedSection>
         </section>
 
         <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
@@ -3583,7 +3614,9 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* ClawOS Updates */}
         <section id="intel-updates">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>ClawOS Updates</div>
-          <ClawOSUpdatesSection updates={data.updates} />
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={80} label="Unlock Updates">
+            <ClawOSUpdatesSection updates={data.updates} />
+          </LockedSection>
         </section>
 
         <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
@@ -3591,7 +3624,9 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
         {/* Hiring */}
         <section id="intel-hiring">
           <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Team & Hiring</div>
-          <HiringSection hiring={data.hiring} />
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={80} label="Unlock Hiring">
+            <HiringSection hiring={data.hiring} />
+          </LockedSection>
         </section>
       </div>
     </div>

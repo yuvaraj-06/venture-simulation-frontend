@@ -5,6 +5,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { VentureSimulation, Stage } from '@/lib/types';
 import IntelligenceDashboard from './IntelligenceDashboard';
+import LockedSection from './LockedSection';
+import { useVentureAccess } from '@/lib/useVentureAccess';
 import React from 'react';
 
 class ErrorBoundaryIntel extends React.Component<{children: React.ReactNode}, {hasError: boolean; error?: Error}> {
@@ -100,10 +102,11 @@ function ProgressBar({ pct, color }: { pct: number; color: string }) {
   );
 }
 
-export default function SimulationDashboard({ simulation }: { simulation: VentureSimulation }) {
+export default function SimulationDashboard({ simulation, ventureId }: { simulation: VentureSimulation; ventureId?: string }) {
   const [activeStage, setActiveStage] = useState(0);
   const [activeSidebarItem, setActiveSidebarItem] = useState('exec-summary');
   const [activeTab, setActiveTab] = useState<'simulation' | 'intelligence'>('simulation');
+  const { isUnlocked, checkoutUrl } = useVentureAccess(ventureId || simulation?.simulation_metadata?.venture_name?.toLowerCase().replace(/[^a-z0-9]+/g, '_') || '');
 
   const { simulation_metadata: meta, executive_summary: summary, signal_origin: signal,
     founding_team: team, products, stages, analysis } = simulation;
@@ -292,7 +295,7 @@ export default function SimulationDashboard({ simulation }: { simulation: Ventur
                 </p>
               </div>
               <ErrorBoundaryIntel>
-                <IntelligenceDashboard ventureId={meta.venture_name === 'Share Insights' ? 'share_insights' : meta.venture_name.toLowerCase().replace(/\s+/g, '_')} />
+                <IntelligenceDashboard ventureId={ventureId || (meta.venture_name === 'Share Insights' ? 'share_insights' : meta.venture_name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, ''))} />
               </ErrorBoundaryIntel>
               {/* Footer */}
               <div style={{ marginTop: 80, paddingTop: 32, borderTop: '1px solid #111', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -356,6 +359,7 @@ export default function SimulationDashboard({ simulation }: { simulation: Ventur
           <hr style={{ border: 'none', borderTop: '1px solid #111', margin: '40px 0' }} />
 
           {/* SIGNAL ORIGIN */}
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={160} label="Unlock Signal Analysis">
           <SectionHeader id="signal-origin" label="Signal Origin">
             <h2 style={{ fontSize: 28, fontWeight: 700, marginBottom: 20 }}>Signal Origin</h2>
             <div className="sim-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 32 }}>
@@ -425,10 +429,12 @@ export default function SimulationDashboard({ simulation }: { simulation: Ventur
               </div>
             </div>
           </SectionHeader>
+          </LockedSection>
 
           <hr style={{ border: 'none', borderTop: '1px solid #111', margin: '40px 0' }} />
 
           {/* FOUNDING TEAM */}
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={140} label="Unlock Team Details">
           <SectionHeader id="founding-team" label="Founding Team">
             <h2 style={{ fontSize: 28, fontWeight: 700, marginBottom: 20 }}>Founding Team</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
@@ -464,10 +470,12 @@ export default function SimulationDashboard({ simulation }: { simulation: Ventur
               ))}
             </div>
           </SectionHeader>
+          </LockedSection>
 
           <hr style={{ border: 'none', borderTop: '1px solid #111', margin: '40px 0' }} />
 
           {/* PRODUCTS */}
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={140} label="Unlock Products Analysis">
           <SectionHeader id="products" label="Products & Services">
             <h2 style={{ fontSize: 28, fontWeight: 700, marginBottom: 20 }}>Products & Services</h2>
             {products?.length > 0 ? (
@@ -506,15 +514,19 @@ export default function SimulationDashboard({ simulation }: { simulation: Ventur
               </div>
             )}
           </SectionHeader>
+          </LockedSection>
 
           <hr style={{ border: 'none', borderTop: '1px solid #111', margin: '40px 0' }} />
 
           {/* STAGE SECTIONS */}
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={200} label="Unlock Stage Simulation">
           {((stages || []) as any[]).map((stage: Stage, idx: number) => (
             <StageSection key={stage.stage_name} stage={stage} isActive={idx === activeStage} />
           ))}
+          </LockedSection>
 
           {/* ANALYSIS */}
+          <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} teaserHeight={160} label="Unlock Full Analysis">
           <SectionHeader id="analysis" label="Analysis">
             <h2 style={{ fontSize: 28, fontWeight: 700, marginBottom: 24 }}>Simulation Analysis</h2>
 
@@ -642,6 +654,7 @@ export default function SimulationDashboard({ simulation }: { simulation: Ventur
               </div>
             )}
           </SectionHeader>
+          </LockedSection>
 
           {/* Footer */}
           <div style={{ marginTop: 80, paddingTop: 32, borderTop: '1px solid #111', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
