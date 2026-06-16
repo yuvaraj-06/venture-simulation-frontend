@@ -149,7 +149,7 @@ interface HiringData {
 function IntelCard({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   return (
     <div style={{
-      background: '#080808', border: '1px solid #1a1a1a', borderRadius: 8, padding: 20,
+      background: '#FFFFFF', border: '1px solid #F1F4F5', borderRadius: 8, padding: 20,
       ...style
     }}>
       {children}
@@ -159,16 +159,16 @@ function IntelCard({ children, style }: { children: React.ReactNode; style?: Rea
 
 function IntelLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ color: '#444', fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 10 }}>
+    <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 10 }}>
       {children}
     </div>
   );
 }
 
-function ScoreBar({ value, max = 100, color = '#00d4ff' }: { value: number; max?: number; color?: string }) {
+function ScoreBar({ value, max = 100, color = '#0A7D3C' }: { value: number; max?: number; color?: string }) {
   const pct = Math.min((value / max) * 100, 100);
   return (
-    <div style={{ height: 4, background: '#1a1a1a', borderRadius: 2, overflow: 'hidden' }}>
+    <div style={{ height: 4, background: '#F1F4F5', borderRadius: 2, overflow: 'hidden' }}>
       <div style={{ height: '100%', width: `${pct}%`, background: color, borderRadius: 2 }} />
     </div>
   );
@@ -179,7 +179,7 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
     return (
       <IntelCard>
         <IntelLabel>Brand DNA</IntelLabel>
-        <p style={{ color: '#444', fontSize: 13 }}>No brand DNA data available yet. Run a brand analysis to populate this section.</p>
+        <p style={{ color: '#939799', fontSize: 13 }}>No brand DNA data available yet. Run a brand analysis to populate this section.</p>
       </IntelCard>
     );
   }
@@ -258,7 +258,7 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
               <div key={i} style={{ width: 32, height: 32, borderRadius: 6, background: c, border: '1px solid rgba(255,255,255,0.1)' }} title={c} />
             ))}
           </div>
-          {vi.typography && <p style={{ color: '#888', fontSize: 12, lineHeight: 1.5 }}>{safeStr(vi.typography)}</p>}
+          {vi.typography && <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5 }}>{safeStr(vi.typography)}</p>}
         </IntelCard>
       )}
 
@@ -266,23 +266,23 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
       {(bv.description || bv.tone || bd.voice) && (
         <IntelCard>
           <IntelLabel>Brand Voice</IntelLabel>
-          <p style={{ color: '#aaa', fontSize: 13, lineHeight: 1.6 }}>{safeStr(bv.description || bv.tone || bd.voice)}</p>
+          <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.6 }}>{safeStr(bv.description || bv.tone || bd.voice)}</p>
           {bv.personality && (
             <div style={{ marginTop: 8 }}>
-              <span style={{ color: '#555', fontSize: 11 }}>Personality: </span>
-              <span style={{ color: '#ccc', fontSize: 13 }}>{safeStr(bv.personality)}</span>
+              <span style={{ color: '#939799', fontSize: 11 }}>Personality: </span>
+              <span style={{ color: '#2B3033', fontSize: 13 }}>{safeStr(bv.personality)}</span>
             </div>
           )}
           {bv.language_style && (
             <div style={{ marginTop: 6 }}>
-              <span style={{ color: '#555', fontSize: 11 }}>Style: </span>
-              <span style={{ color: '#ccc', fontSize: 13 }}>{safeStr(bv.language_style)}</span>
+              <span style={{ color: '#939799', fontSize: 11 }}>Style: </span>
+              <span style={{ color: '#2B3033', fontSize: 13 }}>{safeStr(bv.language_style)}</span>
             </div>
           )}
           {bdValues.length > 0 && (
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 10 }}>
               {bdValues.map((v: string, i: number) => (
-                <span key={i} style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', color: '#00d4ff', padding: '3px 10px', borderRadius: 20, fontSize: 12 }}>{v}</span>
+                <span key={i} style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '3px 10px', borderRadius: 20, fontSize: 12 }}>{v}</span>
               ))}
             </div>
           )}
@@ -294,9 +294,9 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
         <IntelCard>
           <IntelLabel>Key Messages</IntelLabel>
           {keyMessages.map((m: string, i: number) => (
-            <div key={i} style={{ display: 'flex', gap: 8, padding: '6px 0', borderBottom: i < keyMessages.length - 1 ? '1px solid #1a1a1a' : 'none' }}>
-              <span style={{ color: '#00d4ff', fontSize: 12, fontWeight: 700, flexShrink: 0 }}>{i + 1}</span>
-              <span style={{ color: '#aaa', fontSize: 13, lineHeight: 1.5 }}>{m}</span>
+            <div key={i} style={{ display: 'flex', gap: 8, padding: '6px 0', borderBottom: i < keyMessages.length - 1 ? '1px solid #F1F4F5' : 'none' }}>
+              <span style={{ color: '#0A7D3C', fontSize: 12, fontWeight: 700, flexShrink: 0 }}>{i + 1}</span>
+              <span style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.5 }}>{m}</span>
             </div>
           ))}
         </IntelCard>
@@ -308,8 +308,8 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
           <IntelLabel>Unique Selling Points</IntelLabel>
           {usps.map((u: string, i: number) => (
             <div key={i} style={{ display: 'flex', gap: 8, padding: '6px 0' }}>
-              <span style={{ color: '#00ff88', fontSize: 12 }}>✓</span>
-              <span style={{ color: '#aaa', fontSize: 13, lineHeight: 1.5 }}>{u}</span>
+              <span style={{ color: '#0A7D3C', fontSize: 12 }}>✓</span>
+              <span style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.5 }}>{u}</span>
             </div>
           ))}
         </IntelCard>
@@ -321,9 +321,9 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
           <IntelLabel>Target Personas</IntelLabel>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             {personas.map((p: any, i: number) => (
-              <div key={i} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 8, padding: 16, flex: '1 1 250px', minWidth: 200 }}>
-                <div style={{ color: '#fff', fontSize: 14, fontWeight: 600, marginBottom: 6 }}>{safeStr(p.name || '')}</div>
-                <div style={{ color: '#888', fontSize: 12, lineHeight: 1.5 }}>{safeStr(p.description || '')}</div>
+              <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F1F4F5', borderRadius: 8, padding: 16, flex: '1 1 250px', minWidth: 200 }}>
+                <div style={{ color: '#111111', fontSize: 14, fontWeight: 600, marginBottom: 6 }}>{safeStr(p.name || '')}</div>
+                <div style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5 }}>{safeStr(p.description || '')}</div>
               </div>
             ))}
           </div>
@@ -336,21 +336,21 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
           <IntelLabel>Competitive Positioning</IntelLabel>
           {typeof bd.competitive_positioning === 'object' && !Array.isArray(bd.competitive_positioning) ? (
             <div>
-              {(bd.competitive_positioning as any).position_statement && <p style={{ color: '#aaa', fontSize: 13, lineHeight: 1.6, marginBottom: 10 }}>{String((bd.competitive_positioning as any).position_statement)}</p>}
-              {(bd.competitive_positioning as any).category && <span style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', color: '#00d4ff', padding: '3px 10px', borderRadius: 20, fontSize: 11, marginRight: 8 }}>{String((bd.competitive_positioning as any).category)}</span>}
+              {(bd.competitive_positioning as any).position_statement && <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.6, marginBottom: 10 }}>{String((bd.competitive_positioning as any).position_statement)}</p>}
+              {(bd.competitive_positioning as any).category && <span style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '3px 10px', borderRadius: 20, fontSize: 11, marginRight: 8 }}>{String((bd.competitive_positioning as any).category)}</span>}
               {Array.isArray((bd.competitive_positioning as any).differentiators) && (
                 <div style={{ marginTop: 10 }}>
                   {((bd.competitive_positioning as any).differentiators as any[]).slice(0, 5).map((d: any, i: number) => (
                     <div key={i} style={{ display: 'flex', gap: 8, padding: '4px 0' }}>
-                      <span style={{ color: '#00ff88', fontSize: 12 }}>✓</span>
-                      <span style={{ color: '#888', fontSize: 12 }}>{typeof d === 'string' ? d : (d?.feature || d?.name || d?.title || safeStr(d))}</span>
+                      <span style={{ color: '#0A7D3C', fontSize: 12 }}>✓</span>
+                      <span style={{ color: '#5E6366', fontSize: 12 }}>{typeof d === 'string' ? d : (d?.feature || d?.name || d?.title || safeStr(d))}</span>
                     </div>
                   ))}
                 </div>
               )}
             </div>
           ) : (
-            <p style={{ color: '#aaa', fontSize: 13, lineHeight: 1.6 }}>{safeStr(bd.competitive_positioning)}</p>
+            <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.6 }}>{safeStr(bd.competitive_positioning)}</p>
           )}
         </IntelCard>
       )}
@@ -360,7 +360,7 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
         <IntelCard>
           <IntelLabel>Content Themes</IntelLabel>
           {themes.map((t: string, i: number) => (
-            <div key={i} style={{ color: '#aaa', fontSize: 13, padding: '4px 0', borderBottom: i < themes.length - 1 ? '1px solid #1a1a1a' : 'none' }}>{t}</div>
+            <div key={i} style={{ color: '#5E6366', fontSize: 13, padding: '4px 0', borderBottom: i < themes.length - 1 ? '1px solid #F1F4F5' : 'none' }}>{t}</div>
           ))}
         </IntelCard>
       )}
@@ -376,14 +376,14 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
                 const name = isString ? arch : (arch.name || arch.archetype || 'Archetype');
                 const desc = isString ? '' : (arch.description || arch.fit || '');
                 return (
-                  <div key={i} style={{ background: '#0d0d0d', border: `1px solid ${i === 0 ? 'rgba(0,212,255,0.3)' : '#1a1a1a'}`, borderRadius: 8, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
+                  <div key={i} style={{ background: '#FFFFFF', border: `1px solid ${i === 0 ? 'rgba(10, 125, 60,0.3)' : '#F1F4F5'}`, borderRadius: 8, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: desc ? 8 : 0 }}>
-                      <div style={{ color: '#fff', fontSize: 15, fontWeight: 700 }}>{name}</div>
-                      <span style={{ background: i === 0 ? 'rgba(0,212,255,0.1)' : 'rgba(255,255,255,0.04)', border: `1px solid ${i === 0 ? 'rgba(0,212,255,0.3)' : '#1a1a1a'}`, color: i === 0 ? '#00d4ff' : '#666', padding: '2px 10px', borderRadius: 20, fontSize: 10, fontWeight: 600 }}>
+                      <div style={{ color: '#111111', fontSize: 15, fontWeight: 700 }}>{name}</div>
+                      <span style={{ background: i === 0 ? 'rgba(10, 125, 60,0.1)' : 'rgba(255,255,255,0.04)', border: `1px solid ${i === 0 ? 'rgba(10, 125, 60,0.3)' : '#F1F4F5'}`, color: i === 0 ? '#0A7D3C' : '#D8DBDC', padding: '2px 10px', borderRadius: 20, fontSize: 10, fontWeight: 600 }}>
                         {i === 0 ? 'Primary' : 'Secondary'}
                       </span>
                     </div>
-                    {desc && <p style={{ color: '#888', fontSize: 12, lineHeight: 1.6, margin: 0 }}>{desc}</p>}
+                    {desc && <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.6, margin: 0 }}>{desc}</p>}
                   </div>
                 );
               })}
@@ -391,23 +391,23 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
           ) : typeof bd.brand_archetypes === 'object' ? (
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
               {(bd.brand_archetypes as any).primary && (
-                <div style={{ background: '#0d0d0d', border: '1px solid rgba(0,212,255,0.3)', borderRadius: 8, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
+                <div style={{ background: '#FFFFFF', border: '1px solid rgba(10, 125, 60,0.3)', borderRadius: 8, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                    <div style={{ color: '#fff', fontSize: 15, fontWeight: 700 }}>{String((bd.brand_archetypes as any).primary)}</div>
-                    <span style={{ background: 'rgba(0,212,255,0.1)', border: '1px solid rgba(0,212,255,0.3)', color: '#00d4ff', padding: '2px 10px', borderRadius: 20, fontSize: 10, fontWeight: 600 }}>Primary</span>
+                    <div style={{ color: '#111111', fontSize: 15, fontWeight: 700 }}>{String((bd.brand_archetypes as any).primary)}</div>
+                    <span style={{ background: 'rgba(10, 125, 60,0.1)', border: '1px solid rgba(10, 125, 60,0.3)', color: '#0A7D3C', padding: '2px 10px', borderRadius: 20, fontSize: 10, fontWeight: 600 }}>Primary</span>
                   </div>
                 </div>
               )}
               {(bd.brand_archetypes as any).secondary && (
-                <div style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 8, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
+                <div style={{ background: '#FFFFFF', border: '1px solid #F1F4F5', borderRadius: 8, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                    <div style={{ color: '#fff', fontSize: 15, fontWeight: 700 }}>{String((bd.brand_archetypes as any).secondary)}</div>
-                    <span style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1a1a1a', color: '#666', padding: '2px 10px', borderRadius: 20, fontSize: 10, fontWeight: 600 }}>Secondary</span>
+                    <div style={{ color: '#111111', fontSize: 15, fontWeight: 700 }}>{String((bd.brand_archetypes as any).secondary)}</div>
+                    <span style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #F1F4F5', color: '#5E6366', padding: '2px 10px', borderRadius: 20, fontSize: 10, fontWeight: 600 }}>Secondary</span>
                   </div>
                 </div>
               )}
               {(bd.brand_archetypes as any).rationale && (
-                <p style={{ color: '#888', fontSize: 12, lineHeight: 1.6, width: '100%' }}>{String((bd.brand_archetypes as any).rationale)}</p>
+                <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.6, width: '100%' }}>{String((bd.brand_archetypes as any).rationale)}</p>
               )}
             </div>
           ) : null}
@@ -418,19 +418,19 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
       {bd.personality && !bv.description && !bv.tone ? (
         <IntelCard>
           <IntelLabel>Personality</IntelLabel>
-          <p style={{ color: '#aaa', fontSize: 13, lineHeight: 1.6 }}>{safeStr(bd.personality)}</p>
+          <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.6 }}>{safeStr(bd.personality)}</p>
         </IntelCard>
       ) : null}
       {bd.positioning && !bd.competitive_positioning ? (
         <IntelCard>
           <IntelLabel>Market Positioning</IntelLabel>
-          <p style={{ color: '#aaa', fontSize: 13, lineHeight: 1.6 }}>{safeStr(bd.positioning)}</p>
+          <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.6 }}>{safeStr(bd.positioning)}</p>
         </IntelCard>
       ) : null}
       {(bd.tagline || messaging.tagline || (messaging.primary && typeof messaging.primary === 'string')) ? (
         <IntelCard style={{ gridColumn: '1/-1' }}>
           <IntelLabel>Tagline</IntelLabel>
-          <p style={{ color: '#fff', fontSize: 18, fontWeight: 700, fontStyle: 'italic' }}>&ldquo;{safeStr(bd.tagline || messaging.tagline || messaging.primary)}&rdquo;</p>
+          <p style={{ color: '#111111', fontSize: 18, fontWeight: 700, fontStyle: 'italic' }}>&ldquo;{safeStr(bd.tagline || messaging.tagline || messaging.primary)}&rdquo;</p>
         </IntelCard>
       ) : null}
     </div>
@@ -456,16 +456,16 @@ function SEOGEOSection({ seo, geo }: { seo: Record<string, unknown> | null; geo:
       <IntelCard>
         <IntelLabel>SEO Audit</IntelLabel>
         {!seo || seoScore === 0 ? (
-          <p style={{ color: '#444', fontSize: 13 }}>No SEO data available.</p>
+          <p style={{ color: '#939799', fontSize: 13 }}>No SEO data available.</p>
         ) : (
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
-              <div style={{ width: 64, height: 64, borderRadius: '50%', border: `3px solid ${seoScore >= 70 ? '#00ff88' : seoScore >= 40 ? '#ff8800' : '#ff3333'}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontSize: 22, fontWeight: 800, color: seoScore >= 70 ? '#00ff88' : seoScore >= 40 ? '#ff8800' : '#ff3333' }}>{seoScore}</span>
+              <div style={{ width: 64, height: 64, borderRadius: '50%', border: `3px solid ${seoScore >= 70 ? '#00D65D' : seoScore >= 40 ? '#8A6D3B' : '#C0392B'}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontSize: 22, fontWeight: 800, color: seoScore >= 70 ? '#0A7D3C' : seoScore >= 40 ? '#8A6D3B' : '#C0392B' }}>{seoScore}</span>
               </div>
               <div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: '#fff' }}>Overall Score</div>
-                <div style={{ fontSize: 12, color: '#666' }}>{seoScore >= 70 ? 'Good' : seoScore >= 40 ? 'Needs Work' : 'Critical Issues'}</div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: '#111111' }}>Overall Score</div>
+                <div style={{ fontSize: 12, color: '#5E6366' }}>{seoScore >= 70 ? 'Good' : seoScore >= 40 ? 'Needs Work' : 'Critical Issues'}</div>
               </div>
             </div>
             {/* Score breakdown */}
@@ -475,17 +475,17 @@ function SEOGEOSection({ seo, geo }: { seo: Record<string, unknown> | null; geo:
               { label: 'Mobile', val: seo?.mobile_score },
               { label: 'Page Speed', val: seo?.page_speed },
             ].filter(s => s.val && typeof s.val !== 'object').map((s, i) => (
-              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', borderBottom: '1px solid #1a1a1a' }}>
-                <span style={{ color: '#888', fontSize: 12 }}>{s.label}</span>
-                <span style={{ color: '#aaa', fontSize: 12, fontWeight: 600 }}>{String(s.val)}</span>
+              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', borderBottom: '1px solid #F1F4F5' }}>
+                <span style={{ color: '#5E6366', fontSize: 12 }}>{s.label}</span>
+                <span style={{ color: '#5E6366', fontSize: 12, fontWeight: 600 }}>{String(s.val)}</span>
               </div>
             ))}
             {issues.length > 0 && (
               <div style={{ marginTop: 12 }}>
-                <div style={{ color: '#666', fontSize: 11, textTransform: 'uppercase', marginBottom: 6 }}>Issues ({issues.length})</div>
+                <div style={{ color: '#5E6366', fontSize: 11, textTransform: 'uppercase', marginBottom: 6 }}>Issues ({issues.length})</div>
                 {issues.slice(0, 5).map((issue: any, i: number) => (
-                  <div key={i} style={{ fontSize: 12, color: '#aaa', padding: '4px 0', borderBottom: '1px solid #111', display: 'flex', gap: 6 }}>
-                    <span style={{ color: issue?.severity === 'critical' ? '#ff3333' : '#ff8800', flexShrink: 0 }}>●</span>
+                  <div key={i} style={{ fontSize: 12, color: '#5E6366', padding: '4px 0', borderBottom: '1px solid #FFFFFF', display: 'flex', gap: 6 }}>
+                    <span style={{ color: issue?.severity === 'critical' ? '#C0392B' : '#8A6D3B', flexShrink: 0 }}>●</span>
                     <span>{typeof issue === 'string' ? issue : String(issue?.issue || issue?.description || issue?.message || '')}</span>
                   </div>
                 ))}
@@ -493,10 +493,10 @@ function SEOGEOSection({ seo, geo }: { seo: Record<string, unknown> | null; geo:
             )}
             {keywords.length > 0 && (
               <div style={{ marginTop: 12 }}>
-                <div style={{ color: '#666', fontSize: 11, textTransform: 'uppercase', marginBottom: 6 }}>Keywords</div>
+                <div style={{ color: '#5E6366', fontSize: 11, textTransform: 'uppercase', marginBottom: 6 }}>Keywords</div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
                   {keywords.slice(0, 10).map((kw: string, i: number) => (
-                    <span key={i} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', color: '#666', padding: '2px 8px', borderRadius: 3, fontSize: 11 }}>{kw}</span>
+                    <span key={i} style={{ background: '#FFFFFF', border: '1px solid #F1F4F5', color: '#5E6366', padding: '2px 8px', borderRadius: 3, fontSize: 11 }}>{kw}</span>
                   ))}
                 </div>
               </div>
@@ -507,33 +507,33 @@ function SEOGEOSection({ seo, geo }: { seo: Record<string, unknown> | null; geo:
       <IntelCard>
         <IntelLabel>GEO / AI Search Visibility</IntelLabel>
         {!geo || geoScore === 0 ? (
-          <p style={{ color: '#444', fontSize: 13 }}>No GEO data available.</p>
+          <p style={{ color: '#939799', fontSize: 13 }}>No GEO data available.</p>
         ) : (
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
-              <div style={{ width: 64, height: 64, borderRadius: '50%', border: `3px solid ${geoScore >= 50 ? '#00ff88' : geoScore >= 20 ? '#ff8800' : '#ff3333'}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontSize: 22, fontWeight: 800, color: geoScore >= 50 ? '#00ff88' : geoScore >= 20 ? '#ff8800' : '#ff3333' }}>{geoScore}</span>
+              <div style={{ width: 64, height: 64, borderRadius: '50%', border: `3px solid ${geoScore >= 50 ? '#00D65D' : geoScore >= 20 ? '#8A6D3B' : '#C0392B'}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontSize: 22, fontWeight: 800, color: geoScore >= 50 ? '#0A7D3C' : geoScore >= 20 ? '#8A6D3B' : '#C0392B' }}>{geoScore}</span>
               </div>
               <div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: '#fff' }}>AI Visibility Score</div>
-                <div style={{ fontSize: 12, color: '#666' }}>{geoScore >= 50 ? 'Visible' : geoScore >= 20 ? 'Low Visibility' : 'Not Visible'}</div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: '#111111' }}>AI Visibility Score</div>
+                <div style={{ fontSize: 12, color: '#5E6366' }}>{geoScore >= 50 ? 'Visible' : geoScore >= 20 ? 'Low Visibility' : 'Not Visible'}</div>
               </div>
             </div>
             {platforms.map((p: any, i: number) => (
-              <div key={i} style={{ padding: '10px 0', borderBottom: i < platforms.length - 1 ? '1px solid #1a1a1a' : 'none' }}>
+              <div key={i} style={{ padding: '10px 0', borderBottom: i < platforms.length - 1 ? '1px solid #F1F4F5' : 'none' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                  <span style={{ color: '#fff', fontSize: 13, fontWeight: 600 }}>{p.name}</span>
-                  <span style={{ color: p.score >= 50 ? '#00ff88' : p.score >= 20 ? '#ff8800' : '#ff3333', fontSize: 13, fontWeight: 700 }}>{p.score}/100</span>
+                  <span style={{ color: '#111111', fontSize: 13, fontWeight: 600 }}>{p.name}</span>
+                  <span style={{ color: p.score >= 50 ? '#0A7D3C' : p.score >= 20 ? '#8A6D3B' : '#C0392B', fontSize: 13, fontWeight: 700 }}>{p.score}/100</span>
                 </div>
-                <p style={{ color: '#666', fontSize: 11, lineHeight: 1.4, margin: 0 }}>{p.summary?.slice(0, 150)}{p.summary?.length > 150 ? '...' : ''}</p>
+                <p style={{ color: '#5E6366', fontSize: 11, lineHeight: 1.4, margin: 0 }}>{p.summary?.slice(0, 150)}{p.summary?.length > 150 ? '...' : ''}</p>
               </div>
             ))}
             {geoRecs.length > 0 && (
               <div style={{ marginTop: 12 }}>
-                <div style={{ color: '#666', fontSize: 11, textTransform: 'uppercase', marginBottom: 6 }}>Recommendations</div>
+                <div style={{ color: '#5E6366', fontSize: 11, textTransform: 'uppercase', marginBottom: 6 }}>Recommendations</div>
                 {geoRecs.slice(0, 3).map((r: string, i: number) => (
-                  <div key={i} style={{ fontSize: 12, color: '#aaa', padding: '4px 0', display: 'flex', gap: 6 }}>
-                    <span style={{ color: '#00d4ff', flexShrink: 0 }}>→</span><span>{r}</span>
+                  <div key={i} style={{ fontSize: 12, color: '#5E6366', padding: '4px 0', display: 'flex', gap: 6 }}>
+                    <span style={{ color: '#0A7D3C', flexShrink: 0 }}>→</span><span>{r}</span>
                   </div>
                 ))}
               </div>
@@ -555,7 +555,7 @@ function CompetitorsSection({ competitors }: { competitors: IntelligenceData['co
     return (
       <IntelCard>
         <IntelLabel>Competitive Landscape</IntelLabel>
-        <p style={{ color: '#444', fontSize: 13 }}>No competitor data found. Run a competitor analysis to populate.</p>
+        <p style={{ color: '#939799', fontSize: 13 }}>No competitor data found. Run a competitor analysis to populate.</p>
       </IntelCard>
     );
   }
@@ -574,8 +574,8 @@ function CompetitorsSection({ competitors }: { competitors: IntelligenceData['co
             <IntelCard>
               <IntelLabel>Competitive Advantages</IntelLabel>
               {competitiveAdvantages.map((a: string, i: number) => (
-                <div key={i} style={{ color: '#aaa', fontSize: 12, padding: '5px 0', display: 'flex', gap: 6, borderBottom: i < competitiveAdvantages.length - 1 ? '1px solid #111' : 'none' }}>
-                  <span style={{ color: '#00ff88', flexShrink: 0 }}>✓</span><span>{a}</span>
+                <div key={i} style={{ color: '#5E6366', fontSize: 12, padding: '5px 0', display: 'flex', gap: 6, borderBottom: i < competitiveAdvantages.length - 1 ? '1px solid #FFFFFF' : 'none' }}>
+                  <span style={{ color: '#0A7D3C', flexShrink: 0 }}>✓</span><span>{a}</span>
                 </div>
               ))}
             </IntelCard>
@@ -584,8 +584,8 @@ function CompetitorsSection({ competitors }: { competitors: IntelligenceData['co
             <IntelCard>
               <IntelLabel>Competitive Gaps</IntelLabel>
               {gaps.map((g: string, i: number) => (
-                <div key={i} style={{ color: '#aaa', fontSize: 12, padding: '5px 0', display: 'flex', gap: 6, borderBottom: i < gaps.length - 1 ? '1px solid #111' : 'none' }}>
-                  <span style={{ color: '#ff4444', flexShrink: 0 }}>!</span><span>{g}</span>
+                <div key={i} style={{ color: '#5E6366', fontSize: 12, padding: '5px 0', display: 'flex', gap: 6, borderBottom: i < gaps.length - 1 ? '1px solid #FFFFFF' : 'none' }}>
+                  <span style={{ color: '#C0392B', flexShrink: 0 }}>!</span><span>{g}</span>
                 </div>
               ))}
             </IntelCard>
@@ -601,38 +601,38 @@ function CompetitorsSection({ competitors }: { competitors: IntelligenceData['co
         const weaknesses = c.weaknesses || c.cons || [];
         const threat = c.threat_level || c.market_position || '';
         const similarity = c.similarity_score || c.similarity || 0;
-        const threatColor = threat === 'high' ? '#ff3333' : threat === 'medium' ? '#ff8800' : '#00ff88';
+        const threatColor = threat === 'high' ? '#C0392B' : threat === 'medium' ? '#8A6D3B' : '#00D65D';
         return (
           <IntelCard key={i}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
               <div>
-                <div style={{ color: '#fff', fontWeight: 700, fontSize: 14 }}>{c.name}</div>
-                {domain && <a href={domain.startsWith('http') ? domain : `https://${domain}`} target="_blank" rel="noopener noreferrer" style={{ color: '#444', fontSize: 11, textDecoration: 'none' }}>{domain} ↗</a>}
+                <div style={{ color: '#111111', fontWeight: 700, fontSize: 14 }}>{c.name}</div>
+                {domain && <a href={domain.startsWith('http') ? domain : `https://${domain}`} target="_blank" rel="noopener noreferrer" style={{ color: '#939799', fontSize: 11, textDecoration: 'none' }}>{domain} ↗</a>}
               </div>
               <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                {similarity > 0 && <span style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', color: '#00d4ff', padding: '2px 8px', borderRadius: 3, fontSize: 10 }}>{similarity}% similar</span>}
+                {similarity > 0 && <span style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '2px 8px', borderRadius: 3, fontSize: 10 }}>{similarity}% similar</span>}
                 {threat && <span style={{ background: `${threatColor}15`, border: `1px solid ${threatColor}44`, color: threatColor, padding: '2px 8px', borderRadius: 3, fontSize: 10 }}>{threat}</span>}
               </div>
             </div>
-            {desc && <p style={{ color: '#888', fontSize: 12, lineHeight: 1.5, marginBottom: 10 }}>{desc}</p>}
+            {desc && <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5, marginBottom: 10 }}>{desc}</p>}
             {Array.isArray(strengths) && strengths.length > 0 && (
               <div style={{ marginBottom: 8 }}>
-                <div style={{ color: '#00ff88', fontSize: 10, letterSpacing: '0.1em', marginBottom: 4 }}>STRENGTHS</div>
+                <div style={{ color: '#0A7D3C', fontSize: 10, letterSpacing: '0.1em', marginBottom: 4 }}>STRENGTHS</div>
                 {strengths.slice(0, 3).map((s: string, j: number) => (
-                  <div key={j} style={{ color: '#888', fontSize: 12, padding: '2px 0 2px 8px', borderLeft: '2px solid #00ff8833' }}>{s}</div>
+                  <div key={j} style={{ color: '#5E6366', fontSize: 12, padding: '2px 0 2px 8px', borderLeft: '2px solid #00D65D33' }}>{s}</div>
                 ))}
               </div>
             )}
             {Array.isArray(weaknesses) && weaknesses.length > 0 && (
               <div>
-                <div style={{ color: '#ff4444', fontSize: 10, letterSpacing: '0.1em', marginBottom: 4 }}>WEAKNESSES</div>
+                <div style={{ color: '#C0392B', fontSize: 10, letterSpacing: '0.1em', marginBottom: 4 }}>WEAKNESSES</div>
                 {weaknesses.slice(0, 3).map((w: string, j: number) => (
-                  <div key={j} style={{ color: '#888', fontSize: 12, padding: '2px 0 2px 8px', borderLeft: '2px solid #ff444433' }}>{w}</div>
+                  <div key={j} style={{ color: '#5E6366', fontSize: 12, padding: '2px 0 2px 8px', borderLeft: '2px solid #C0392B33' }}>{w}</div>
                 ))}
               </div>
             )}
-            {c.pricing && <div style={{ marginTop: 8, color: '#666', fontSize: 11 }}>Pricing: {typeof c.pricing === 'string' ? c.pricing : `${c.pricing.model || ''} ${c.pricing.details ? '— ' + c.pricing.details : ''}`.trim()}</div>}
-            {c.funding && <div style={{ marginTop: 4, color: '#00d4ff', fontSize: 12 }}>{c.funding}</div>}
+            {c.pricing && <div style={{ marginTop: 8, color: '#5E6366', fontSize: 11 }}>Pricing: {typeof c.pricing === 'string' ? c.pricing : `${c.pricing.model || ''} ${c.pricing.details ? '— ' + c.pricing.details : ''}`.trim()}</div>}
+            {c.funding && <div style={{ marginTop: 4, color: '#0A7D3C', fontSize: 12 }}>{c.funding}</div>}
           </IntelCard>
         );
       })}
@@ -659,26 +659,26 @@ function PatentsGrantsSection({ patents, grants }: { patents: Record<string, unk
       <IntelCard>
         <IntelLabel>Patents ({patentList.length})</IntelLabel>
         {patentList.length === 0 ? (
-          <p style={{ color: '#444', fontSize: 13 }}>No patent data available.</p>
+          <p style={{ color: '#939799', fontSize: 13 }}>No patent data available.</p>
         ) : (
           <div>
-            {landscape && typeof landscape === 'string' && <p style={{ color: '#888', fontSize: 12, marginBottom: 12, lineHeight: 1.5 }}>{landscape.slice(0, 200)}</p>}
+            {landscape && typeof landscape === 'string' && <p style={{ color: '#5E6366', fontSize: 12, marginBottom: 12, lineHeight: 1.5 }}>{landscape.slice(0, 200)}</p>}
             {visiblePatents.map((p: any, i: number) => (
-              <div key={i} style={{ padding: '10px 0', borderBottom: i < visiblePatents.length - 1 ? '1px solid #1a1a1a' : 'none' }}>
-                <div style={{ color: '#fff', fontSize: 13, fontWeight: 600, marginBottom: 2 }}>{p.title || 'Untitled Patent'}</div>
+              <div key={i} style={{ padding: '10px 0', borderBottom: i < visiblePatents.length - 1 ? '1px solid #F1F4F5' : 'none' }}>
+                <div style={{ color: '#111111', fontSize: 13, fontWeight: 600, marginBottom: 2 }}>{p.title || 'Untitled Patent'}</div>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
-                  {p.patent_number && <span style={{ color: '#00d4ff', fontSize: 11 }}>{p.patent_number}</span>}
-                  {p.assignee && p.assignee !== 'Not specified' && <span style={{ color: '#666', fontSize: 11 }}>· {p.assignee}</span>}
-                  {p.filing_date && <span style={{ color: '#444', fontSize: 11 }}>· Filed {p.filing_date}</span>}
+                  {p.patent_number && <span style={{ color: '#0A7D3C', fontSize: 11 }}>{p.patent_number}</span>}
+                  {p.assignee && p.assignee !== 'Not specified' && <span style={{ color: '#5E6366', fontSize: 11 }}>· {p.assignee}</span>}
+                  {p.filing_date && <span style={{ color: '#939799', fontSize: 11 }}>· Filed {p.filing_date}</span>}
                 </div>
-                {p.abstract && <p style={{ color: '#666', fontSize: 11, lineHeight: 1.4, margin: 0 }}>{String(p.abstract).slice(0, 120)}...</p>}
-                {p.url && <a href={p.url} target="_blank" rel="noopener noreferrer" style={{ color: '#3B82F6', fontSize: 11, textDecoration: 'none' }}>View patent ↗</a>}
+                {p.abstract && <p style={{ color: '#5E6366', fontSize: 11, lineHeight: 1.4, margin: 0 }}>{String(p.abstract).slice(0, 120)}...</p>}
+                {p.url && <a href={p.url} target="_blank" rel="noopener noreferrer" style={{ color: '#0A7D3C', fontSize: 11, textDecoration: 'none' }}>View patent ↗</a>}
               </div>
             ))}
             {patentList.length > INITIAL_SHOW && (
               <button
                 onClick={() => setShowAllPatents(!showAllPatents)}
-                style={{ background: 'rgba(0,212,255,0.06)', border: '1px solid rgba(0,212,255,0.15)', color: '#00d4ff', padding: '8px 16px', borderRadius: 6, fontSize: 12, cursor: 'pointer', width: '100%', marginTop: 10, fontWeight: 500 }}
+                style={{ background: 'rgba(10, 125, 60,0.06)', border: '1px solid rgba(10, 125, 60,0.15)', color: '#0A7D3C', padding: '8px 16px', borderRadius: 6, fontSize: 12, cursor: 'pointer', width: '100%', marginTop: 10, fontWeight: 500 }}
               >
                 {showAllPatents ? 'Show less' : `View all ${patentList.length} patents ↓`}
               </button>
@@ -686,11 +686,11 @@ function PatentsGrantsSection({ patents, grants }: { patents: Record<string, unk
           </div>
         )}
         {whitespaces.length > 0 && (
-          <div style={{ marginTop: 12, borderTop: '1px solid #1a1a1a', paddingTop: 12 }}>
-            <div style={{ color: '#00ff88', fontSize: 10, letterSpacing: '0.1em', marginBottom: 6 }}>WHITE SPACES (IP Opportunities)</div>
+          <div style={{ marginTop: 12, borderTop: '1px solid #F1F4F5', paddingTop: 12 }}>
+            <div style={{ color: '#0A7D3C', fontSize: 10, letterSpacing: '0.1em', marginBottom: 6 }}>WHITE SPACES (IP Opportunities)</div>
             {whitespaces.slice(0, 5).map((ws: any, i: number) => (
-              <div key={i} style={{ color: '#888', fontSize: 12, padding: '3px 0', display: 'flex', gap: 6 }}>
-                <span style={{ color: '#00ff88', flexShrink: 0 }}>◇</span>
+              <div key={i} style={{ color: '#5E6366', fontSize: 12, padding: '3px 0', display: 'flex', gap: 6 }}>
+                <span style={{ color: '#0A7D3C', flexShrink: 0 }}>◇</span>
                 <span>{typeof ws === 'string' ? ws : ws.area || ws.description || JSON.stringify(ws)}</span>
               </div>
             ))}
@@ -702,39 +702,39 @@ function PatentsGrantsSection({ patents, grants }: { patents: Record<string, unk
       <IntelCard>
         <IntelLabel>Open Grants ({grantList.length})</IntelLabel>
         {grantList.length === 0 ? (
-          <p style={{ color: '#444', fontSize: 13 }}>No grant data available.</p>
+          <p style={{ color: '#939799', fontSize: 13 }}>No grant data available.</p>
         ) : (
           <div>
             {visibleGrants.map((g: any, i: number) => (
-              <div key={i} style={{ padding: '12px 0', borderBottom: i < visibleGrants.length - 1 ? '1px solid #1a1a1a' : 'none' }}>
+              <div key={i} style={{ padding: '12px 0', borderBottom: i < visibleGrants.length - 1 ? '1px solid #F1F4F5' : 'none' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4 }}>
-                  <div style={{ color: '#fff', fontSize: 13, fontWeight: 600 }}>{g.name || 'Unnamed Grant'}</div>
+                  <div style={{ color: '#111111', fontSize: 13, fontWeight: 600 }}>{g.name || 'Unnamed Grant'}</div>
                   {g.url && (
                     <a href={g.url} target="_blank" rel="noopener noreferrer"
-                      style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.3)', color: '#3B82F6', padding: '3px 10px', borderRadius: 4, fontSize: 11, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                      style={{ background: 'rgba(10, 125, 60,0.1)', border: '1px solid rgba(10, 125, 60,0.3)', color: '#0A7D3C', padding: '3px 10px', borderRadius: 4, fontSize: 11, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
                       Apply ↗
                     </a>
                   )}
                 </div>
                 <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 6 }}>
-                  {g.agency && <span style={{ color: '#00d4ff', fontSize: 11 }}>{g.agency}</span>}
-                  {g.amount && <span style={{ color: '#00ff88', fontSize: 11, fontWeight: 600 }}>{g.amount}</span>}
+                  {g.agency && <span style={{ color: '#0A7D3C', fontSize: 11 }}>{g.agency}</span>}
+                  {g.amount && <span style={{ color: '#0A7D3C', fontSize: 11, fontWeight: 600 }}>{g.amount}</span>}
                   {g.deadline && (
-                    <span style={{ color: new Date(g.deadline) < new Date() ? '#ff3333' : '#ff8800', fontSize: 11 }}>
+                    <span style={{ color: new Date(g.deadline) < new Date() ? '#C0392B' : '#8A6D3B', fontSize: 11 }}>
                       Deadline: {safeStr(g.deadline)}
                     </span>
                   )}
-                  {g.category && <span style={{ background: 'rgba(255,255,255,0.04)', color: '#666', padding: '1px 6px', borderRadius: 3, fontSize: 10 }}>{g.category}</span>}
+                  {g.category && <span style={{ background: 'rgba(255,255,255,0.04)', color: '#5E6366', padding: '1px 6px', borderRadius: 3, fontSize: 10 }}>{g.category}</span>}
                 </div>
-                {g.description && <p style={{ color: '#888', fontSize: 12, lineHeight: 1.4, margin: 0 }}>{String(g.description).slice(0, 150)}{g.description.length > 150 ? '...' : ''}</p>}
-                {g.eligibility && <p style={{ color: '#555', fontSize: 11, lineHeight: 1.4, margin: '4px 0 0' }}>Eligibility: {String(g.eligibility).slice(0, 100)}</p>}
-                {g.relevance_score && <div style={{ marginTop: 4 }}><span style={{ background: 'rgba(0,255,136,0.08)', border: '1px solid rgba(0,255,136,0.2)', color: '#00ff88', padding: '1px 6px', borderRadius: 3, fontSize: 10 }}>{g.relevance_score}% relevant</span></div>}
+                {g.description && <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.4, margin: 0 }}>{String(g.description).slice(0, 150)}{g.description.length > 150 ? '...' : ''}</p>}
+                {g.eligibility && <p style={{ color: '#939799', fontSize: 11, lineHeight: 1.4, margin: '4px 0 0' }}>Eligibility: {String(g.eligibility).slice(0, 100)}</p>}
+                {g.relevance_score && <div style={{ marginTop: 4 }}><span style={{ background: 'rgba(0, 214, 93,0.08)', border: '1px solid rgba(0, 214, 93,0.2)', color: '#0A7D3C', padding: '1px 6px', borderRadius: 3, fontSize: 10 }}>{g.relevance_score}% relevant</span></div>}
               </div>
             ))}
             {grantList.length > INITIAL_SHOW && (
               <button
                 onClick={() => setShowAllGrants(!showAllGrants)}
-                style={{ background: 'rgba(255,204,0,0.06)', border: '1px solid rgba(255,204,0,0.15)', color: '#ffcc00', padding: '8px 16px', borderRadius: 6, fontSize: 12, cursor: 'pointer', width: '100%', marginTop: 10, fontWeight: 500 }}
+                style={{ background: 'rgba(255,204,0,0.06)', border: '1px solid rgba(255,204,0,0.15)', color: '#8A6D3B', padding: '8px 16px', borderRadius: 6, fontSize: 12, cursor: 'pointer', width: '100%', marginTop: 10, fontWeight: 500 }}
               >
                 {showAllGrants ? 'Show less' : `View all ${grantList.length} grants ↓`}
               </button>
@@ -757,7 +757,7 @@ function SocialSection({ social }: { social: IntelligenceData['social'] }) {
     return (
       <IntelCard>
         <IntelLabel>Social Analytics</IntelLabel>
-        <p style={{ color: '#444', fontSize: 13 }}>No social analytics data available. Run social analysis to populate.</p>
+        <p style={{ color: '#939799', fontSize: 13 }}>No social analytics data available. Run social analysis to populate.</p>
       </IntelCard>
     );
   }
@@ -773,27 +773,27 @@ function SocialSection({ social }: { social: IntelligenceData['social'] }) {
           <IntelLabel>Web Traffic (SemRush)</IntelLabel>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
             {[
-              { label: 'Monthly Visits', value: semrush.monthly_visits, color: '#00d4ff' },
-              { label: 'Global Rank', value: semrush.global_rank ? `#${semrush.global_rank}` : '--', color: '#00ff88' },
-              { label: 'MoM Growth', value: `${semrush.monthly_growth || 0}%`, color: '#ff8800' },
-              { label: 'Top Country', value: semrush.top_country || '--', color: '#fff' },
+              { label: 'Monthly Visits', value: semrush.monthly_visits, color: '#0A7D3C' },
+              { label: 'Global Rank', value: semrush.global_rank ? `#${semrush.global_rank}` : '--', color: '#0A7D3C' },
+              { label: 'MoM Growth', value: `${semrush.monthly_growth || 0}%`, color: '#8A6D3B' },
+              { label: 'Top Country', value: semrush.top_country || '--', color: '#111111' },
             ].map((m) => (
-              <div key={m.label} style={{ background: '#0d0d0d', border: '1px solid #151515', borderRadius: 6, padding: '10px 12px' }}>
-                <div style={{ color: '#444', fontSize: 10, marginBottom: 4 }}>{m.label}</div>
+              <div key={m.label} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '10px 12px' }}>
+                <div style={{ color: '#939799', fontSize: 10, marginBottom: 4 }}>{m.label}</div>
                 <div style={{ color: m.color, fontWeight: 700, fontSize: 16 }}>{String(m.value)}</div>
               </div>
             ))}
           </div>
           {Object.keys(trafficSource).length > 0 && (
             <div>
-              <div style={{ color: '#444', fontSize: 10, marginBottom: 8 }}>TRAFFIC SOURCES</div>
+              <div style={{ color: '#939799', fontSize: 10, marginBottom: 8 }}>TRAFFIC SOURCES</div>
               {Object.entries(trafficSource).sort((a, b) => b[1] - a[1]).map(([src, pct]) => (
                 <div key={src} style={{ display: 'grid', gridTemplateColumns: '90px 1fr 32px', gap: 8, alignItems: 'center', marginBottom: 6 }}>
-                  <span style={{ color: '#666', fontSize: 11, textTransform: 'capitalize' }}>{src}</span>
-                  <div style={{ height: 3, background: '#111', borderRadius: 2, overflow: 'hidden' }}>
-                    <div style={{ height: '100%', width: `${pct}%`, background: '#00d4ff' }} />
+                  <span style={{ color: '#5E6366', fontSize: 11, textTransform: 'capitalize' }}>{src}</span>
+                  <div style={{ height: 3, background: '#FFFFFF', borderRadius: 2, overflow: 'hidden' }}>
+                    <div style={{ height: '100%', width: `${pct}%`, background: '#0A7D3C' }} />
                   </div>
-                  <span style={{ color: '#00d4ff', fontSize: 11, textAlign: 'right' }}>{pct}%</span>
+                  <span style={{ color: '#0A7D3C', fontSize: 11, textAlign: 'right' }}>{pct}%</span>
                 </div>
               ))}
             </div>
@@ -806,15 +806,15 @@ function SocialSection({ social }: { social: IntelligenceData['social'] }) {
           {Object.entries(links).filter(([, v]) => v).map(([platform, url]) => (
             <a key={platform} href={url} target="_blank" rel="noopener noreferrer" style={{
               display: 'flex', alignItems: 'center', gap: 10,
-              background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 6, padding: '10px 14px',
+              background: '#FFFFFF', border: '1px solid #F1F4F5', borderRadius: 6, padding: '10px 14px',
               textDecoration: 'none', transition: 'border-color 0.15s',
             }}>
-              <span style={{ color: '#00d4ff', fontSize: 13, fontWeight: 600, textTransform: 'capitalize', width: 80 }}>{platform}</span>
-              <span style={{ color: '#555', fontSize: 12, wordBreak: 'break-all' }}>{url}</span>
+              <span style={{ color: '#0A7D3C', fontSize: 13, fontWeight: 600, textTransform: 'capitalize', width: 80 }}>{platform}</span>
+              <span style={{ color: '#939799', fontSize: 12, wordBreak: 'break-all' }}>{url}</span>
             </a>
           ))}
           {Object.values(links).filter(Boolean).length === 0 && (
-            <p style={{ color: '#444', fontSize: 13 }}>No social profiles configured.</p>
+            <p style={{ color: '#939799', fontSize: 13 }}>No social profiles configured.</p>
           )}
         </div>
       </IntelCard>
@@ -827,7 +827,7 @@ function GoalsSection({ goals }: { goals: GoalsData | null }) {
     return (
       <IntelCard>
         <IntelLabel>Goals Overview</IntelLabel>
-        <p style={{ color: '#444', fontSize: 13 }}>No goals data available.</p>
+        <p style={{ color: '#939799', fontSize: 13 }}>No goals data available.</p>
       </IntelCard>
     );
   }
@@ -838,19 +838,19 @@ function GoalsSection({ goals }: { goals: GoalsData | null }) {
         <IntelCard key={i}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
             <IntelLabel>{ws.name}</IntelLabel>
-            <span style={{ color: '#555', fontSize: 12 }}>{ws.goals?.length || 0} goals</span>
+            <span style={{ color: '#939799', fontSize: 12 }}>{ws.goals?.length || 0} goals</span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             {(ws.goals || []).slice(0, 5).map((g, j) => (
-              <div key={j} style={{ display: 'grid', gridTemplateColumns: '1fr 80px 80px', gap: 8, alignItems: 'center', padding: '6px 0', borderBottom: '1px solid #111' }}>
-                <span style={{ color: '#888', fontSize: 12 }}>{g.name}</span>
+              <div key={j} style={{ display: 'grid', gridTemplateColumns: '1fr 80px 80px', gap: 8, alignItems: 'center', padding: '6px 0', borderBottom: '1px solid #FFFFFF' }}>
+                <span style={{ color: '#5E6366', fontSize: 12 }}>{g.name}</span>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ color: '#444', fontSize: 10 }}>PERF</div>
-                  <div style={{ color: g.performanceScore >= 60 ? '#00ff88' : g.performanceScore >= 30 ? '#ff8800' : '#ff4444', fontSize: 12, fontWeight: 700 }}>{g.performanceScore}</div>
+                  <div style={{ color: '#939799', fontSize: 10 }}>PERF</div>
+                  <div style={{ color: g.performanceScore >= 60 ? '#0A7D3C' : g.performanceScore >= 30 ? '#8A6D3B' : '#C0392B', fontSize: 12, fontWeight: 700 }}>{g.performanceScore}</div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ color: '#444', fontSize: 10 }}>EXEC</div>
-                  <div style={{ color: '#00d4ff', fontSize: 12, fontWeight: 700 }}>{g.executionScore}</div>
+                  <div style={{ color: '#939799', fontSize: 10 }}>EXEC</div>
+                  <div style={{ color: '#0A7D3C', fontSize: 12, fontWeight: 700 }}>{g.executionScore}</div>
                 </div>
               </div>
             ))}
@@ -872,9 +872,9 @@ function InvestorSection({ investors }: { investors: IntelligenceData['investors
           <IntelLabel>Current Investors</IntelLabel>
           <div style={{ display: 'flex', flex: 1, gap: 10, flexWrap: 'wrap' }}>
             {coInvestors.map((inv, i) => (
-              <div key={i} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 6, padding: '8px 14px', display: 'flex', alignItems: 'center', gap: 8 }}>
-                {inv.is_lead && <span style={{ background: 'rgba(0,212,255,0.1)', color: '#00d4ff', border: '1px solid rgba(0,212,255,0.2)', borderRadius: 3, padding: '1px 6px', fontSize: 9, fontWeight: 700 }}>LEAD</span>}
-                <span style={{ color: '#aaa', fontSize: 13 }}>{inv.name}</span>
+              <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F1F4F5', borderRadius: 6, padding: '8px 14px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                {inv.is_lead && <span style={{ background: 'rgba(10, 125, 60,0.1)', color: '#0A7D3C', border: '1px solid rgba(10, 125, 60,0.2)', borderRadius: 3, padding: '1px 6px', fontSize: 9, fontWeight: 700 }}>LEAD</span>}
+                <span style={{ color: '#5E6366', fontSize: 13 }}>{inv.name}</span>
               </div>
             ))}
           </div>
@@ -887,24 +887,24 @@ function InvestorSection({ investors }: { investors: IntelligenceData['investors
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid #1a1a1a' }}>
+                <tr style={{ borderBottom: '1px solid #F1F4F5' }}>
                   {['Name', 'Firm', 'Stage', 'Amount', 'Status'].map(h => (
-                    <th key={h} style={{ color: '#444', padding: '6px 10px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{h}</th>
+                    <th key={h} style={{ color: '#939799', padding: '6px 10px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {pipeline.map((lead, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid #0d0d0d' }}>
-                    <td style={{ padding: '8px 10px', color: '#aaa' }}>{lead.name || '--'}</td>
-                    <td style={{ padding: '8px 10px', color: '#666' }}>{lead.firm || '--'}</td>
-                    <td style={{ padding: '8px 10px', color: '#888' }}>{lead.stage || '--'}</td>
-                    <td style={{ padding: '8px 10px', color: '#00d4ff' }}>{lead.amount || '--'}</td>
+                  <tr key={i} style={{ borderBottom: '1px solid #FFFFFF' }}>
+                    <td style={{ padding: '8px 10px', color: '#5E6366' }}>{lead.name || '--'}</td>
+                    <td style={{ padding: '8px 10px', color: '#5E6366' }}>{lead.firm || '--'}</td>
+                    <td style={{ padding: '8px 10px', color: '#5E6366' }}>{lead.stage || '--'}</td>
+                    <td style={{ padding: '8px 10px', color: '#0A7D3C' }}>{lead.amount || '--'}</td>
                     <td style={{ padding: '8px 10px' }}>
                       <span style={{
-                        background: lead.status === 'committed' ? 'rgba(0,255,136,0.1)' : 'rgba(255,136,0,0.1)',
-                        color: lead.status === 'committed' ? '#00ff88' : '#ff8800',
-                        border: `1px solid ${lead.status === 'committed' ? 'rgba(0,255,136,0.3)' : 'rgba(255,136,0,0.3)'}`,
+                        background: lead.status === 'committed' ? 'rgba(0, 214, 93,0.1)' : 'rgba(138, 109, 59,0.1)',
+                        color: lead.status === 'committed' ? '#0A7D3C' : '#8A6D3B',
+                        border: `1px solid ${lead.status === 'committed' ? 'rgba(0, 214, 93,0.3)' : 'rgba(138, 109, 59,0.3)'}`,
                         padding: '2px 8px', borderRadius: 3, fontSize: 10, fontWeight: 700
                       }}>{lead.status || 'active'}</span>
                     </td>
@@ -917,7 +917,7 @@ function InvestorSection({ investors }: { investors: IntelligenceData['investors
       ) : (
         <IntelCard>
           <IntelLabel>Investor Pipeline</IntelLabel>
-          <p style={{ color: '#444', fontSize: 13 }}>No investor pipeline data. Leads will appear here as they are added.</p>
+          <p style={{ color: '#939799', fontSize: 13 }}>No investor pipeline data. Leads will appear here as they are added.</p>
         </IntelCard>
       )}
     </div>
@@ -1048,31 +1048,31 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
   return (
     <div style={{
       position: 'fixed', top: 0, right: 0, bottom: 0, width: 440,
-      background: '#0a0a0a', borderLeft: '1px solid #1a1a1a',
+      background: '#FFFFFF', borderLeft: '1px solid #F1F4F5',
       zIndex: 10000, display: 'flex', flexDirection: 'column',
       boxShadow: '-8px 0 30px rgba(0,0,0,0.6)',
     }}>
       {/* Header */}
       <div style={{
-        padding: '14px 20px', borderBottom: '1px solid #1a1a1a',
-        display: 'flex', alignItems: 'center', gap: 12, background: '#080808',
+        padding: '14px 20px', borderBottom: '1px solid #F1F4F5',
+        display: 'flex', alignItems: 'center', gap: 12, background: '#FFFFFF',
       }}>
         <div style={{
           width: 32, height: 32, borderRadius: 8,
-          background: `${item.sourceColor || '#00d4ff'}15`,
-          border: `1px solid ${item.sourceColor || '#00d4ff'}33`,
+          background: `${item.sourceColor || '#0A7D3C'}15`,
+          border: `1px solid ${item.sourceColor || '#0A7D3C'}33`,
           display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
         }}>{item.sourceIcon || item.icon || '🤖'}</div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ color: '#fff', fontSize: 13, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <div style={{ color: '#111111', fontSize: 13, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {item.goalName || item.title || item.headline?.split(':')[0] || item.subject || item.source || 'Agent Chat'}
           </div>
-          <div style={{ color: '#555', fontSize: 11 }}>
+          <div style={{ color: '#939799', fontSize: 11 }}>
             {item.source || item.chatSection || ''}{item.workstream ? ` · ${item.workstream}` : ''}{sessionId ? ` · ${sessionId.slice(0, 12)}` : ' · ClawAPI'}
           </div>
         </div>
         <button onClick={onClose} style={{
-          background: '#111', border: '1px solid #222', color: '#888',
+          background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#5E6366',
           width: 28, height: 28, borderRadius: 6, cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
         }}>✕</button>
@@ -1083,33 +1083,33 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
         {messages.map((msg, i) => (
           <div key={i} style={{ alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '85%' }}>
             <div className={msg.role === 'agent' ? 'chat-md' : ''} style={{
-              background: msg.role === 'user' ? '#00d4ff' : '#151515',
-              color: msg.role === 'user' ? '#000' : '#ccc',
+              background: msg.role === 'user' ? '#0A7D3C' : '#F7F8F9',
+              color: msg.role === 'user' ? '#111111' : '#E8E6E4',
               padding: '10px 14px', borderRadius: msg.role === 'user' ? '12px 12px 4px 12px' : '12px 12px 12px 4px',
               fontSize: 13, lineHeight: 1.6,
             }}>
               {msg.role === 'agent' ? (
                 <ReactMarkdown components={{
                   p: ({children}) => <p style={{margin: '6px 0'}}>{children}</p>,
-                  strong: ({children}) => <strong style={{color: '#fff'}}>{children}</strong>,
-                  em: ({children}) => <em style={{color: '#aaa'}}>{children}</em>,
-                  h1: ({children}) => <div style={{fontSize: 16, fontWeight: 700, color: '#fff', margin: '10px 0 6px'}}>{children}</div>,
-                  h2: ({children}) => <div style={{fontSize: 15, fontWeight: 700, color: '#fff', margin: '8px 0 4px'}}>{children}</div>,
-                  h3: ({children}) => <div style={{fontSize: 14, fontWeight: 600, color: '#ddd', margin: '6px 0 4px'}}>{children}</div>,
+                  strong: ({children}) => <strong style={{color: '#111111'}}>{children}</strong>,
+                  em: ({children}) => <em style={{color: '#5E6366'}}>{children}</em>,
+                  h1: ({children}) => <div style={{fontSize: 16, fontWeight: 700, color: '#111111', margin: '10px 0 6px'}}>{children}</div>,
+                  h2: ({children}) => <div style={{fontSize: 15, fontWeight: 700, color: '#111111', margin: '8px 0 4px'}}>{children}</div>,
+                  h3: ({children}) => <div style={{fontSize: 14, fontWeight: 600, color: '#2B3033', margin: '6px 0 4px'}}>{children}</div>,
                   ul: ({children}) => <ul style={{paddingLeft: 18, margin: '6px 0'}}>{children}</ul>,
                   ol: ({children}) => <ol style={{paddingLeft: 18, margin: '6px 0'}}>{children}</ol>,
-                  li: ({children}) => <li style={{margin: '3px 0', color: '#ccc'}}>{children}</li>,
+                  li: ({children}) => <li style={{margin: '3px 0', color: '#2B3033'}}>{children}</li>,
                   code: ({children, className}) => className ? (
-                    <pre style={{background: '#0a0a0a', border: '1px solid #1a1a1a', borderRadius: 6, padding: '10px 12px', margin: '6px 0', overflowX: 'auto', fontSize: 12, color: '#aaa'}}><code>{children}</code></pre>
+                    <pre style={{background: '#FFFFFF', border: '1px solid #F1F4F5', borderRadius: 6, padding: '10px 12px', margin: '6px 0', overflowX: 'auto', fontSize: 12, color: '#5E6366'}}><code>{children}</code></pre>
                   ) : (
-                    <code style={{background: '#1a1a1a', padding: '1px 5px', borderRadius: 3, fontSize: 12, color: '#00d4ff'}}>{children}</code>
+                    <code style={{background: '#F1F4F5', padding: '1px 5px', borderRadius: 3, fontSize: 12, color: '#0A7D3C'}}>{children}</code>
                   ),
-                  hr: () => <hr style={{border: 'none', borderTop: '1px solid #1a1a1a', margin: '10px 0'}} />,
-                  a: ({href, children}) => <a href={href} target="_blank" rel="noopener noreferrer" style={{color: '#00d4ff', textDecoration: 'underline'}}>{children}</a>,
+                  hr: () => <hr style={{border: 'none', borderTop: '1px solid #F1F4F5', margin: '10px 0'}} />,
+                  a: ({href, children}) => <a href={href} target="_blank" rel="noopener noreferrer" style={{color: '#0A7D3C', textDecoration: 'underline'}}>{children}</a>,
                   table: ({children}) => <div style={{overflowX: 'auto', margin: '8px 0'}}><table style={{width: '100%', borderCollapse: 'collapse', fontSize: 12}}>{children}</table></div>,
-                  th: ({children}) => <th style={{background: '#1a1a1a', color: '#888', padding: '6px 10px', textAlign: 'left', border: '1px solid #222', fontSize: 11, fontWeight: 600}}>{children}</th>,
-                  td: ({children}) => <td style={{padding: '6px 10px', border: '1px solid #1a1a1a', color: '#ccc'}}>{children}</td>,
-                  blockquote: ({children}) => <blockquote style={{borderLeft: '3px solid #00d4ff', paddingLeft: 12, margin: '8px 0', color: '#888'}}>{children}</blockquote>,
+                  th: ({children}) => <th style={{background: '#F1F4F5', color: '#5E6366', padding: '6px 10px', textAlign: 'left', border: '1px solid #E8E6E4', fontSize: 11, fontWeight: 600}}>{children}</th>,
+                  td: ({children}) => <td style={{padding: '6px 10px', border: '1px solid #F1F4F5', color: '#2B3033'}}>{children}</td>,
+                  blockquote: ({children}) => <blockquote style={{borderLeft: '3px solid #0A7D3C', paddingLeft: 12, margin: '8px 0', color: '#5E6366'}}>{children}</blockquote>,
                 }}>{msg.text}</ReactMarkdown>
               ) : msg.text}
             </div>
@@ -1117,7 +1117,7 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
         ))}
         {loading && (
           <div style={{ alignSelf: 'flex-start' }}>
-            <div style={{ background: '#151515', color: '#00d4ff', padding: '10px 14px', borderRadius: '12px 12px 12px 4px', fontSize: 13, display: 'flex', gap: 4 }}>
+            <div style={{ background: '#F7F8F9', color: '#0A7D3C', padding: '10px 14px', borderRadius: '12px 12px 12px 4px', fontSize: 13, display: 'flex', gap: 4 }}>
               <span className="dot-pulse">●</span> OS is thinking...
             </div>
           </div>
@@ -1126,19 +1126,19 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
       </div>
 
       {/* Input */}
-      <div style={{ padding: '12px 20px', borderTop: '1px solid #1a1a1a', display: 'flex', gap: 8 }}>
+      <div style={{ padding: '12px 20px', borderTop: '1px solid #F1F4F5', display: 'flex', gap: 8 }}>
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
           placeholder="Give instructions to the agent..."
           style={{
-            flex: 1, background: '#111', border: '1px solid #222', color: '#fff',
+            flex: 1, background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#111111',
             padding: '10px 14px', borderRadius: 8, fontSize: 13, outline: 'none',
           }}
         />
         <button onClick={handleSend} disabled={loading} style={{
-          background: loading ? '#333' : '#00d4ff', color: '#000', border: 'none',
+          background: loading ? '#E8E6E4' : '#0A7D3C', color: '#111111', border: 'none',
           padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 700,
           cursor: loading ? 'wait' : 'pointer', flexShrink: 0,
         }}>Send</button>
@@ -1148,7 +1148,7 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
       <div style={{ padding: '8px 20px 16px', display: 'flex', gap: 6, flexWrap: 'wrap' }}>
         {quickActions.map((q: string) => (
           <button key={q} onClick={() => { setInput(q); }} style={{
-            background: '#111', border: '1px solid #1a1a1a', color: '#888',
+            background: '#FFFFFF', border: '1px solid #F1F4F5', color: '#5E6366',
             padding: '5px 12px', borderRadius: 6, fontSize: 11, cursor: 'pointer',
             transition: 'all 0.15s',
           }}>{q}</button>
@@ -1164,19 +1164,19 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
 
   if (!updates?.updates || Object.keys(updates.updates).length === 0) {
     return (
-      <div style={{ color: '#444', fontSize: 13, padding: '24px 0', textAlign: 'center' }}>
+      <div style={{ color: '#939799', fontSize: 13, padding: '24px 0', textAlign: 'center' }}>
         No updates available
       </div>
     );
   }
 
   const workstreamColors: Record<string, string> = {
-    Product: '#00d4ff',
-    Demand: '#00ff88',
-    Operations: '#ff8800',
-    Team: '#aa44ff',
-    Partnerships: '#ff4488',
-    Investors: '#ffcc00',
+    Product: '#0A7D3C',
+    Demand: '#00D65D',
+    Operations: '#8A6D3B',
+    Team: '#5E6366',
+    Partnerships: '#C0392B',
+    Investors: '#C9A227',
     Synergy: '#44ffcc',
   };
 
@@ -1195,7 +1195,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-        <div style={{ color: '#555', fontSize: 11, fontFamily: 'monospace' }}>
+        <div style={{ color: '#939799', fontSize: 11, fontFamily: 'monospace' }}>
           {totalUpdates} total updates across {Object.keys(updates.updates).length} workstreams
         </div>
         <button
@@ -1206,7 +1206,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
             else setExpandedWorkstreams(new Set(allWs));
           }}
           style={{
-            background: 'none', border: '1px solid #222', borderRadius: 4, color: '#555',
+            background: 'none', border: '1px solid #E8E6E4', borderRadius: 4, color: '#939799',
             fontSize: 10, padding: '3px 8px', cursor: 'pointer', fontFamily: 'monospace', letterSpacing: '0.08em'
           }}
         >
@@ -1215,7 +1215,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
       </div>
 
       {Object.entries(updates.updates).map(([workstream, items]) => {
-        const color = workstreamColors[workstream] || '#00d4ff';
+        const color = workstreamColors[workstream] || '#0A7D3C';
         const isExpanded = expandedWorkstreams.has(workstream);
 
         return (
@@ -1226,24 +1226,24 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 padding: '12px 16px',
-                background: '#080808',
-                border: '1px solid #1a1a1a',
+                background: '#FFFFFF',
+                border: '1px solid #F1F4F5',
                 borderRadius: isExpanded ? '8px 8px 0 0' : 8,
                 cursor: 'pointer',
                 transition: 'all 0.15s',
                 userSelect: 'none',
               }}
-              onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.background = '#0d0d0d'}
-              onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.background = '#080808'}
+              onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.background = '#FFFFFF'}
+              onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.background = '#FFFFFF'}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div style={{ width: 3, height: 16, background: color, borderRadius: 2 }} />
                 <span style={{ color, fontSize: 11, fontFamily: 'monospace', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 600 }}>
                   {workstream}
                 </span>
-                <span style={{ color: '#555', fontSize: 10, fontFamily: 'monospace' }}>· {items.length} update{items.length !== 1 ? 's' : ''}</span>
+                <span style={{ color: '#939799', fontSize: 10, fontFamily: 'monospace' }}>· {items.length} update{items.length !== 1 ? 's' : ''}</span>
               </div>
-              <span style={{ color: '#444', fontSize: 12, transition: 'transform 0.15s', transform: isExpanded ? 'rotate(180deg)' : 'none', display: 'inline-block' }}>
+              <span style={{ color: '#939799', fontSize: 12, transition: 'transform 0.15s', transform: isExpanded ? 'rotate(180deg)' : 'none', display: 'inline-block' }}>
                 ▾
               </span>
             </div>
@@ -1251,7 +1251,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
             {/* Updates list */}
             {isExpanded && (
               <div style={{
-                border: '1px solid #1a1a1a',
+                border: '1px solid #F1F4F5',
                 borderTop: 'none',
                 borderRadius: '0 0 8px 8px',
                 overflow: 'hidden',
@@ -1269,8 +1269,8 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
                       key={i}
                       style={{
                         padding: '16px 20px',
-                        borderBottom: i < items.length - 1 ? '1px solid #111' : 'none',
-                        background: i % 2 === 0 ? '#060606' : '#050505',
+                        borderBottom: i < items.length - 1 ? '1px solid #FFFFFF' : 'none',
+                        background: i % 2 === 0 ? '#060606' : '#FFFFFF',
                       }}
                     >
                       {/* Tags row */}
@@ -1278,8 +1278,8 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
                           {goalName && (
                             <span style={{
-                              background: 'rgba(0,212,255,0.08)', color: '#00d4ff',
-                              border: '1px solid rgba(0,212,255,0.2)',
+                              background: 'rgba(10, 125, 60,0.08)', color: '#0A7D3C',
+                              border: '1px solid rgba(10, 125, 60,0.2)',
                               borderRadius: 4, padding: '3px 8px', fontSize: 10,
                               fontFamily: 'monospace', letterSpacing: '0.04em', maxWidth: 280,
                               overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
@@ -1289,7 +1289,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
                           )}
                           {msName && (
                             <span style={{
-                              background: 'rgba(255,200,0,0.08)', color: '#ffcc44',
+                              background: 'rgba(255,200,0,0.08)', color: '#8A6D3B',
                               border: '1px solid rgba(255,200,0,0.2)',
                               borderRadius: 4, padding: '3px 8px', fontSize: 10,
                               fontFamily: 'monospace', letterSpacing: '0.04em', maxWidth: 240,
@@ -1300,8 +1300,8 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
                           )}
                           {taskName && (
                             <span style={{
-                              background: 'rgba(0,255,136,0.08)', color: '#00ff88',
-                              border: '1px solid rgba(0,255,136,0.2)',
+                              background: 'rgba(0, 214, 93,0.08)', color: '#0A7D3C',
+                              border: '1px solid rgba(0, 214, 93,0.2)',
                               borderRadius: 4, padding: '3px 8px', fontSize: 10,
                               fontFamily: 'monospace', letterSpacing: '0.04em', maxWidth: 240,
                               overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
@@ -1313,7 +1313,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
                       )}
 
                       {/* Update text */}
-                      <div style={{ color: '#bbb', fontSize: 13, lineHeight: 1.6, marginBottom: 8 }}>
+                      <div style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.6, marginBottom: 8 }}>
                         {safeStr(item.update)}
                       </div>
 
@@ -1325,7 +1325,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
                               <img
                                 src={img}
                                 alt="screenshot"
-                                style={{ height: 60, width: 'auto', borderRadius: 4, border: '1px solid #1a1a1a', objectFit: 'cover' }}
+                                style={{ height: 60, width: 'auto', borderRadius: 4, border: '1px solid #F1F4F5', objectFit: 'cover' }}
                                 onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
                               />
                             </a>
@@ -1342,8 +1342,8 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
                             return (
                               <a key={j} href={link} target="_blank" rel="noreferrer" style={{
                                 display: 'inline-flex', alignItems: 'center', gap: 4,
-                                background: '#0d0d0d', border: '1px solid #222', borderRadius: 4,
-                                color: '#00d4ff', fontSize: 10, padding: '3px 8px',
+                                background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 4,
+                                color: '#0A7D3C', fontSize: 10, padding: '3px 8px',
                                 textDecoration: 'none', fontFamily: 'monospace',
                               }}>
                                 ↗ {displayUrl}
@@ -1352,7 +1352,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
                           })}
                         </div>
                         {item.date_id && (
-                          <span style={{ color: '#444', fontSize: 10, fontFamily: 'monospace' }}>
+                          <span style={{ color: '#939799', fontSize: 10, fontFamily: 'monospace' }}>
                             {item.date_id}
                           </span>
                         )}
@@ -1407,16 +1407,16 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
   const polsiaFeed = (feed as any)?.feed || (feed as any)?.events || [];
   polsiaFeed.forEach((evt: any) => {
     const typeMap: Record<string, { icon: string; color: string; label: string }> = {
-      brand_dna: { icon: '🎨', color: '#00d4ff', label: 'Brand' },
-      seo_audit: { icon: '🔍', color: '#ff8800', label: 'SEO' },
-      geo_check: { icon: '🌐', color: '#00ff88', label: 'GEO' },
-      competitors: { icon: '⚔️', color: '#ff4400', label: 'Competitive Intel' },
-      patents: { icon: '📜', color: '#aa44ff', label: 'IP/Patents' },
-      grants: { icon: '💰', color: '#ffcc00', label: 'Grants' },
-      scrape: { icon: '🔄', color: '#666', label: 'Data Collection' },
-      simulation: { icon: '🧪', color: '#3B82F6', label: 'Simulation' },
+      brand_dna: { icon: '🎨', color: '#0A7D3C', label: 'Brand' },
+      seo_audit: { icon: '🔍', color: '#8A6D3B', label: 'SEO' },
+      geo_check: { icon: '🌐', color: '#0A7D3C', label: 'GEO' },
+      competitors: { icon: '⚔️', color: '#8A6D3B', label: 'Competitive Intel' },
+      patents: { icon: '📜', color: '#5E6366', label: 'IP/Patents' },
+      grants: { icon: '💰', color: '#8A6D3B', label: 'Grants' },
+      scrape: { icon: '🔄', color: '#5E6366', label: 'Data Collection' },
+      simulation: { icon: '🧪', color: '#0A7D3C', label: 'Simulation' },
     };
-    const meta = typeMap[evt.type] || { icon: '📋', color: '#00d4ff', label: evt.type?.replace(/_/g, ' ') || 'Update' };
+    const meta = typeMap[evt.type] || { icon: '📋', color: '#0A7D3C', label: evt.type?.replace(/_/g, ' ') || 'Update' };
     const isActionable = evt.status !== 'complete' || evt.type === 'competitors' || evt.type === 'grants';
     actionItems.push({
       id: itemId++,
@@ -1569,7 +1569,7 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
       id: itemId++,
       source: 'SEO',
       sourceIcon: '🔍',
-      sourceColor: '#ff8800',
+      sourceColor: '#8A6D3B',
       headline: `SEO score ${seoScoreVal}/100 with ${criticalCount} critical issues. Revenue at risk.`,
       description: `The website has ${seoIssues.length} SEO issues, ${criticalCount} critical. This directly impacts organic discovery and CAC.`,
       actionType: 'action',
@@ -1585,7 +1585,7 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
       id: itemId++,
       source: 'GEO',
       sourceIcon: '🌐',
-      sourceColor: '#00ff88',
+      sourceColor: '#00D65D',
       headline: `AI visibility score ${geoScoreVal}/100. Invisible to ChatGPT, Claude, Gemini.`,
       description: 'The venture is not being cited by any major AI platform. This is a critical gap for discovery.',
       actionType: 'action',
@@ -1605,8 +1605,8 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
         <IntelLabel>CEO Action Feed</IntelLabel>
         <div style={{ textAlign: 'center', padding: '40px 0' }}>
           <div style={{ fontSize: 32, marginBottom: 12 }}>✅</div>
-          <div style={{ color: '#00ff88', fontSize: 15, fontWeight: 600, marginBottom: 4 }}>All Clear</div>
-          <p style={{ color: '#555', fontSize: 13 }}>No pending actions or decisions required right now.</p>
+          <div style={{ color: '#0A7D3C', fontSize: 15, fontWeight: 600, marginBottom: 4 }}>All Clear</div>
+          <p style={{ color: '#939799', fontSize: 13 }}>No pending actions or decisions required right now.</p>
         </div>
       </IntelCard>
     );
@@ -1636,15 +1636,15 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
       {/* Summary bar */}
       <div style={{ display: 'flex', gap: 12 }}>
         {[
-          { key: 'all' as const, label: 'All', count: actionItems.length, color: '#fff' },
-          { key: 'action' as const, label: '🔴 Needs Action', count: actionCount, color: '#ff4444' },
-          { key: 'review' as const, label: '🟡 Review', count: reviewCount, color: '#ff8800' },
-          { key: 'info' as const, label: '🟢 Info', count: infoCount, color: '#00ff88' },
+          { key: 'all' as const, label: 'All', count: actionItems.length, color: '#111111' },
+          { key: 'action' as const, label: '🔴 Needs Action', count: actionCount, color: '#C0392B' },
+          { key: 'review' as const, label: '🟡 Review', count: reviewCount, color: '#8A6D3B' },
+          { key: 'info' as const, label: '🟢 Info', count: infoCount, color: '#0A7D3C' },
         ].map(f => (
           <button key={f.key} onClick={() => setActiveFilter(f.key)} style={{
-            background: activeFilter === f.key ? `${f.color}12` : '#080808',
-            border: `1px solid ${activeFilter === f.key ? `${f.color}44` : '#1a1a1a'}`,
-            color: activeFilter === f.key ? f.color : '#555',
+            background: activeFilter === f.key ? `${f.color}12` : '#FFFFFF',
+            border: `1px solid ${activeFilter === f.key ? `${f.color}44` : '#F1F4F5'}`,
+            color: activeFilter === f.key ? f.color : '#939799',
             padding: '8px 16px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
             fontWeight: activeFilter === f.key ? 700 : 400,
             display: 'flex', alignItems: 'center', gap: 8,
@@ -1662,15 +1662,15 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {filtered.map((item) => {
           const isExpanded = expandedItems.has(item.id);
-          const urgencyColors = { high: '#ff4444', medium: '#ff8800', low: '#00ff88' };
-          const urgencyBg = { high: 'rgba(255,68,68,0.06)', medium: 'rgba(255,136,0,0.06)', low: 'rgba(0,255,136,0.04)' };
-          const actionBtnColors = { action: { bg: '#ff4444', text: '#fff' }, review: { bg: '#1a1a1a', text: '#ff8800' }, info: { bg: '#111', text: '#888' } };
+          const urgencyColors = { high: '#C0392B', medium: '#8A6D3B', low: '#00D65D' };
+          const urgencyBg = { high: 'rgba(192, 57, 43,0.06)', medium: 'rgba(138, 109, 59,0.06)', low: 'rgba(0, 214, 93,0.04)' };
+          const actionBtnColors = { action: { bg: '#C0392B', text: '#FFFFFF' }, review: { bg: '#F1F4F5', text: '#8A6D3B' }, info: { bg: '#FFFFFF', text: '#C8CBCC' } };
           const btnStyle = actionBtnColors[item.actionType];
 
           return (
             <div key={item.id} style={{
-              background: '#080808',
-              border: `1px solid ${item.actionType === 'action' ? 'rgba(255,68,68,0.2)' : '#1a1a1a'}`,
+              background: '#FFFFFF',
+              border: `1px solid ${item.actionType === 'action' ? 'rgba(192, 57, 43,0.2)' : '#F1F4F5'}`,
               borderRadius: 10,
               overflow: 'hidden',
               transition: 'border-color 0.15s',
@@ -1697,18 +1697,18 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
                     <span style={{ color: item.sourceColor, fontSize: 12, fontWeight: 600 }}>{item.source}</span>
-                    {item.workstream && <span style={{ color: '#333', fontSize: 11 }}>· {item.workstream}</span>}
-                    {item.date && <span style={{ color: '#222', fontSize: 10, marginLeft: 'auto', flexShrink: 0 }}>{item.date}</span>}
+                    {item.workstream && <span style={{ color: '#5E6366', fontSize: 11 }}>· {item.workstream}</span>}
+                    {item.date && <span style={{ color: '#2B3033', fontSize: 10, marginLeft: 'auto', flexShrink: 0 }}>{item.date}</span>}
                   </div>
-                  <div style={{ color: '#ddd', fontSize: 14, fontWeight: 600, lineHeight: 1.3 }}>{item.headline}</div>
+                  <div style={{ color: '#2B3033', fontSize: 14, fontWeight: 600, lineHeight: 1.3 }}>{item.headline}</div>
                 </div>
 
                 {/* Status + action */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
                   {item.urgency === 'high' && (
                     <span style={{
-                      background: 'rgba(255,68,68,0.1)', color: '#ff4444',
-                      border: '1px solid rgba(255,68,68,0.3)',
+                      background: 'rgba(192, 57, 43,0.1)', color: '#C0392B',
+                      border: '1px solid rgba(192, 57, 43,0.3)',
                       padding: '3px 8px', borderRadius: 4, fontSize: 10, fontWeight: 700,
                     }}>Urgent</span>
                   )}
@@ -1718,7 +1718,7 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
                     padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700,
                     cursor: 'pointer', whiteSpace: 'nowrap',
                   }}>{item.actionLabel}</button>
-                  <span style={{ color: '#333', fontSize: 16, transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }}>▾</span>
+                  <span style={{ color: '#5E6366', fontSize: 16, transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }}>▾</span>
                 </div>
               </div>
 
@@ -1726,35 +1726,35 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
               {isExpanded && (
                 <div style={{
                   padding: '0 18px 18px 68px',
-                  borderTop: '1px solid #111',
+                  borderTop: '1px solid #FFFFFF',
                   background: urgencyBg[item.urgency],
                 }}>
                   {/* Description */}
-                  <p style={{ color: '#888', fontSize: 13, lineHeight: 1.6, margin: '14px 0' }}>
+                  <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.6, margin: '14px 0' }}>
                     {safeStr(item.description)}
                   </p>
 
                   {/* Actionable steps */}
                   {item.details && item.details.length > 0 && (
                     <div style={{ marginBottom: 14 }}>
-                      <div style={{ color: '#555', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8, fontWeight: 600 }}>
+                      <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8, fontWeight: 600 }}>
                         {item.actionType === 'action' ? 'REQUIRED ACTIONS' : item.actionType === 'review' ? 'KEY POINTS TO REVIEW' : 'SUMMARY'}
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                         {item.details.map((action, i) => (
                           <div key={i} style={{
                             display: 'flex', gap: 10, alignItems: 'flex-start',
-                            background: '#0a0a0a', border: '1px solid #151515',
+                            background: '#FFFFFF', border: '1px solid #F7F8F9',
                             borderRadius: 6, padding: '10px 14px',
                           }}>
                             <span style={{
-                              background: item.actionType === 'action' ? 'rgba(255,68,68,0.12)' : 'rgba(0,212,255,0.08)',
-                              color: item.actionType === 'action' ? '#ff4444' : '#00d4ff',
-                              border: `1px solid ${item.actionType === 'action' ? 'rgba(255,68,68,0.25)' : 'rgba(0,212,255,0.2)'}`,
+                              background: item.actionType === 'action' ? 'rgba(192, 57, 43,0.12)' : 'rgba(10, 125, 60,0.08)',
+                              color: item.actionType === 'action' ? '#C0392B' : '#0A7D3C',
+                              border: `1px solid ${item.actionType === 'action' ? 'rgba(192, 57, 43,0.25)' : 'rgba(10, 125, 60,0.2)'}`,
                               borderRadius: 4, padding: '1px 7px', fontSize: 11, fontWeight: 700,
                               flexShrink: 0, minWidth: 22, textAlign: 'center',
                             }}>{i + 1}</span>
-                            <span style={{ color: '#aaa', fontSize: 13, lineHeight: 1.5 }}>{action}</span>
+                            <span style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.5 }}>{action}</span>
                           </div>
                         ))}
                       </div>
@@ -1765,18 +1765,18 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
                   {(item.goalImpact || item.valuationAtStake) && (
                     <div style={{
                       display: 'flex', gap: 16, padding: '10px 14px',
-                      background: '#0a0a0a', border: '1px solid #151515', borderRadius: 6,
+                      background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6,
                     }}>
                       {item.goalImpact && (
                         <div>
-                          <div style={{ color: '#444', fontSize: 10, letterSpacing: '0.05em' }}>GOAL IMPACT</div>
-                          <div style={{ color: '#00d4ff', fontSize: 13, fontWeight: 600, marginTop: 2 }}>{item.goalImpact}</div>
+                          <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.05em' }}>GOAL IMPACT</div>
+                          <div style={{ color: '#0A7D3C', fontSize: 13, fontWeight: 600, marginTop: 2 }}>{item.goalImpact}</div>
                         </div>
                       )}
                       {item.valuationAtStake && (
                         <div>
-                          <div style={{ color: '#444', fontSize: 10, letterSpacing: '0.05em' }}>VALUATION AT STAKE</div>
-                          <div style={{ color: '#ff8800', fontSize: 13, fontWeight: 600, marginTop: 2 }}>{item.valuationAtStake}</div>
+                          <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.05em' }}>VALUATION AT STAKE</div>
+                          <div style={{ color: '#8A6D3B', fontSize: 13, fontWeight: 600, marginTop: 2 }}>{item.valuationAtStake}</div>
                         </div>
                       )}
                     </div>
@@ -1949,12 +1949,12 @@ function getWorkstreamIcon(ws?: string): string {
 
 function getWorkstreamColor(ws?: string): string {
   const map: Record<string, string> = {
-    product: '#00d4ff', demand: '#ff8800', operations: '#00ff88', team: '#aa44ff',
-    partnerships: '#ffcc00', investors: '#3B82F6', synergy: '#ff4400',
-    Product: '#00d4ff', Demand: '#ff8800', Operations: '#00ff88', Team: '#aa44ff',
-    Partnerships: '#ffcc00', Investors: '#3B82F6', Synergy: '#ff4400',
+    product: '#0A7D3C', demand: '#8A6D3B', operations: '#00D65D', team: '#5E6366',
+    partnerships: '#C9A227', investors: '#0A7D3C', synergy: '#8A6D3B',
+    Product: '#0A7D3C', Demand: '#8A6D3B', Operations: '#00D65D', Team: '#5E6366',
+    Partnerships: '#C9A227', Investors: '#0A7D3C', Synergy: '#8A6D3B',
   };
-  return map[ws || ''] || '#00d4ff';
+  return map[ws || ''] || '#0A7D3C';
 }
 
 function HiringSection({ hiring }: { hiring: HiringData | null }) {
@@ -1962,7 +1962,7 @@ function HiringSection({ hiring }: { hiring: HiringData | null }) {
     return (
       <IntelCard>
         <IntelLabel>Team & Hiring</IntelLabel>
-        <p style={{ color: '#444', fontSize: 13 }}>No hiring data available.</p>
+        <p style={{ color: '#939799', fontSize: 13 }}>No hiring data available.</p>
       </IntelCard>
     );
   }
@@ -1973,21 +1973,21 @@ function HiringSection({ hiring }: { hiring: HiringData | null }) {
         <IntelLabel>Team ({hiring.employees?.length || 0} members)</IntelLabel>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {(hiring.employees || []).map((emp, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', borderBottom: '1px solid #111' }}>
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', borderBottom: '1px solid #FFFFFF' }}>
               {emp.image_id && emp.image_id.startsWith('http') && (
-                <img src={emp.image_id} alt={emp.name} style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover', border: '1px solid #1a1a1a' }} />
+                <img src={emp.image_id} alt={emp.name} style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover', border: '1px solid #F1F4F5' }} />
               )}
               {(!emp.image_id || !emp.image_id.startsWith('http')) && (
-                <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg, #00d4ff, #0066ff)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 14 }}>
+                <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#111111', fontWeight: 700, fontSize: 14 }}>
                   {emp.name?.[0]}
                 </div>
               )}
               <div>
-                <div style={{ color: '#fff', fontSize: 13, fontWeight: 600 }}>{emp.name}</div>
-                <div style={{ color: '#555', fontSize: 11 }}>{emp.title}</div>
+                <div style={{ color: '#111111', fontSize: 13, fontWeight: 600 }}>{emp.name}</div>
+                <div style={{ color: '#939799', fontSize: 11 }}>{emp.title}</div>
               </div>
               {emp.link && (
-                <a href={emp.link} target="_blank" rel="noopener noreferrer" style={{ marginLeft: 'auto', color: '#00d4ff', fontSize: 11 }}>LinkedIn</a>
+                <a href={emp.link} target="_blank" rel="noopener noreferrer" style={{ marginLeft: 'auto', color: '#0A7D3C', fontSize: 11 }}>LinkedIn</a>
               )}
             </div>
           ))}
@@ -1997,13 +1997,13 @@ function HiringSection({ hiring }: { hiring: HiringData | null }) {
       <IntelCard>
         <IntelLabel>Open Roles ({hiring.hiring_tasks?.length || 0})</IntelLabel>
         {!hiring.hiring_tasks?.length ? (
-          <p style={{ color: '#444', fontSize: 13 }}>No open positions at this time.</p>
+          <p style={{ color: '#939799', fontSize: 13 }}>No open positions at this time.</p>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {hiring.hiring_tasks.map((task, i) => (
-              <div key={i} style={{ background: '#0d0d0d', border: '1px solid #151515', borderRadius: 6, padding: '10px 14px' }}>
-                <div style={{ color: '#fff', fontSize: 13, fontWeight: 600, marginBottom: 4 }}>{task.title}</div>
-                {task.description && <p style={{ color: '#666', fontSize: 12, margin: 0 }}>{task.description}</p>}
+              <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '10px 14px' }}>
+                <div style={{ color: '#111111', fontSize: 13, fontWeight: 600, marginBottom: 4 }}>{task.title}</div>
+                {task.description && <p style={{ color: '#5E6366', fontSize: 12, margin: 0 }}>{task.description}</p>}
               </div>
             ))}
           </div>
@@ -2022,7 +2022,7 @@ function CompanyOverviewSection({ companyInfo, domain }: { companyInfo: Record<s
     return (
       <IntelCard>
         <IntelLabel>Company Overview</IntelLabel>
-        <p style={{ color: '#444', fontSize: 13 }}>No company data available.</p>
+        <p style={{ color: '#939799', fontSize: 13 }}>No company data available.</p>
       </IntelCard>
     );
   }
@@ -2044,32 +2044,32 @@ function CompanyOverviewSection({ companyInfo, domain }: { companyInfo: Record<s
       <IntelCard>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
           <div>
-            <div style={{ color: '#fff', fontSize: 22, fontWeight: 800, marginBottom: 4 }}>{ci.name || domain}</div>
-            {ci.tagline && <div style={{ color: '#00d4ff', fontSize: 14, fontStyle: 'italic', marginBottom: 8 }}>&ldquo;{ci.tagline}&rdquo;</div>}
+            <div style={{ color: '#111111', fontSize: 22, fontWeight: 800, marginBottom: 4 }}>{ci.name || domain}</div>
+            {ci.tagline && <div style={{ color: '#0A7D3C', fontSize: 14, fontStyle: 'italic', marginBottom: 8 }}>&ldquo;{ci.tagline}&rdquo;</div>}
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 8 }}>
-              {ci.industry && <span style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', color: '#00d4ff', padding: '3px 10px', borderRadius: 20, fontSize: 11 }}>{ci.industry}</span>}
-              {ci.location && <span style={{ color: '#666', fontSize: 12 }}>📍 {ci.location}</span>}
-              {ci.founded && <span style={{ color: '#666', fontSize: 12 }}>Est. {ci.founded}</span>}
-              {ci.team_size && <span style={{ color: '#666', fontSize: 12 }}>👥 {ci.team_size}</span>}
+              {ci.industry && <span style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '3px 10px', borderRadius: 20, fontSize: 11 }}>{ci.industry}</span>}
+              {ci.location && <span style={{ color: '#5E6366', fontSize: 12 }}>📍 {ci.location}</span>}
+              {ci.founded && <span style={{ color: '#5E6366', fontSize: 12 }}>Est. {ci.founded}</span>}
+              {ci.team_size && <span style={{ color: '#5E6366', fontSize: 12 }}>👥 {ci.team_size}</span>}
             </div>
           </div>
           {websiteUrl && (
-            <a href={websiteUrl} target="_blank" rel="noopener noreferrer" style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', color: '#00d4ff', padding: '6px 16px', borderRadius: 6, fontSize: 12, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+            <a href={websiteUrl} target="_blank" rel="noopener noreferrer" style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '6px 16px', borderRadius: 6, fontSize: 12, textDecoration: 'none', whiteSpace: 'nowrap' }}>
               Visit ↗
             </a>
           )}
         </div>
-        {ci.description && <p style={{ color: '#aaa', fontSize: 13, lineHeight: 1.7, marginBottom: 16 }}>{ci.description}</p>}
+        {ci.description && <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.7, marginBottom: 16 }}>{ci.description}</p>}
         {ci.value_proposition && (
-          <div style={{ background: '#0d0d0d', borderLeft: '3px solid #00d4ff', padding: '12px 16px', borderRadius: '0 6px 6px 0', marginBottom: 16 }}>
-            <div style={{ color: '#444', fontSize: 10, letterSpacing: '0.1em', marginBottom: 4 }}>VALUE PROPOSITION</div>
-            <p style={{ color: '#aaa', fontSize: 13, lineHeight: 1.6, margin: 0 }}>{ci.value_proposition}</p>
+          <div style={{ background: '#FFFFFF', borderLeft: '3px solid #0A7D3C', padding: '12px 16px', borderRadius: '0 6px 6px 0', marginBottom: 16 }}>
+            <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', marginBottom: 4 }}>VALUE PROPOSITION</div>
+            <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.6, margin: 0 }}>{ci.value_proposition}</p>
           </div>
         )}
         {ci.target_audience && (
           <div style={{ marginBottom: 16 }}>
-            <div style={{ color: '#444', fontSize: 10, letterSpacing: '0.1em', marginBottom: 6 }}>TARGET AUDIENCE</div>
-            <p style={{ color: '#888', fontSize: 12, lineHeight: 1.5 }}>{ci.target_audience}</p>
+            <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', marginBottom: 6 }}>TARGET AUDIENCE</div>
+            <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5 }}>{ci.target_audience}</p>
           </div>
         )}
       </IntelCard>
@@ -2080,11 +2080,11 @@ function CompanyOverviewSection({ companyInfo, domain }: { companyInfo: Record<s
           <IntelLabel>Products ({products.length})</IntelLabel>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 12 }}>
             {products.map((p: any, i: number) => (
-              <div key={i} style={{ background: '#0d0d0d', border: '1px solid #151515', borderRadius: 8, padding: 14 }}>
-                <div style={{ color: '#fff', fontSize: 13, fontWeight: 600, marginBottom: 4 }}>{typeof p === 'string' ? p : (p.name || p.title || 'Product')}</div>
-                {p.category && <span style={{ background: 'rgba(255,255,255,0.04)', color: '#555', padding: '2px 8px', borderRadius: 3, fontSize: 10 }}>{p.category}</span>}
-                {p.description && <p style={{ color: '#666', fontSize: 12, lineHeight: 1.4, margin: '6px 0 0' }}>{String(p.description).slice(0, 100)}</p>}
-                {p.pricing && <div style={{ color: '#00ff88', fontSize: 11, marginTop: 6 }}>{typeof p.pricing === 'string' ? p.pricing : p.pricing.amount || ''}</div>}
+              <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 8, padding: 14 }}>
+                <div style={{ color: '#111111', fontSize: 13, fontWeight: 600, marginBottom: 4 }}>{typeof p === 'string' ? p : (p.name || p.title || 'Product')}</div>
+                {p.category && <span style={{ background: 'rgba(255,255,255,0.04)', color: '#939799', padding: '2px 8px', borderRadius: 3, fontSize: 10 }}>{p.category}</span>}
+                {p.description && <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.4, margin: '6px 0 0' }}>{String(p.description).slice(0, 100)}</p>}
+                {p.pricing && <div style={{ color: '#0A7D3C', fontSize: 11, marginTop: 6 }}>{typeof p.pricing === 'string' ? p.pricing : p.pricing.amount || ''}</div>}
               </div>
             ))}
           </div>
@@ -2097,7 +2097,7 @@ function CompanyOverviewSection({ companyInfo, domain }: { companyInfo: Record<s
           <IntelLabel>Tech Stack</IntelLabel>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             {techStack.map((t: string, i: number) => (
-              <span key={i} style={{ background: 'rgba(0,255,136,0.06)', border: '1px solid rgba(0,255,136,0.15)', color: '#00ff88', padding: '5px 14px', borderRadius: 20, fontSize: 12 }}>{t}</span>
+              <span key={i} style={{ background: 'rgba(0, 214, 93,0.06)', border: '1px solid rgba(0, 214, 93,0.15)', color: '#0A7D3C', padding: '5px 14px', borderRadius: 20, fontSize: 12 }}>{t}</span>
             ))}
           </div>
         </IntelCard>
@@ -2109,7 +2109,7 @@ function CompanyOverviewSection({ companyInfo, domain }: { companyInfo: Record<s
           <IntelLabel>Social Profiles</IntelLabel>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             {Object.entries(socialLinks).filter(([, v]) => v).map(([platform, url]) => (
-              <a key={platform} href={String(url)} target="_blank" rel="noopener noreferrer" style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', color: '#00d4ff', padding: '6px 14px', borderRadius: 6, fontSize: 12, textDecoration: 'none', textTransform: 'capitalize' }}>
+              <a key={platform} href={String(url)} target="_blank" rel="noopener noreferrer" style={{ background: '#FFFFFF', border: '1px solid #F1F4F5', color: '#0A7D3C', padding: '6px 14px', borderRadius: 6, fontSize: 12, textDecoration: 'none', textTransform: 'capitalize' }}>
                 {platform.replace(/_/g, ' ')} ↗
               </a>
             ))}
@@ -2136,35 +2136,35 @@ function MarketMetricsSection({ competitors, metrics }: { competitors: any; metr
           <div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
               {[
-                { label: 'Market Size', value: market.market_size || market.tam || '--', color: '#00d4ff' },
-                { label: 'CAGR', value: market.cagr || market.growth_rate || '--', color: '#00ff88' },
+                { label: 'Market Size', value: market.market_size || market.tam || '--', color: '#0A7D3C' },
+                { label: 'CAGR', value: market.cagr || market.growth_rate || '--', color: '#0A7D3C' },
               ].map(m => (
-                <div key={m.label} style={{ background: '#0d0d0d', border: '1px solid #151515', borderRadius: 6, padding: '12px 14px', textAlign: 'center' }}>
+                <div key={m.label} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '12px 14px', textAlign: 'center' }}>
                   <div style={{ color: m.color, fontSize: 24, fontWeight: 800, marginBottom: 4 }}>{m.value}</div>
-                  <div style={{ color: '#444', fontSize: 10, letterSpacing: '0.1em' }}>{m.label}</div>
+                  <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em' }}>{m.label}</div>
                 </div>
               ))}
             </div>
             {Array.isArray(market.trends) && market.trends.length > 0 && (
               <div>
-                <div style={{ color: '#555', fontSize: 10, letterSpacing: '0.1em', marginBottom: 8 }}>MARKET TRENDS</div>
+                <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', marginBottom: 8 }}>MARKET TRENDS</div>
                 {market.trends.map((t: string, i: number) => (
-                  <div key={i} style={{ color: '#888', fontSize: 12, padding: '4px 0', display: 'flex', gap: 6 }}>
-                    <span style={{ color: '#00d4ff' }}>→</span><span>{t}</span>
+                  <div key={i} style={{ color: '#5E6366', fontSize: 12, padding: '4px 0', display: 'flex', gap: 6 }}>
+                    <span style={{ color: '#0A7D3C' }}>→</span><span>{t}</span>
                   </div>
                 ))}
               </div>
             )}
           </div>
         ) : (
-          <p style={{ color: '#444', fontSize: 13 }}>No market data available.</p>
+          <p style={{ color: '#939799', fontSize: 13 }}>No market data available.</p>
         )}
         {advantages.length > 0 && (
-          <div style={{ marginTop: 16, borderTop: '1px solid #1a1a1a', paddingTop: 12 }}>
-            <div style={{ color: '#00ff88', fontSize: 10, letterSpacing: '0.1em', marginBottom: 8 }}>COMPETITIVE ADVANTAGES</div>
+          <div style={{ marginTop: 16, borderTop: '1px solid #F1F4F5', paddingTop: 12 }}>
+            <div style={{ color: '#0A7D3C', fontSize: 10, letterSpacing: '0.1em', marginBottom: 8 }}>COMPETITIVE ADVANTAGES</div>
             {advantages.map((a: string, i: number) => (
-              <div key={i} style={{ color: '#aaa', fontSize: 12, padding: '4px 0', display: 'flex', gap: 6 }}>
-                <span style={{ color: '#00ff88' }}>✓</span><span>{a}</span>
+              <div key={i} style={{ color: '#5E6366', fontSize: 12, padding: '4px 0', display: 'flex', gap: 6 }}>
+                <span style={{ color: '#0A7D3C' }}>✓</span><span>{a}</span>
               </div>
             ))}
           </div>
@@ -2178,25 +2178,25 @@ function MarketMetricsSection({ competitors, metrics }: { competitors: any; metr
           <div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               {[
-                { label: 'Current Valuation', value: metrics.current_valuation ? `$${(Number(metrics.current_valuation) / 1e6).toFixed(1)}M` : '--', color: '#00ff88' },
-                { label: 'Target Valuation', value: metrics.target_valuation ? `$${(Number(metrics.target_valuation) / 1e6).toFixed(1)}M` : '--', color: '#00d4ff' },
-                { label: 'ROI', value: metrics.roi || '--', color: '#ff8800' },
-                { label: 'Total Investment', value: metrics.total_investment || '--', color: '#fff' },
+                { label: 'Current Valuation', value: metrics.current_valuation ? `$${(Number(metrics.current_valuation) / 1e6).toFixed(1)}M` : '--', color: '#0A7D3C' },
+                { label: 'Target Valuation', value: metrics.target_valuation ? `$${(Number(metrics.target_valuation) / 1e6).toFixed(1)}M` : '--', color: '#0A7D3C' },
+                { label: 'ROI', value: metrics.roi || '--', color: '#8A6D3B' },
+                { label: 'Total Investment', value: metrics.total_investment || '--', color: '#111111' },
               ].filter(m => m.value !== '--').map(m => (
-                <div key={m.label} style={{ background: '#0d0d0d', border: '1px solid #151515', borderRadius: 6, padding: '10px 12px' }}>
-                  <div style={{ color: '#444', fontSize: 10, marginBottom: 4 }}>{m.label}</div>
+                <div key={m.label} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '10px 12px' }}>
+                  <div style={{ color: '#939799', fontSize: 10, marginBottom: 4 }}>{m.label}</div>
                   <div style={{ color: m.color, fontWeight: 700, fontSize: 16 }}>{m.value}</div>
                 </div>
               ))}
             </div>
             {metrics.burn && (
-              <div style={{ marginTop: 12, padding: '8px 12px', background: 'rgba(255,68,68,0.06)', border: '1px solid rgba(255,68,68,0.15)', borderRadius: 6 }}>
-                <span style={{ color: '#ff4444', fontSize: 12 }}>🔥 Monthly Burn: {metrics.burn}</span>
+              <div style={{ marginTop: 12, padding: '8px 12px', background: 'rgba(192, 57, 43,0.06)', border: '1px solid rgba(192, 57, 43,0.15)', borderRadius: 6 }}>
+                <span style={{ color: '#C0392B', fontSize: 12 }}>🔥 Monthly Burn: {metrics.burn}</span>
               </div>
             )}
           </div>
         ) : (
-          <p style={{ color: '#444', fontSize: 13 }}>No metrics data available.</p>
+          <p style={{ color: '#939799', fontSize: 13 }}>No metrics data available.</p>
         )}
       </IntelCard>
     </div>
@@ -2260,32 +2260,32 @@ function MarkdownPopup({ url, title, onClose }: { url: string; title: string; on
   return (
     <div style={{
       position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-      background: 'rgba(0,0,0,0.85)', zIndex: 9999,
+      background: 'rgba(255,255,255,0.88)', zIndex: 9999,
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       padding: 20,
     }} onClick={onClose}>
       <div style={{
-        background: '#0a0a0a', border: '1px solid #1a1a1a', borderRadius: 12,
+        background: '#FFFFFF', border: '1px solid #F1F4F5', borderRadius: 12,
         width: '100%', maxWidth: 900, maxHeight: '90vh',
         display: 'flex', flexDirection: 'column', overflow: 'hidden',
       }} onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div style={{
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-          padding: '14px 20px', borderBottom: '1px solid #1a1a1a', flexShrink: 0,
+          padding: '14px 20px', borderBottom: '1px solid #F1F4F5', flexShrink: 0,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{ fontSize: 18 }}>📄</span>
-            <span style={{ color: '#fff', fontSize: 15, fontWeight: 700 }}>{title}</span>
+            <span style={{ color: '#111111', fontSize: 15, fontWeight: 700 }}>{title}</span>
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
             <a href={url} target="_blank" rel="noopener noreferrer" style={{
-              background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)',
-              color: '#00d4ff', padding: '5px 14px', borderRadius: 6, fontSize: 11, textDecoration: 'none',
+              background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)',
+              color: '#0A7D3C', padding: '5px 14px', borderRadius: 6, fontSize: 11, textDecoration: 'none',
             }}>Download ↓</a>
             <button onClick={onClose} style={{
-              background: 'rgba(255,255,255,0.06)', border: '1px solid #1a1a1a',
-              color: '#888', padding: '5px 12px', borderRadius: 6, fontSize: 14, cursor: 'pointer',
+              background: 'rgba(255,255,255,0.06)', border: '1px solid #F1F4F5',
+              color: '#5E6366', padding: '5px 12px', borderRadius: 6, fontSize: 14, cursor: 'pointer',
             }}>✕</button>
           </div>
         </div>
@@ -2293,35 +2293,35 @@ function MarkdownPopup({ url, title, onClose }: { url: string; title: string; on
         <div style={{
           flex: 1, overflowY: 'auto', padding: '24px 32px',
         }}>
-          {loading && <div style={{ color: '#00d4ff', fontSize: 13, textAlign: 'center', padding: 40 }}>Loading document...</div>}
-          {error && <div style={{ color: '#ff4444', fontSize: 13, textAlign: 'center', padding: 40 }}>Failed to load: {error}</div>}
+          {loading && <div style={{ color: '#0A7D3C', fontSize: 13, textAlign: 'center', padding: 40 }}>Loading document...</div>}
+          {error && <div style={{ color: '#C0392B', fontSize: 13, textAlign: 'center', padding: 40 }}>Failed to load: {error}</div>}
           {!loading && !error && (
             <div
               className="md-viewer"
               dangerouslySetInnerHTML={{ __html: renderMarkdown(content) }}
-              style={{ color: '#ccc', fontSize: 14, lineHeight: 1.8 }}
+              style={{ color: '#2B3033', fontSize: 14, lineHeight: 1.8 }}
             />
           )}
         </div>
       </div>
       <style>{`
-        .md-viewer h1 { color: #fff; font-size: 24px; font-weight: 800; margin: 0 0 16px; border-bottom: 1px solid #1a1a1a; padding-bottom: 12px; }
-        .md-viewer h2 { color: #fff; font-size: 18px; font-weight: 700; margin: 28px 0 12px; }
-        .md-viewer h3 { color: #ddd; font-size: 15px; font-weight: 600; margin: 20px 0 8px; }
+        .md-viewer h1 { color: #111111; font-size: 24px; font-weight: 800; margin: 0 0 16px; border-bottom: 1px solid #F1F4F5; padding-bottom: 12px; }
+        .md-viewer h2 { color: #111111; font-size: 18px; font-weight: 700; margin: 28px 0 12px; }
+        .md-viewer h3 { color: #2B3033; font-size: 15px; font-weight: 600; margin: 20px 0 8px; }
         .md-viewer p { margin: 8px 0; }
-        .md-viewer strong { color: #fff; }
-        .md-viewer em { color: #aaa; }
-        .md-viewer a { color: #00d4ff; text-decoration: underline; text-decoration-color: rgba(0,212,255,0.3); }
-        .md-viewer code { background: #1a1a1a; padding: 2px 6px; border-radius: 4px; font-size: 13px; color: #aaa; font-family: monospace; }
+        .md-viewer strong { color: #111111; }
+        .md-viewer em { color: #5E6366; }
+        .md-viewer a { color: #0A7D3C; text-decoration: underline; text-decoration-color: rgba(10, 125, 60,0.3); }
+        .md-viewer code { background: #F1F4F5; padding: 2px 6px; border-radius: 4px; font-size: 13px; color: #5E6366; font-family: monospace; }
         .md-viewer ul { padding-left: 20px; margin: 8px 0; }
-        .md-viewer li { margin: 4px 0; color: #aaa; }
-        .md-viewer li::marker { color: #00d4ff; }
-        .md-viewer hr { border: none; border-top: 1px solid #1a1a1a; margin: 20px 0; }
+        .md-viewer li { margin: 4px 0; color: #5E6366; }
+        .md-viewer li::marker { color: #0A7D3C; }
+        .md-viewer hr { border: none; border-top: 1px solid #F1F4F5; margin: 20px 0; }
         .md-viewer table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
-        .md-viewer th { background: #111; color: #888; padding: 8px 12px; text-align: left; border: 1px solid #1a1a1a; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
-        .md-viewer td { padding: 8px 12px; border: 1px solid #151515; color: #aaa; }
-        .md-viewer tr:hover td { background: rgba(0,212,255,0.03); }
-        .md-viewer blockquote { border-left: 3px solid #00d4ff; padding: 8px 16px; margin: 12px 0; color: #888; background: rgba(0,212,255,0.03); border-radius: 0 6px 6px 0; }
+        .md-viewer th { background: #FFFFFF; color: #5E6366; padding: 8px 12px; text-align: left; border: 1px solid #F1F4F5; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .md-viewer td { padding: 8px 12px; border: 1px solid #F7F8F9; color: #5E6366; }
+        .md-viewer tr:hover td { background: rgba(10, 125, 60,0.03); }
+        .md-viewer blockquote { border-left: 3px solid #0A7D3C; padding: 8px 16px; margin: 12px 0; color: #5E6366; background: rgba(10, 125, 60,0.03); border-radius: 0 6px 6px 0; }
       `}</style>
     </div>
   );
@@ -2359,16 +2359,16 @@ function DocumentsSection({ documents }: { documents: any }) {
       <IntelCard>
         <IntelLabel>Documents ({docs.length})</IntelLabel>
         {docs.length === 0 ? (
-          <p style={{ color: '#444', fontSize: 13 }}>No documents available.</p>
+          <p style={{ color: '#939799', fontSize: 13 }}>No documents available.</p>
         ) : (
           <div>
             {/* Workstream filter buttons */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 16 }}>
               {workstreams.map((ws: string) => (
                 <button key={ws} onClick={() => setFilter(ws)} style={{
-                  background: filter === ws ? 'rgba(0,212,255,0.12)' : '#0d0d0d',
-                  border: `1px solid ${filter === ws ? 'rgba(0,212,255,0.3)' : '#1a1a1a'}`,
-                  color: filter === ws ? '#00d4ff' : '#555',
+                  background: filter === ws ? 'rgba(10, 125, 60,0.12)' : '#FFFFFF',
+                  border: `1px solid ${filter === ws ? 'rgba(10, 125, 60,0.3)' : '#F1F4F5'}`,
+                  color: filter === ws ? '#0A7D3C' : '#C8CBCC',
                   padding: '5px 14px', borderRadius: 6, fontSize: 11, cursor: 'pointer',
                   textTransform: 'capitalize', fontWeight: filter === ws ? 600 : 400,
                 }}>
@@ -2389,23 +2389,23 @@ function DocumentsSection({ documents }: { documents: any }) {
                 };
                 return (
                   <a key={i} href={docUrl} target="_blank" rel="noopener noreferrer" onClick={handleClick} style={{
-                    background: '#0d0d0d', border: '1px solid #151515', borderRadius: 8, padding: '12px 14px',
+                    background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 8, padding: '12px 14px',
                     textDecoration: 'none', display: 'flex', gap: 10, alignItems: 'flex-start', transition: 'border-color 0.15s', cursor: 'pointer',
                   }}>
                     <span style={{ fontSize: 20, flexShrink: 0 }}>{doc.type === 'md' ? '📝' : doc.type === 'pdf' ? '📄' : doc.type === 'spreadsheet' ? '📊' : doc.source?.includes('notion') ? '📝' : '📁'}</span>
                     <div style={{ overflow: 'hidden' }}>
-                      <div style={{ color: '#fff', fontSize: 13, fontWeight: 600 }}>{docTitle}</div>
+                      <div style={{ color: '#111111', fontSize: 13, fontWeight: 600 }}>{docTitle}</div>
                       <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
-                        {doc.source && <span style={{ color: '#555', fontSize: 10 }}>{doc.source}</span>}
-                        {(doc.workstream || doc.category) && <span style={{ color: '#00d4ff', fontSize: 10 }}>{doc.workstream || doc.category}</span>}
-                        {isMdFile(doc) && <span style={{ background: 'rgba(0,255,136,0.08)', color: '#00ff88', padding: '0 6px', borderRadius: 3, fontSize: 9, fontWeight: 600 }}>VIEW</span>}
+                        {doc.source && <span style={{ color: '#939799', fontSize: 10 }}>{doc.source}</span>}
+                        {(doc.workstream || doc.category) && <span style={{ color: '#0A7D3C', fontSize: 10 }}>{doc.workstream || doc.category}</span>}
+                        {isMdFile(doc) && <span style={{ background: 'rgba(0, 214, 93,0.08)', color: '#0A7D3C', padding: '0 6px', borderRadius: 3, fontSize: 9, fontWeight: 600 }}>VIEW</span>}
                       </div>
                     </div>
                   </a>
                 );
               })}
             </div>
-            {filtered.length > 20 && <p style={{ color: '#555', fontSize: 12, marginTop: 12 }}>+ {filtered.length - 20} more documents</p>}
+            {filtered.length > 20 && <p style={{ color: '#939799', fontSize: 12, marginTop: 12 }}>+ {filtered.length - 20} more documents</p>}
           </div>
         )}
       </IntelCard>
@@ -2422,23 +2422,23 @@ function VideosSection({ videos }: { videos: any }) {
     <IntelCard>
       <IntelLabel>Videos ({videoList.length})</IntelLabel>
       {videoList.length === 0 ? (
-        <p style={{ color: '#444', fontSize: 13 }}>No video data available.</p>
+        <p style={{ color: '#939799', fontSize: 13 }}>No video data available.</p>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12 }}>
           {videoList.map((v: any, i: number) => (
             <a key={i} href={v.url || v.link || '#'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-              <div style={{ background: '#0d0d0d', border: '1px solid #151515', borderRadius: 8, overflow: 'hidden' }}>
+              <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 8, overflow: 'hidden' }}>
                 {v.thumbnail ? (
                   <img src={v.thumbnail} alt={v.title || ''} style={{ width: '100%', height: 120, objectFit: 'cover' }} />
                 ) : (
-                  <div style={{ width: '100%', height: 120, background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ width: '100%', height: 120, background: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <span style={{ fontSize: 32 }}>🎬</span>
                   </div>
                 )}
                 <div style={{ padding: '10px 12px' }}>
-                  <div style={{ color: '#fff', fontSize: 12, fontWeight: 600 }}>{v.title || v.name || 'Video'}</div>
-                  {v.duration && <div style={{ color: '#555', fontSize: 10, marginTop: 4 }}>{v.duration}</div>}
-                  {v.views && <div style={{ color: '#00d4ff', fontSize: 10, marginTop: 2 }}>{v.views} views</div>}
+                  <div style={{ color: '#111111', fontSize: 12, fontWeight: 600 }}>{v.title || v.name || 'Video'}</div>
+                  {v.duration && <div style={{ color: '#939799', fontSize: 10, marginTop: 4 }}>{v.duration}</div>}
+                  {v.views && <div style={{ color: '#0A7D3C', fontSize: 10, marginTop: 2 }}>{v.views} views</div>}
                 </div>
               </div>
             </a>
@@ -2486,12 +2486,12 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
     <IntelCard>
       <IntelLabel>Analytics Overview</IntelLabel>
       {/* Tab bar */}
-      <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid #1a1a1a', marginBottom: 20 }}>
+      <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid #F1F4F5', marginBottom: 20 }}>
         {tabs.map(t => (
           <button key={t.key} onClick={() => setTab(t.key)} style={{
             background: 'transparent', border: 'none',
-            borderBottom: tab === t.key ? '2px solid #00d4ff' : '2px solid transparent',
-            color: tab === t.key ? '#00d4ff' : '#555',
+            borderBottom: tab === t.key ? '2px solid #0A7D3C' : '2px solid transparent',
+            color: tab === t.key ? '#0A7D3C' : '#C8CBCC',
             padding: '8px 20px', fontSize: 13, fontWeight: tab === t.key ? 700 : 400,
             cursor: 'pointer', transition: 'all 0.15s',
           }}>{t.label}</button>
@@ -2502,12 +2502,12 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
       {tab === 'health' && (
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
-            <div style={{ width: 64, height: 64, borderRadius: '50%', border: `3px solid ${seoScore >= 70 ? '#00ff88' : seoScore >= 40 ? '#ff8800' : '#ff3333'}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ fontSize: 22, fontWeight: 800, color: seoScore >= 70 ? '#00ff88' : seoScore >= 40 ? '#ff8800' : '#ff3333' }}>{seoScore}</span>
+            <div style={{ width: 64, height: 64, borderRadius: '50%', border: `3px solid ${seoScore >= 70 ? '#00D65D' : seoScore >= 40 ? '#8A6D3B' : '#C0392B'}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ fontSize: 22, fontWeight: 800, color: seoScore >= 70 ? '#0A7D3C' : seoScore >= 40 ? '#8A6D3B' : '#C0392B' }}>{seoScore}</span>
             </div>
             <div>
-              <div style={{ fontSize: 14, fontWeight: 600, color: '#fff' }}>Overall Score</div>
-              <div style={{ fontSize: 12, color: '#666' }}>{seoScore >= 70 ? 'Good' : seoScore >= 40 ? 'Needs Work' : 'Critical Issues'}</div>
+              <div style={{ fontSize: 14, fontWeight: 600, color: '#111111' }}>Overall Score</div>
+              <div style={{ fontSize: 12, color: '#5E6366' }}>{seoScore >= 70 ? 'Good' : seoScore >= 40 ? 'Needs Work' : 'Critical Issues'}</div>
             </div>
           </div>
           {[
@@ -2516,17 +2516,17 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
             { label: 'Mobile', val: seo?.mobile_score },
             { label: 'Page Speed', val: seo?.page_speed },
           ].filter(s => s.val && typeof s.val !== 'object').map((s, i) => (
-            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid #1a1a1a' }}>
-              <span style={{ color: '#888', fontSize: 12 }}>{s.label}</span>
-              <span style={{ color: '#aaa', fontSize: 12, fontWeight: 600 }}>{String(s.val)}</span>
+            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid #F1F4F5' }}>
+              <span style={{ color: '#5E6366', fontSize: 12 }}>{s.label}</span>
+              <span style={{ color: '#5E6366', fontSize: 12, fontWeight: 600 }}>{String(s.val)}</span>
             </div>
           ))}
           {issues.length > 0 && (
             <div style={{ marginTop: 14 }}>
-              <div style={{ color: '#666', fontSize: 11, textTransform: 'uppercase', marginBottom: 8 }}>Issues ({issues.length})</div>
+              <div style={{ color: '#5E6366', fontSize: 11, textTransform: 'uppercase', marginBottom: 8 }}>Issues ({issues.length})</div>
               {issues.slice(0, 6).map((issue: any, i: number) => (
-                <div key={i} style={{ fontSize: 12, color: '#aaa', padding: '5px 0', borderBottom: '1px solid #111', display: 'flex', gap: 6 }}>
-                  <span style={{ color: issue?.severity === 'critical' ? '#ff3333' : '#ff8800', flexShrink: 0 }}>●</span>
+                <div key={i} style={{ fontSize: 12, color: '#5E6366', padding: '5px 0', borderBottom: '1px solid #FFFFFF', display: 'flex', gap: 6 }}>
+                  <span style={{ color: issue?.severity === 'critical' ? '#C0392B' : '#8A6D3B', flexShrink: 0 }}>●</span>
                   <span>{typeof issue === 'string' ? issue : String(issue?.issue || issue?.description || issue?.message || '')}</span>
                 </div>
               ))}
@@ -2539,46 +2539,46 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
       {tab === 'links' && (
         <div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 20 }}>
-            <div style={{ background: '#0d0d0d', border: '1px solid #151515', borderRadius: 6, padding: '12px 14px', textAlign: 'center' }}>
-              <div style={{ color: '#fff', fontSize: 22, fontWeight: 800 }}>{da || '--'}</div>
-              <div style={{ color: '#555', fontSize: 10, letterSpacing: '0.05em' }}>Domain Authority</div>
+            <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '12px 14px', textAlign: 'center' }}>
+              <div style={{ color: '#111111', fontSize: 22, fontWeight: 800 }}>{da || '--'}</div>
+              <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.05em' }}>Domain Authority</div>
             </div>
-            <div style={{ background: '#0d0d0d', border: '1px solid #151515', borderRadius: 6, padding: '12px 14px', textAlign: 'center' }}>
-              <div style={{ color: '#fff', fontSize: 22, fontWeight: 800 }}>{referringDomains || '--'}</div>
-              <div style={{ color: '#555', fontSize: 10, letterSpacing: '0.05em' }}>Referring Domains</div>
+            <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '12px 14px', textAlign: 'center' }}>
+              <div style={{ color: '#111111', fontSize: 22, fontWeight: 800 }}>{referringDomains || '--'}</div>
+              <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.05em' }}>Referring Domains</div>
             </div>
-            <div style={{ background: '#0d0d0d', border: '1px solid #151515', borderRadius: 6, padding: '12px 14px', textAlign: 'center' }}>
-              <div style={{ color: '#00ff88', fontSize: 22, fontWeight: 800 }}>{linkVelocity ? `+${linkVelocity}` : '--'}</div>
-              <div style={{ color: '#555', fontSize: 10, letterSpacing: '0.05em' }}>Links/Month</div>
+            <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '12px 14px', textAlign: 'center' }}>
+              <div style={{ color: '#0A7D3C', fontSize: 22, fontWeight: 800 }}>{linkVelocity ? `+${linkVelocity}` : '--'}</div>
+              <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.05em' }}>Links/Month</div>
             </div>
           </div>
           {topDomains.length > 0 ? (
             <div>
-              <div style={{ color: '#555', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>Top Referring Domains</div>
+              <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>Top Referring Domains</div>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid #1a1a1a' }}>
-                    <th style={{ color: '#444', padding: '6px 10px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase' }}>Domain</th>
-                    <th style={{ color: '#444', padding: '6px 10px', textAlign: 'right', fontSize: 10, textTransform: 'uppercase' }}>Rating</th>
+                  <tr style={{ borderBottom: '1px solid #F1F4F5' }}>
+                    <th style={{ color: '#939799', padding: '6px 10px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase' }}>Domain</th>
+                    <th style={{ color: '#939799', padding: '6px 10px', textAlign: 'right', fontSize: 10, textTransform: 'uppercase' }}>Rating</th>
                   </tr>
                 </thead>
                 <tbody>
                   {topDomains.slice(0, 8).map((d: any, i: number) => (
-                    <tr key={i} style={{ borderBottom: '1px solid #111' }}>
-                      <td style={{ padding: '8px 10px', color: '#aaa', display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <div style={{ width: 20, height: 20, borderRadius: 4, background: ['#22c55e','#f97316','#000','#333','#ff4500'][i%5], display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, color: '#fff', fontWeight: 700 }}>
+                    <tr key={i} style={{ borderBottom: '1px solid #FFFFFF' }}>
+                      <td style={{ padding: '8px 10px', color: '#5E6366', display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <div style={{ width: 20, height: 20, borderRadius: 4, background: ['#22c55e','#8A6D3B','#F1F4F5','#E8E6E4','#8A6D3B'][i%5], display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, color: '#111111', fontWeight: 700 }}>
                           {(d.domain || d.name || '?').slice(0,2).toUpperCase()}
                         </div>
                         {d.domain || d.name}
                       </td>
-                      <td style={{ padding: '8px 10px', color: '#00d4ff', textAlign: 'right', fontWeight: 600 }}>{d.rating || d.authority || '--'}</td>
+                      <td style={{ padding: '8px 10px', color: '#0A7D3C', textAlign: 'right', fontWeight: 600 }}>{d.rating || d.authority || '--'}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           ) : (
-            <p style={{ color: '#444', fontSize: 13 }}>No backlink data available yet.</p>
+            <p style={{ color: '#939799', fontSize: 13 }}>No backlink data available yet.</p>
           )}
         </div>
       )}
@@ -2587,39 +2587,39 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
       {tab === 'ai-geo' && (
         <div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 20 }}>
-            <div style={{ background: '#0d0d0d', border: '1px solid #151515', borderRadius: 6, padding: '14px', textAlign: 'center' }}>
-              <div style={{ color: geoScore >= 50 ? '#00ff88' : '#ff4444', fontSize: 28, fontWeight: 800 }}>{geoScore}</div>
-              <div style={{ color: '#555', fontSize: 10, letterSpacing: '0.05em' }}>GEO Score</div>
+            <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '14px', textAlign: 'center' }}>
+              <div style={{ color: geoScore >= 50 ? '#0A7D3C' : '#C0392B', fontSize: 28, fontWeight: 800 }}>{geoScore}</div>
+              <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.05em' }}>GEO Score</div>
             </div>
-            <div style={{ background: '#0d0d0d', border: '1px solid #151515', borderRadius: 6, padding: '14px', textAlign: 'center' }}>
-              <div style={{ color: '#fff', fontSize: 18, fontWeight: 700 }}>{geoScore >= 60 ? 'High' : geoScore >= 30 ? 'Medium' : 'Low'}</div>
-              <div style={{ color: '#555', fontSize: 10, letterSpacing: '0.05em' }}>Citation Potential</div>
+            <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '14px', textAlign: 'center' }}>
+              <div style={{ color: '#111111', fontSize: 18, fontWeight: 700 }}>{geoScore >= 60 ? 'High' : geoScore >= 30 ? 'Medium' : 'Low'}</div>
+              <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.05em' }}>Citation Potential</div>
             </div>
           </div>
           {/* Overall Visibility grid */}
-          <div style={{ color: '#555', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>Overall Visibility</div>
+          <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>Overall Visibility</div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 20 }}>
             {[
-              { label: 'Visibility', value: geoScore || 0, color: geoScore >= 50 ? '#00ff88' : '#ff4444' },
-              { label: 'Sentiment', value: ((geo as any)?.sentiment || 0).toFixed ? Number((geo as any)?.sentiment || 0).toFixed(2) : '0.00', color: '#fff' },
-              { label: 'Avg Position', value: (geo as any)?.avg_position || '--', color: '#ff4444' },
-              { label: 'Mentions', value: (geo as any)?.mentions || (geo as any)?.total_mentions || 0, color: '#fff' },
+              { label: 'Visibility', value: geoScore || 0, color: geoScore >= 50 ? '#0A7D3C' : '#C0392B' },
+              { label: 'Sentiment', value: ((geo as any)?.sentiment || 0).toFixed ? Number((geo as any)?.sentiment || 0).toFixed(2) : '0.00', color: '#111111' },
+              { label: 'Avg Position', value: (geo as any)?.avg_position || '--', color: '#C0392B' },
+              { label: 'Mentions', value: (geo as any)?.mentions || (geo as any)?.total_mentions || 0, color: '#111111' },
             ].map((m, i) => (
-              <div key={i} style={{ background: '#0a0a0a', border: '1px solid #151515', borderRadius: 6, padding: '10px 12px' }}>
+              <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '10px 12px' }}>
                 <div style={{ color: m.color, fontSize: 18, fontWeight: 700 }}>{m.value}</div>
-                <div style={{ color: '#444', fontSize: 10 }}>{m.label}</div>
+                <div style={{ color: '#939799', fontSize: 10 }}>{m.label}</div>
               </div>
             ))}
           </div>
           {/* Platform status */}
           {platforms.length > 0 && (
             <div>
-              <div style={{ color: '#555', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>Platform Status</div>
+              <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>Platform Status</div>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid #1a1a1a' }}>
-                    <th style={{ color: '#444', padding: '6px 10px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase' }}>Platform</th>
-                    <th style={{ color: '#444', padding: '6px 10px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase' }}>Status</th>
+                  <tr style={{ borderBottom: '1px solid #F1F4F5' }}>
+                    <th style={{ color: '#939799', padding: '6px 10px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase' }}>Platform</th>
+                    <th style={{ color: '#939799', padding: '6px 10px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase' }}>Status</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -2628,12 +2628,12 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
                     const pName = (p.name || '').toLowerCase();
                     const icon = Object.entries(icons).find(([k]) => pName.includes(k))?.[1] || '🌐';
                     return (
-                      <tr key={i} style={{ borderBottom: '1px solid #111' }}>
-                        <td style={{ padding: '10px', color: '#fff', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <tr key={i} style={{ borderBottom: '1px solid #FFFFFF' }}>
+                        <td style={{ padding: '10px', color: '#111111', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
                           <span style={{ fontSize: 16 }}>{icon}</span> {p.name}
-                          <span style={{ color: p.score >= 50 ? '#00ff88' : p.score >= 20 ? '#ff8800' : '#ff3333', fontSize: 11, marginLeft: 'auto', fontWeight: 700 }}>{p.score}/100</span>
+                          <span style={{ color: p.score >= 50 ? '#0A7D3C' : p.score >= 20 ? '#8A6D3B' : '#C0392B', fontSize: 11, marginLeft: 'auto', fontWeight: 700 }}>{p.score}/100</span>
                         </td>
-                        <td style={{ padding: '10px', color: '#666', fontSize: 11, lineHeight: 1.5 }}>{p.summary}</td>
+                        <td style={{ padding: '10px', color: '#5E6366', fontSize: 11, lineHeight: 1.5 }}>{p.summary}</td>
                       </tr>
                     );
                   })}
@@ -2650,22 +2650,22 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
           {passedChecks.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {passedChecks.map((c, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', background: '#0a0a0a', border: '1px solid #151515', borderRadius: 6 }}>
-                  <span style={{ color: c.pass ? '#00ff88' : '#ff4444', fontSize: 16 }}>{c.pass ? '✓' : '✗'}</span>
-                  <span style={{ color: '#aaa', fontSize: 13, flex: 1 }}>{c.label}</span>
-                  <span style={{ color: c.pass ? '#00ff88' : '#ff4444', fontSize: 13, fontWeight: 600 }}>{String(c.val)}</span>
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6 }}>
+                  <span style={{ color: c.pass ? '#0A7D3C' : '#C0392B', fontSize: 16 }}>{c.pass ? '✓' : '✗'}</span>
+                  <span style={{ color: '#5E6366', fontSize: 13, flex: 1 }}>{c.label}</span>
+                  <span style={{ color: c.pass ? '#0A7D3C' : '#C0392B', fontSize: 13, fontWeight: 600 }}>{String(c.val)}</span>
                 </div>
               ))}
             </div>
           ) : (
-            <p style={{ color: '#444', fontSize: 13 }}>No pass/fail data available.</p>
+            <p style={{ color: '#939799', fontSize: 13 }}>No pass/fail data available.</p>
           )}
           {recommendations.length > 0 && (
             <div style={{ marginTop: 16 }}>
-              <div style={{ color: '#555', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>Recommendations</div>
+              <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>Recommendations</div>
               {recommendations.slice(0, 5).map((r, i) => (
-                <div key={i} style={{ fontSize: 12, color: '#aaa', padding: '5px 0', display: 'flex', gap: 6 }}>
-                  <span style={{ color: '#00d4ff', flexShrink: 0 }}>→</span><span>{r}</span>
+                <div key={i} style={{ fontSize: 12, color: '#5E6366', padding: '5px 0', display: 'flex', gap: 6 }}>
+                  <span style={{ color: '#0A7D3C', flexShrink: 0 }}>→</span><span>{r}</span>
                 </div>
               ))}
             </div>
@@ -2685,13 +2685,13 @@ function CompetitorChipsSection({ competitors, onAction }: { competitors: Intell
     ...((competitors.polsia as { competitors?: any[] })?.competitors || []),
   ];
 
-  const chipColors = ['#ff4400', '#ff8800', '#aa44ff', '#333', '#00d4ff', '#00ff88', '#ffcc00', '#3B82F6', '#666', '#ff3333'];
+  const chipColors = ['#8A6D3B', '#8A6D3B', '#5E6366', '#E8E6E4', '#0A7D3C', '#00D65D', '#C9A227', '#0A7D3C', '#D8DBDC', '#C0392B'];
 
   if (list.length === 0) {
     return (
       <IntelCard>
         <IntelLabel>Competitors</IntelLabel>
-        <p style={{ color: '#444', fontSize: 13 }}>No competitor data found.</p>
+        <p style={{ color: '#939799', fontSize: 13 }}>No competitor data found.</p>
       </IntelCard>
     );
   }
@@ -2709,47 +2709,47 @@ function CompetitorChipsSection({ competitors, onAction }: { competitors: Intell
             <div key={i}>
               <div onClick={() => setSelectedComp(isSelected ? null : i)} style={{
                 display: 'flex', alignItems: 'center', gap: 10,
-                background: isSelected ? '#111' : '#0d0d0d', border: `1px solid ${isSelected ? '#00d4ff33' : '#1a1a1a'}`, borderRadius: 8,
+                background: isSelected ? '#FFFFFF' : '#FFFFFF', border: `1px solid ${isSelected ? '#0A7D3C33' : '#F1F4F5'}`, borderRadius: 8,
                 padding: '10px 14px', cursor: 'pointer', transition: 'all 0.15s',
               }}>
                 <div style={{
                   width: 28, height: 28, borderRadius: 6,
                   background: chipColors[i % chipColors.length],
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 10, fontWeight: 700, color: '#fff', flexShrink: 0,
+                  fontSize: 10, fontWeight: 700, color: '#111111', flexShrink: 0,
                 }}>{initials}</div>
-                <span style={{ color: '#aaa', fontSize: 13, flex: 1 }}>{displayName}</span>
-                <span onClick={(e) => { e.stopPropagation(); onAction?.({ actionLabel: 'Review', title: `Remove competitor: ${c.name || displayName}`, description: `Remove ${c.name || displayName} from the competitive landscape tracking.`, source: 'Competitors', sourceIcon: '⚔️', sourceColor: '#ff4400', chatSection: 'competitors' }); }} style={{ color: '#333', fontSize: 14, cursor: 'pointer', flexShrink: 0 }}>×</span>
+                <span style={{ color: '#5E6366', fontSize: 13, flex: 1 }}>{displayName}</span>
+                <span onClick={(e) => { e.stopPropagation(); onAction?.({ actionLabel: 'Review', title: `Remove competitor: ${c.name || displayName}`, description: `Remove ${c.name || displayName} from the competitive landscape tracking.`, source: 'Competitors', sourceIcon: '⚔️', sourceColor: '#8A6D3B', chatSection: 'competitors' }); }} style={{ color: '#5E6366', fontSize: 14, cursor: 'pointer', flexShrink: 0 }}>×</span>
               </div>
               {/* Expanded competitor info */}
               {isSelected && (
-                <div style={{ background: '#0a0a0a', border: '1px solid #1a1a1a', borderTop: 'none', borderRadius: '0 0 8px 8px', padding: '12px 14px', marginTop: -4 }}>
-                  <div style={{ color: '#fff', fontSize: 14, fontWeight: 700, marginBottom: 6 }}>{c.name || displayName}</div>
-                  {c.description && <p style={{ color: '#888', fontSize: 12, lineHeight: 1.5, margin: '0 0 8px' }}>{c.description}</p>}
-                  {c.features && <p style={{ color: '#888', fontSize: 12, lineHeight: 1.5, margin: '0 0 8px' }}>{c.features}</p>}
+                <div style={{ background: '#FFFFFF', border: '1px solid #F1F4F5', borderTop: 'none', borderRadius: '0 0 8px 8px', padding: '12px 14px', marginTop: -4 }}>
+                  <div style={{ color: '#111111', fontSize: 14, fontWeight: 700, marginBottom: 6 }}>{c.name || displayName}</div>
+                  {c.description && <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5, margin: '0 0 8px' }}>{c.description}</p>}
+                  {c.features && <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5, margin: '0 0 8px' }}>{c.features}</p>}
                   {(c.strengths || c.pros) && Array.isArray(c.strengths || c.pros) && (
                     <div style={{ marginBottom: 8 }}>
-                      <div style={{ color: '#00ff88', fontSize: 10, letterSpacing: '0.1em', marginBottom: 4 }}>STRENGTHS</div>
+                      <div style={{ color: '#0A7D3C', fontSize: 10, letterSpacing: '0.1em', marginBottom: 4 }}>STRENGTHS</div>
                       {(c.strengths || c.pros).slice(0, 3).map((s: string, j: number) => (
-                        <div key={j} style={{ color: '#888', fontSize: 11, padding: '2px 0 2px 8px', borderLeft: '2px solid #00ff8833' }}>{s}</div>
+                        <div key={j} style={{ color: '#5E6366', fontSize: 11, padding: '2px 0 2px 8px', borderLeft: '2px solid #00D65D33' }}>{s}</div>
                       ))}
                     </div>
                   )}
                   {(c.weaknesses || c.cons) && Array.isArray(c.weaknesses || c.cons) && (
                     <div style={{ marginBottom: 8 }}>
-                      <div style={{ color: '#ff4444', fontSize: 10, letterSpacing: '0.1em', marginBottom: 4 }}>WEAKNESSES</div>
+                      <div style={{ color: '#C0392B', fontSize: 10, letterSpacing: '0.1em', marginBottom: 4 }}>WEAKNESSES</div>
                       {(c.weaknesses || c.cons).slice(0, 3).map((w: string, j: number) => (
-                        <div key={j} style={{ color: '#888', fontSize: 11, padding: '2px 0 2px 8px', borderLeft: '2px solid #ff444433' }}>{w}</div>
+                        <div key={j} style={{ color: '#5E6366', fontSize: 11, padding: '2px 0 2px 8px', borderLeft: '2px solid #C0392B33' }}>{w}</div>
                       ))}
                     </div>
                   )}
-                  {c.funding && <div style={{ color: '#00d4ff', fontSize: 11, marginBottom: 6 }}>{c.funding}</div>}
-                  {c.pricing && <div style={{ color: '#666', fontSize: 11, marginBottom: 6 }}>Pricing: {typeof c.pricing === 'string' ? c.pricing : c.pricing?.model || ''}</div>}
-                  {(c.similarity_score || c.similarity) > 0 && <span style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', color: '#00d4ff', padding: '2px 8px', borderRadius: 3, fontSize: 10, marginRight: 6 }}>{c.similarity_score || c.similarity}% similar</span>}
-                  {(c.threat_level || c.market_position) && <span style={{ background: 'rgba(255,136,0,0.08)', border: '1px solid rgba(255,136,0,0.2)', color: '#ff8800', padding: '2px 8px', borderRadius: 3, fontSize: 10 }}>{c.threat_level || c.market_position}</span>}
+                  {c.funding && <div style={{ color: '#0A7D3C', fontSize: 11, marginBottom: 6 }}>{c.funding}</div>}
+                  {c.pricing && <div style={{ color: '#5E6366', fontSize: 11, marginBottom: 6 }}>Pricing: {typeof c.pricing === 'string' ? c.pricing : c.pricing?.model || ''}</div>}
+                  {(c.similarity_score || c.similarity) > 0 && <span style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '2px 8px', borderRadius: 3, fontSize: 10, marginRight: 6 }}>{c.similarity_score || c.similarity}% similar</span>}
+                  {(c.threat_level || c.market_position) && <span style={{ background: 'rgba(138, 109, 59,0.08)', border: '1px solid rgba(138, 109, 59,0.2)', color: '#8A6D3B', padding: '2px 8px', borderRadius: 3, fontSize: 10 }}>{c.threat_level || c.market_position}</span>}
                   <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
-                    {domain && <a href={domain.startsWith('http') ? domain : `https://${domain}`} target="_blank" rel="noopener noreferrer" style={{ background: '#111', border: '1px solid #222', color: '#00d4ff', padding: '4px 12px', borderRadius: 6, fontSize: 11, textDecoration: 'none', cursor: 'pointer' }}>Visit ↗</a>}
-                    <button onClick={() => onAction?.({ actionLabel: 'Review', title: `Analyze competitor: ${c.name || displayName}`, description: `Deep dive into ${c.name || displayName}. Compare their product, pricing, positioning, and market share against ours. Identify opportunities to differentiate.`, source: 'Competitors', sourceIcon: '⚔️', sourceColor: '#ff4400', chatSection: 'competitors' })} style={{ background: '#111', border: '1px solid #222', color: '#888', padding: '4px 12px', borderRadius: 6, fontSize: 11, cursor: 'pointer' }}>Analyze</button>
+                    {domain && <a href={domain.startsWith('http') ? domain : `https://${domain}`} target="_blank" rel="noopener noreferrer" style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#0A7D3C', padding: '4px 12px', borderRadius: 6, fontSize: 11, textDecoration: 'none', cursor: 'pointer' }}>Visit ↗</a>}
+                    <button onClick={() => onAction?.({ actionLabel: 'Review', title: `Analyze competitor: ${c.name || displayName}`, description: `Deep dive into ${c.name || displayName}. Compare their product, pricing, positioning, and market share against ours. Identify opportunities to differentiate.`, source: 'Competitors', sourceIcon: '⚔️', sourceColor: '#8A6D3B', chatSection: 'competitors' })} style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#5E6366', padding: '4px 12px', borderRadius: 6, fontSize: 11, cursor: 'pointer' }}>Analyze</button>
                   </div>
                 </div>
               )}
@@ -2757,18 +2757,18 @@ function CompetitorChipsSection({ competitors, onAction }: { competitors: Intell
           );
         })}
         {/* Add button */}
-        <div onClick={() => onAction?.({ actionLabel: 'Post', title: 'Add a new competitor to track', description: 'Add a new competitor to the competitive landscape. Provide the company name or domain and I will research them.', source: 'Competitors', sourceIcon: '⚔️', sourceColor: '#ff4400', chatSection: 'competitors' })} style={{
+        <div onClick={() => onAction?.({ actionLabel: 'Post', title: 'Add a new competitor to track', description: 'Add a new competitor to the competitive landscape. Provide the company name or domain and I will research them.', source: 'Competitors', sourceIcon: '⚔️', sourceColor: '#8A6D3B', chatSection: 'competitors' })} style={{
           display: 'flex', alignItems: 'center', gap: 10,
-          background: '#0a0a0a', border: '1px dashed #222', borderRadius: 8,
+          background: '#FFFFFF', border: '1px dashed #E8E6E4', borderRadius: 8,
           padding: '10px 14px', cursor: 'pointer', transition: 'all 0.15s',
         }}>
           <div style={{
             width: 28, height: 28, borderRadius: 6,
-            background: '#111', border: '1px solid #222',
+            background: '#FFFFFF', border: '1px solid #E8E6E4',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 16, color: '#555',
+            fontSize: 16, color: '#939799',
           }}>+</div>
-          <span style={{ color: '#555', fontSize: 13 }}>Add</span>
+          <span style={{ color: '#939799', fontSize: 13 }}>Add</span>
         </div>
       </div>
     </IntelCard>
@@ -2787,48 +2787,48 @@ function AdsSection({ ads }: { ads: any }) {
     return (
       <IntelCard>
         <IntelLabel>Ads</IntelLabel>
-        <p style={{ color: '#444', fontSize: 13 }}>No ads data available. Connect Meta/Google Ads to populate.</p>
+        <p style={{ color: '#939799', fontSize: 13 }}>No ads data available. Connect Meta/Google Ads to populate.</p>
       </IntelCard>
     );
   }
 
   return (
     <IntelCard>
-      <div style={{ borderBottom: '2px solid #fff', paddingBottom: 12, marginBottom: 16 }}>
-        <div style={{ color: '#fff', fontSize: 18, fontWeight: 800 }}>Ads</div>
+      <div style={{ borderBottom: '2px solid #FFFFFF', paddingBottom: 12, marginBottom: 16 }}>
+        <div style={{ color: '#111111', fontSize: 18, fontWeight: 800 }}>Ads</div>
       </div>
       <div style={{ marginBottom: 16 }}>
-        <span style={{ color: '#fff', fontSize: 14, fontWeight: 700 }}>Spend Today: ${Number(spendToday).toFixed(2)}</span>
-        {dailyBudget > 0 && <span style={{ color: '#555', fontSize: 13, marginLeft: 8 }}>(${Number(dailyBudget).toFixed(2)}/day budget)</span>}
+        <span style={{ color: '#111111', fontSize: 14, fontWeight: 700 }}>Spend Today: ${Number(spendToday).toFixed(2)}</span>
+        {dailyBudget > 0 && <span style={{ color: '#939799', fontSize: 13, marginLeft: 8 }}>(${Number(dailyBudget).toFixed(2)}/day budget)</span>}
       </div>
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
           <thead>
-            <tr style={{ borderBottom: '1px solid #1a1a1a' }}>
+            <tr style={{ borderBottom: '1px solid #F1F4F5' }}>
               {['Ad', 'Spend', 'Impr.', 'Clicks', 'CTR', 'CPC'].map(h => (
-                <th key={h} style={{ color: '#444', padding: '6px 10px', textAlign: h === 'Ad' ? 'left' : 'right', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{h}</th>
+                <th key={h} style={{ color: '#939799', padding: '6px 10px', textAlign: h === 'Ad' ? 'left' : 'right', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {adsList.slice(0, 8).map((ad: any, i: number) => (
-              <tr key={i} style={{ borderBottom: '1px solid #111' }}>
+              <tr key={i} style={{ borderBottom: '1px solid #FFFFFF' }}>
                 <td style={{ padding: '8px 10px' }}>
-                  <div style={{ width: 32, height: 32, borderRadius: 4, background: '#1a1a1a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ width: 32, height: 32, borderRadius: 4, background: '#F1F4F5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {ad.thumbnail ? <img src={ad.thumbnail} style={{ width: 32, height: 32, borderRadius: 4, objectFit: 'cover' }} /> : <span style={{ fontSize: 14 }}>📷</span>}
                   </div>
                 </td>
-                <td style={{ padding: '8px 10px', color: '#aaa', textAlign: 'right' }}>${Number(ad.spend || 0).toFixed(2)}</td>
-                <td style={{ padding: '8px 10px', color: '#888', textAlign: 'right' }}>{ad.impressions || 0}</td>
-                <td style={{ padding: '8px 10px', color: '#888', textAlign: 'right' }}>{ad.clicks || 0}</td>
-                <td style={{ padding: '8px 10px', color: '#888', textAlign: 'right' }}>{Number(ad.ctr || 0).toFixed(2)}%</td>
-                <td style={{ padding: '8px 10px', color: '#00d4ff', textAlign: 'right', fontWeight: 600 }}>${Number(ad.cpc || 0).toFixed(2)}</td>
+                <td style={{ padding: '8px 10px', color: '#5E6366', textAlign: 'right' }}>${Number(ad.spend || 0).toFixed(2)}</td>
+                <td style={{ padding: '8px 10px', color: '#5E6366', textAlign: 'right' }}>{ad.impressions || 0}</td>
+                <td style={{ padding: '8px 10px', color: '#5E6366', textAlign: 'right' }}>{ad.clicks || 0}</td>
+                <td style={{ padding: '8px 10px', color: '#5E6366', textAlign: 'right' }}>{Number(ad.ctr || 0).toFixed(2)}%</td>
+                <td style={{ padding: '8px 10px', color: '#0A7D3C', textAlign: 'right', fontWeight: 600 }}>${Number(ad.cpc || 0).toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <div style={{ marginTop: 12, color: '#444', fontSize: 12 }}>+ {adsCreated} ads created in the past 24h</div>
+      <div style={{ marginTop: 12, color: '#939799', fontSize: 12 }}>+ {adsCreated} ads created in the past 24h</div>
     </IntelCard>
   );
 }
@@ -2910,11 +2910,11 @@ function AICMOFeedSection({ feed, seo, geo, goals, storedCmo, onAction, companyI
   const hnLoading = false;
 
   const sections = [
-    { key: 'hn', icon: '🟧', label: 'Hacker News', count: hnItems.length, color: '#ff6600', isHn: true },
-    { key: 'reddit', icon: '🟠', label: 'Reddit Opportunities', count: redditOpportunities.length, color: '#ff4500' },
-    { key: 'seo', icon: '🌐', label: 'SEO + GEO Recommendations', count: allRecs.length, color: '#00d4ff' },
-    { key: 'x', icon: '𝕏', label: 'X Ideas', count: xIdeas.length, color: '#fff' },
-    { key: 'articles', icon: '✏️', label: 'Articles', count: articles.length, color: '#aa44ff' },
+    { key: 'hn', icon: '🟧', label: 'Hacker News', count: hnItems.length, color: '#8A6D3B', isHn: true },
+    { key: 'reddit', icon: '🟠', label: 'Reddit Opportunities', count: redditOpportunities.length, color: '#8A6D3B' },
+    { key: 'seo', icon: '🌐', label: 'SEO + GEO Recommendations', count: allRecs.length, color: '#0A7D3C' },
+    { key: 'x', icon: '𝕏', label: 'X Ideas', count: xIdeas.length, color: '#111111' },
+    { key: 'articles', icon: '✏️', label: 'Articles', count: articles.length, color: '#5E6366' },
   ];
 
   function toggle(key: string) {
@@ -2930,15 +2930,15 @@ function AICMOFeedSection({ feed, seo, geo, goals, storedCmo, onAction, companyI
             {/* Accordion header */}
             <div onClick={() => toggle(s.key)} style={{
               display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px',
-              cursor: 'pointer', borderBottom: '1px solid #111',
-              background: expanded[s.key] ? '#0a0a0a' : 'transparent',
+              cursor: 'pointer', borderBottom: '1px solid #FFFFFF',
+              background: expanded[s.key] ? '#FFFFFF' : 'transparent',
             }}>
               <span style={{ fontSize: 16 }}>{s.icon}</span>
-              <span style={{ color: '#fff', fontSize: 14, fontWeight: 600, flex: 1 }}>{s.label}</span>
-              <span style={{ color: '#555', fontSize: 11, whiteSpace: 'nowrap', flexShrink: 0 }}>
+              <span style={{ color: '#111111', fontSize: 14, fontWeight: 600, flex: 1 }}>{s.label}</span>
+              <span style={{ color: '#939799', fontSize: 11, whiteSpace: 'nowrap', flexShrink: 0 }}>
                 {s.count > 0 ? (s.key === 'seo' ? `Found ${s.count} issues` : s.key === 'reddit' ? `Found ${s.count} mentions` : s.key === 'hn' ? `${s.count} posts` : s.key === 'x' ? `Generated ${s.count} idea${s.count !== 1 ? 's' : ''}` : `Generated ${s.count} topic${s.count !== 1 ? 's' : ''}`) : 'None yet'}
               </span>
-              <span style={{ color: '#333', fontSize: 14, transform: expanded[s.key] ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }}>▾</span>
+              <span style={{ color: '#5E6366', fontSize: 14, transform: expanded[s.key] ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }}>▾</span>
             </div>
 
             {/* Accordion content */}
@@ -2947,80 +2947,80 @@ function AICMOFeedSection({ feed, seo, geo, goals, storedCmo, onAction, companyI
                 {/* Reddit */}
                 {/* Hacker News */}
                 {s.key === 'hn' && (hnLoading ? (
-                  <p style={{ color: '#555', fontSize: 12 }}>Searching Hacker News...</p>
+                  <p style={{ color: '#939799', fontSize: 12 }}>Searching Hacker News...</p>
                 ) : hnItems.length > 0 ? hnItems.map((h, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: i < hnItems.length - 1 ? '1px solid #111' : 'none' }}>
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: i < hnItems.length - 1 ? '1px solid #FFFFFF' : 'none' }}>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ color: '#ddd', fontSize: 13, fontWeight: 500 }}>{h.title}</div>
+                      <div style={{ color: '#2B3033', fontSize: 13, fontWeight: 500 }}>{h.title}</div>
                       <div style={{ display: 'flex', gap: 10, marginTop: 4, alignItems: 'center' }}>
-                        <span style={{ background: 'rgba(255,102,0,0.12)', border: '1px solid rgba(255,102,0,0.3)', color: '#ff6600', padding: '1px 8px', borderRadius: 10, fontSize: 10, fontWeight: 600 }}>HN</span>
-                        <span style={{ color: '#555', fontSize: 11 }}>▲ {h.points}</span>
-                        <span style={{ color: '#555', fontSize: 11 }}>💬 {h.comments}</span>
+                        <span style={{ background: 'rgba(138, 109, 59,0.12)', border: '1px solid rgba(138, 109, 59,0.3)', color: '#8A6D3B', padding: '1px 8px', borderRadius: 10, fontSize: 10, fontWeight: 600 }}>HN</span>
+                        <span style={{ color: '#939799', fontSize: 11 }}>▲ {h.points}</span>
+                        <span style={{ color: '#939799', fontSize: 11 }}>💬 {h.comments}</span>
                       </div>
                     </div>
                     <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
                       <a href={h.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                        <button style={{ background: '#fff', color: '#000', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>Read</button>
+                        <button style={{ background: '#FFFFFF', color: '#111111', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>Read</button>
                       </a>
                       <a href={`https://news.ycombinator.com/item?id=${h.objectID}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                        <button onClick={(e) => { e.preventDefault(); onAction?.({ actionLabel: 'Post', title: h.title, source: 'Hacker News', sourceIcon: '🟧', sourceColor: '#ff6600', chatSection: 'hn', url: h.url }); }} style={{ background: '#1a1a1a', color: '#ff6600', border: '1px solid #ff660033', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>Post</button>
+                        <button onClick={(e) => { e.preventDefault(); onAction?.({ actionLabel: 'Post', title: h.title, source: 'Hacker News', sourceIcon: '🟧', sourceColor: '#8A6D3B', chatSection: 'hn', url: h.url }); }} style={{ background: '#F1F4F5', color: '#8A6D3B', border: '1px solid #8A6D3B33', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>Post</button>
                       </a>
                     </div>
                   </div>
-                )) : <p style={{ color: '#444', fontSize: 12 }}>No relevant Hacker News posts found.</p>)}
+                )) : <p style={{ color: '#939799', fontSize: 12 }}>No relevant Hacker News posts found.</p>)}
 
                 {/* Reddit */}
                 {s.key === 'reddit' && (redditOpportunities.length > 0 ? redditOpportunities.map((r: any, i: number) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: i < redditOpportunities.length - 1 ? '1px solid #111' : 'none' }}>
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: i < redditOpportunities.length - 1 ? '1px solid #FFFFFF' : 'none' }}>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ color: '#ddd', fontSize: 13, fontWeight: 500, lineHeight: 1.5 }}>{r.title}</div>
+                      <div style={{ color: '#2B3033', fontSize: 13, fontWeight: 500, lineHeight: 1.5 }}>{r.title}</div>
                       <div style={{ display: 'flex', gap: 10, marginTop: 4, alignItems: 'center' }}>
-                        <span style={{ background: 'rgba(255,69,0,0.12)', border: '1px solid rgba(255,69,0,0.3)', color: '#ff4500', padding: '1px 8px', borderRadius: 10, fontSize: 10, fontWeight: 600 }}>{r.subreddit}</span>
-                        <span style={{ color: '#555', fontSize: 11 }}>▲ {r.upvotes}</span>
-                        <span style={{ color: '#555', fontSize: 11 }}>💬 {r.comments}</span>
+                        <span style={{ background: 'rgba(255,69,0,0.12)', border: '1px solid rgba(255,69,0,0.3)', color: '#8A6D3B', padding: '1px 8px', borderRadius: 10, fontSize: 10, fontWeight: 600 }}>{r.subreddit}</span>
+                        <span style={{ color: '#939799', fontSize: 11 }}>▲ {r.upvotes}</span>
+                        <span style={{ color: '#939799', fontSize: 11 }}>💬 {r.comments}</span>
                       </div>
                     </div>
-                    <button onClick={() => onAction?.({ actionLabel: 'Post', title: r.title, source: 'Reddit', sourceIcon: '🟠', sourceColor: '#ff4500', chatSection: 'reddit', subreddit: r.subreddit, upvotes: r.upvotes, comments: r.comments })} style={{ background: '#fff', color: '#000', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>Post</button>
+                    <button onClick={() => onAction?.({ actionLabel: 'Post', title: r.title, source: 'Reddit', sourceIcon: '🟠', sourceColor: '#8A6D3B', chatSection: 'reddit', subreddit: r.subreddit, upvotes: r.upvotes, comments: r.comments })} style={{ background: '#FFFFFF', color: '#111111', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>Post</button>
                   </div>
-                )) : <p style={{ color: '#444', fontSize: 12 }}>No Reddit opportunities detected yet.</p>)}
+                )) : <p style={{ color: '#939799', fontSize: 12 }}>No Reddit opportunities detected yet.</p>)}
 
                 {/* SEO + GEO */}
                 {s.key === 'seo' && (allRecs.length > 0 ? allRecs.map((r, i) => (
-                  <div key={i} style={{ padding: '10px 0', borderBottom: i < allRecs.length - 1 ? '1px solid #111' : 'none' }}>
-                    <div style={{ color: '#ddd', fontSize: 13, fontWeight: 500, lineHeight: 1.5, wordBreak: 'break-word', marginBottom: 6 }}>{r.title}</div>
+                  <div key={i} style={{ padding: '10px 0', borderBottom: i < allRecs.length - 1 ? '1px solid #FFFFFF' : 'none' }}>
+                    <div style={{ color: '#2B3033', fontSize: 13, fontWeight: 500, lineHeight: 1.5, wordBreak: 'break-word', marginBottom: 6 }}>{r.title}</div>
                     <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
                       <span style={{
-                        background: r.severity === 'Critical' ? 'rgba(255,51,51,0.1)' : 'rgba(255,136,0,0.1)',
-                        border: `1px solid ${r.severity === 'Critical' ? 'rgba(255,51,51,0.3)' : 'rgba(255,136,0,0.3)'}`,
-                        color: r.severity === 'Critical' ? '#ff3333' : '#ff8800',
+                        background: r.severity === 'Critical' ? 'rgba(192, 57, 43,0.1)' : 'rgba(138, 109, 59,0.1)',
+                        border: `1px solid ${r.severity === 'Critical' ? 'rgba(192, 57, 43,0.3)' : 'rgba(138, 109, 59,0.3)'}`,
+                        color: r.severity === 'Critical' ? '#C0392B' : '#8A6D3B',
                         padding: '1px 8px', borderRadius: 4, fontSize: 10, fontWeight: 700,
                       }}>{r.severity}</span>
-                      <span style={{ color: '#555', fontSize: 11 }}>{r.category}</span>
-                      <button onClick={() => onAction?.({ actionLabel: 'Fix', title: r.title, description: r.title, source: 'SEO/GEO', sourceIcon: '🔧', sourceColor: '#ff8800', chatSection: 'seo', category: r.category, severity: r.severity })} style={{ background: '#fff', color: '#000', border: 'none', padding: '4px 14px', borderRadius: 6, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>Fix</button>
+                      <span style={{ color: '#939799', fontSize: 11 }}>{r.category}</span>
+                      <button onClick={() => onAction?.({ actionLabel: 'Fix', title: r.title, description: r.title, source: 'SEO/GEO', sourceIcon: '🔧', sourceColor: '#8A6D3B', chatSection: 'seo', category: r.category, severity: r.severity })} style={{ background: '#FFFFFF', color: '#111111', border: 'none', padding: '4px 14px', borderRadius: 6, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>Fix</button>
                     </div>
                   </div>
-                )) : <p style={{ color: '#444', fontSize: 12 }}>No SEO/GEO issues to fix.</p>)}
+                )) : <p style={{ color: '#939799', fontSize: 12 }}>No SEO/GEO issues to fix.</p>)}
 
                 {/* X Ideas */}
                 {s.key === 'x' && (xIdeas.length > 0 ? xIdeas.map((x, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: i < xIdeas.length - 1 ? '1px solid #111' : 'none' }}>
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: i < xIdeas.length - 1 ? '1px solid #FFFFFF' : 'none' }}>
                     <div style={{ flex: 1 }}>
-                      <div style={{ color: '#ddd', fontSize: 13 }}>{x.text}</div>
+                      <div style={{ color: '#2B3033', fontSize: 13 }}>{x.text}</div>
                     </div>
-                    <button onClick={() => onAction?.({ actionLabel: 'Post', text: x.text, source: 'X', sourceIcon: '𝕏', sourceColor: '#fff', chatSection: 'x' })} style={{ background: '#fff', color: '#000', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>Post</button>
+                    <button onClick={() => onAction?.({ actionLabel: 'Post', text: x.text, source: 'X', sourceIcon: '𝕏', sourceColor: '#FFFFFF', chatSection: 'x' })} style={{ background: '#FFFFFF', color: '#111111', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>Post</button>
                   </div>
-                )) : <p style={{ color: '#444', fontSize: 12 }}>No tweet ideas generated yet.</p>)}
+                )) : <p style={{ color: '#939799', fontSize: 12 }}>No tweet ideas generated yet.</p>)}
 
                 {/* Articles */}
                 {s.key === 'articles' && (articles.length > 0 ? articles.map((a, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: i < articles.length - 1 ? '1px solid #111' : 'none' }}>
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: i < articles.length - 1 ? '1px solid #FFFFFF' : 'none' }}>
                     <div style={{ flex: 1 }}>
-                      <div style={{ color: '#ddd', fontSize: 13 }}>{a.title}</div>
-                      <span style={{ color: '#555', fontSize: 11 }}>{a.topic}</span>
+                      <div style={{ color: '#2B3033', fontSize: 13 }}>{a.title}</div>
+                      <span style={{ color: '#939799', fontSize: 11 }}>{a.topic}</span>
                     </div>
-                    <button onClick={() => onAction?.({ actionLabel: 'Write', title: a.title, topic: a.topic, source: 'Articles', sourceIcon: '✏️', sourceColor: '#aa44ff', chatSection: 'articles' })} style={{ background: '#fff', color: '#000', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>Write</button>
+                    <button onClick={() => onAction?.({ actionLabel: 'Write', title: a.title, topic: a.topic, source: 'Articles', sourceIcon: '✏️', sourceColor: '#5E6366', chatSection: 'articles' })} style={{ background: '#FFFFFF', color: '#111111', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>Write</button>
                   </div>
-                )) : <p style={{ color: '#444', fontSize: 12 }}>No article topics generated yet.</p>)}
+                )) : <p style={{ color: '#939799', fontSize: 12 }}>No article topics generated yet.</p>)}
               </div>
             )}
           </div>
@@ -3080,29 +3080,29 @@ function EmailsDraftedSection({ brandDna, companyInfo, onAction }: { brandDna: a
       <IntelLabel>Emails Drafted ({emails.length})</IntelLabel>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {emails.map((e, i) => (
-          <div key={i} style={{ background: '#0d0d0d', border: '1px solid #151515', borderRadius: 8, padding: '14px 16px' }}>
+          <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 8, padding: '14px 16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span style={{ fontSize: 14 }}>✉️</span>
-                <span style={{ color: '#fff', fontSize: 13, fontWeight: 600 }}>{e.subject}</span>
+                <span style={{ color: '#111111', fontSize: 13, fontWeight: 600 }}>{e.subject}</span>
               </div>
               <div style={{ display: 'flex', gap: 6 }}>
-                <span style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', color: '#00d4ff', padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600 }}>{e.type}</span>
+                <span style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600 }}>{e.type}</span>
                 <span style={{
-                  background: e.status === 'ready' ? 'rgba(0,255,136,0.08)' : 'rgba(255,136,0,0.08)',
-                  border: `1px solid ${e.status === 'ready' ? 'rgba(0,255,136,0.2)' : 'rgba(255,136,0,0.2)'}`,
-                  color: e.status === 'ready' ? '#00ff88' : '#ff8800',
+                  background: e.status === 'ready' ? 'rgba(0, 214, 93,0.08)' : 'rgba(138, 109, 59,0.08)',
+                  border: `1px solid ${e.status === 'ready' ? 'rgba(0, 214, 93,0.2)' : 'rgba(138, 109, 59,0.2)'}`,
+                  color: e.status === 'ready' ? '#0A7D3C' : '#8A6D3B',
                   padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600,
                 }}>{e.status === 'ready' ? 'Ready' : 'Draft'}</span>
               </div>
             </div>
-            <div style={{ color: '#555', fontSize: 11, marginBottom: 6 }}>To: {e.to}</div>
-            <p style={{ color: '#888', fontSize: 12, lineHeight: 1.5, margin: 0 }}>{e.preview}</p>
+            <div style={{ color: '#939799', fontSize: 11, marginBottom: 6 }}>To: {e.to}</div>
+            <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5, margin: 0 }}>{e.preview}</p>
             <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
-              <button onClick={() => onAction?.({ actionLabel: e.status === 'ready' ? 'Send' : 'Edit', subject: e.subject, to: e.to, description: e.preview, source: 'Email', sourceIcon: '✉️', sourceColor: '#00d4ff', chatSection: 'email' })} style={{ background: e.status === 'ready' ? '#fff' : '#1a1a1a', color: e.status === 'ready' ? '#000' : '#888', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+              <button onClick={() => onAction?.({ actionLabel: e.status === 'ready' ? 'Send' : 'Edit', subject: e.subject, to: e.to, description: e.preview, source: 'Email', sourceIcon: '✉️', sourceColor: '#0A7D3C', chatSection: 'email' })} style={{ background: e.status === 'ready' ? '#FFFFFF' : '#F1F4F5', color: e.status === 'ready' ? '#111111' : '#C8CBCC', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
                 {e.status === 'ready' ? 'Send' : 'Edit'}
               </button>
-              <button onClick={() => onAction?.({ actionLabel: 'Review', subject: e.subject, to: e.to, description: e.preview, source: 'Email', sourceIcon: '✉️', sourceColor: '#00d4ff', chatSection: 'email' })} style={{ background: '#111', color: '#555', border: '1px solid #222', padding: '6px 16px', borderRadius: 6, fontSize: 12, cursor: 'pointer' }}>Preview</button>
+              <button onClick={() => onAction?.({ actionLabel: 'Review', subject: e.subject, to: e.to, description: e.preview, source: 'Email', sourceIcon: '✉️', sourceColor: '#0A7D3C', chatSection: 'email' })} style={{ background: '#FFFFFF', color: '#939799', border: '1px solid #E8E6E4', padding: '6px 16px', borderRadius: 6, fontSize: 12, cursor: 'pointer' }}>Preview</button>
             </div>
           </div>
         ))}
@@ -3159,29 +3159,29 @@ function LinkedInDraftedSection({ brandDna, companyInfo, goals, onAction }: { br
       <IntelLabel>LinkedIn Posts Drafted ({posts.length})</IntelLabel>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {posts.map((p, i) => (
-          <div key={i} style={{ background: '#0d0d0d', border: '1px solid #151515', borderRadius: 8, padding: '14px 16px' }}>
+          <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 8, padding: '14px 16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <div style={{ width: 24, height: 24, borderRadius: 4, background: '#0077B5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: '#fff', fontWeight: 700 }}>in</div>
-                <span style={{ color: '#aaa', fontSize: 12, fontWeight: 600 }}>{p.author}</span>
-                <span style={{ color: '#333', fontSize: 11 }}>· {p.engagement}</span>
+                <div style={{ width: 24, height: 24, borderRadius: 4, background: '#0A7D3C', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: '#111111', fontWeight: 700 }}>in</div>
+                <span style={{ color: '#5E6366', fontSize: 12, fontWeight: 600 }}>{p.author}</span>
+                <span style={{ color: '#5E6366', fontSize: 11 }}>· {p.engagement}</span>
               </div>
               <div style={{ display: 'flex', gap: 6 }}>
-                <span style={{ background: 'rgba(0,119,181,0.1)', border: '1px solid rgba(0,119,181,0.2)', color: '#0077B5', padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600 }}>{p.type}</span>
+                <span style={{ background: 'rgba(0,119,181,0.1)', border: '1px solid rgba(0,119,181,0.2)', color: '#0A7D3C', padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600 }}>{p.type}</span>
                 <span style={{
-                  background: p.status === 'ready' ? 'rgba(0,255,136,0.08)' : 'rgba(255,136,0,0.08)',
-                  border: `1px solid ${p.status === 'ready' ? 'rgba(0,255,136,0.2)' : 'rgba(255,136,0,0.2)'}`,
-                  color: p.status === 'ready' ? '#00ff88' : '#ff8800',
+                  background: p.status === 'ready' ? 'rgba(0, 214, 93,0.08)' : 'rgba(138, 109, 59,0.08)',
+                  border: `1px solid ${p.status === 'ready' ? 'rgba(0, 214, 93,0.2)' : 'rgba(138, 109, 59,0.2)'}`,
+                  color: p.status === 'ready' ? '#0A7D3C' : '#8A6D3B',
                   padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600,
                 }}>{p.status === 'ready' ? 'Ready' : 'Draft'}</span>
               </div>
             </div>
-            <p style={{ color: '#ccc', fontSize: 13, lineHeight: 1.6, margin: 0, whiteSpace: 'pre-wrap' }}>{p.content}</p>
+            <p style={{ color: '#2B3033', fontSize: 13, lineHeight: 1.6, margin: 0, whiteSpace: 'pre-wrap' }}>{p.content}</p>
             <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
-              <button onClick={() => onAction?.({ actionLabel: p.status === 'ready' ? 'Publish' : 'Edit', content: p.content, author: p.author, description: p.content, source: 'LinkedIn', sourceIcon: 'in', sourceColor: '#0077B5', chatSection: 'linkedin' })} style={{ background: p.status === 'ready' ? '#0077B5' : '#1a1a1a', color: '#fff', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+              <button onClick={() => onAction?.({ actionLabel: p.status === 'ready' ? 'Publish' : 'Edit', content: p.content, author: p.author, description: p.content, source: 'LinkedIn', sourceIcon: 'in', sourceColor: '#0A7D3C', chatSection: 'linkedin' })} style={{ background: p.status === 'ready' ? '#0A7D3C' : '#F1F4F5', color: '#111111', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
                 {p.status === 'ready' ? 'Publish' : 'Edit'}
               </button>
-              <button onClick={() => onAction?.({ actionLabel: 'Post', content: p.content, author: p.author, description: p.content, source: 'LinkedIn', sourceIcon: 'in', sourceColor: '#0077B5', chatSection: 'linkedin', title: 'Schedule LinkedIn Post' })} style={{ background: '#111', color: '#555', border: '1px solid #222', padding: '6px 16px', borderRadius: 6, fontSize: 12, cursor: 'pointer' }}>Schedule</button>
+              <button onClick={() => onAction?.({ actionLabel: 'Post', content: p.content, author: p.author, description: p.content, source: 'LinkedIn', sourceIcon: 'in', sourceColor: '#0A7D3C', chatSection: 'linkedin', title: 'Schedule LinkedIn Post' })} style={{ background: '#FFFFFF', color: '#939799', border: '1px solid #E8E6E4', padding: '6px 16px', borderRadius: 6, fontSize: 12, cursor: 'pointer' }}>Schedule</button>
             </div>
           </div>
         ))}
@@ -3203,7 +3203,7 @@ function AdsFromDBSection({ ads, onAction }: { ads: any; onAction?: (item: any) 
     return (
       <IntelCard>
         <IntelLabel>Ads</IntelLabel>
-        <p style={{ color: '#444', fontSize: 13 }}>No ads data. Connect ad accounts or generate HeyGen avatar ads.</p>
+        <p style={{ color: '#939799', fontSize: 13 }}>No ads data. Connect ad accounts or generate HeyGen avatar ads.</p>
       </IntelCard>
     );
   }
@@ -3211,32 +3211,32 @@ function AdsFromDBSection({ ads, onAction }: { ads: any; onAction?: (item: any) 
   return (
     <IntelCard>
       {/* Header with line */}
-      <div style={{ borderBottom: '2px solid #fff', paddingBottom: 10, marginBottom: 14 }}>
-        <div style={{ color: '#fff', fontSize: 18, fontWeight: 800 }}>Ads</div>
+      <div style={{ borderBottom: '2px solid #FFFFFF', paddingBottom: 10, marginBottom: 14 }}>
+        <div style={{ color: '#111111', fontSize: 18, fontWeight: 800 }}>Ads</div>
       </div>
 
       {/* Spend summary */}
       <div style={{ marginBottom: 16 }}>
-        <span style={{ color: '#fff', fontSize: 14, fontWeight: 700 }}>Spend Today: ${Number(spendToday).toFixed(2)}</span>
-        {dailyBudget > 0 && <span style={{ color: '#555', fontSize: 13, marginLeft: 8 }}>(${Number(dailyBudget).toFixed(2)}/day budget)</span>}
+        <span style={{ color: '#111111', fontSize: 14, fontWeight: 700 }}>Spend Today: ${Number(spendToday).toFixed(2)}</span>
+        {dailyBudget > 0 && <span style={{ color: '#939799', fontSize: 13, marginLeft: 8 }}>(${Number(dailyBudget).toFixed(2)}/day budget)</span>}
       </div>
 
       {/* Table */}
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
           <thead>
-            <tr style={{ borderBottom: '1px solid #1a1a1a' }}>
+            <tr style={{ borderBottom: '1px solid #F1F4F5' }}>
               {['Ad', 'Spend', 'Impr.', 'Clicks', 'CTR', 'CPC'].map(h => (
-                <th key={h} style={{ color: '#555', padding: '8px 12px', textAlign: h === 'Ad' ? 'left' : 'right', fontSize: 11, fontWeight: 600 }}>{h}</th>
+                <th key={h} style={{ color: '#939799', padding: '8px 12px', textAlign: h === 'Ad' ? 'left' : 'right', fontSize: 11, fontWeight: 600 }}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {adsList.map((ad: any, i: number) => (
               <>
-                <tr key={i} onClick={() => setExpandedAd(expandedAd === i ? null : i)} style={{ borderBottom: '1px solid #111', cursor: 'pointer', background: expandedAd === i ? '#0d0d0d' : 'transparent' }}>
+                <tr key={i} onClick={() => setExpandedAd(expandedAd === i ? null : i)} style={{ borderBottom: '1px solid #FFFFFF', cursor: 'pointer', background: expandedAd === i ? '#FFFFFF' : 'transparent' }}>
                   <td style={{ padding: '10px 12px' }}>
-                    <div style={{ width: 44, height: 44, borderRadius: 6, overflow: 'hidden', background: '#1a1a1a' }}>
+                    <div style={{ width: 44, height: 44, borderRadius: 6, overflow: 'hidden', background: '#F1F4F5' }}>
                       {ad.preview_image_url ? (
                         <img src={ad.preview_image_url} alt={ad.avatar_name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                       ) : (
@@ -3244,29 +3244,29 @@ function AdsFromDBSection({ ads, onAction }: { ads: any; onAction?: (item: any) 
                       )}
                     </div>
                   </td>
-                  <td style={{ padding: '10px 12px', color: '#fff', textAlign: 'right', fontWeight: 600 }}>${Number(ad.spend || 0).toFixed(2)}</td>
-                  <td style={{ padding: '10px 12px', color: '#888', textAlign: 'right' }}>{Number(ad.impressions || 0).toLocaleString()}</td>
-                  <td style={{ padding: '10px 12px', color: '#888', textAlign: 'right' }}>{ad.clicks || 0}</td>
-                  <td style={{ padding: '10px 12px', color: '#888', textAlign: 'right' }}>{Number(ad.ctr || 0).toFixed(2)}%</td>
-                  <td style={{ padding: '10px 12px', color: '#888', textAlign: 'right' }}>${Number(ad.cpc || 0).toFixed(2)}</td>
+                  <td style={{ padding: '10px 12px', color: '#111111', textAlign: 'right', fontWeight: 600 }}>${Number(ad.spend || 0).toFixed(2)}</td>
+                  <td style={{ padding: '10px 12px', color: '#5E6366', textAlign: 'right' }}>{Number(ad.impressions || 0).toLocaleString()}</td>
+                  <td style={{ padding: '10px 12px', color: '#5E6366', textAlign: 'right' }}>{ad.clicks || 0}</td>
+                  <td style={{ padding: '10px 12px', color: '#5E6366', textAlign: 'right' }}>{Number(ad.ctr || 0).toFixed(2)}%</td>
+                  <td style={{ padding: '10px 12px', color: '#5E6366', textAlign: 'right' }}>${Number(ad.cpc || 0).toFixed(2)}</td>
                 </tr>
                 {expandedAd === i && (
                   <tr key={`${i}-script`}>
-                    <td colSpan={6} style={{ padding: '0 12px 14px 12px', background: '#0d0d0d' }}>
-                      <div style={{ padding: '12px 16px', background: '#0a0a0a', border: '1px solid #1a1a1a', borderRadius: 8 }}>
+                    <td colSpan={6} style={{ padding: '0 12px 14px 12px', background: '#FFFFFF' }}>
+                      <div style={{ padding: '12px 16px', background: '#FFFFFF', border: '1px solid #F1F4F5', borderRadius: 8 }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                           <div>
-                            <span style={{ color: '#fff', fontSize: 13, fontWeight: 600 }}>{ad.avatar_name}</span>
+                            <span style={{ color: '#111111', fontSize: 13, fontWeight: 600 }}>{ad.avatar_name}</span>
                             <span style={{
-                              background: ad.status === 'active' ? 'rgba(0,255,136,0.08)' : 'rgba(255,136,0,0.08)',
-                              border: `1px solid ${ad.status === 'active' ? 'rgba(0,255,136,0.2)' : 'rgba(255,136,0,0.2)'}`,
-                              color: ad.status === 'active' ? '#00ff88' : '#ff8800',
+                              background: ad.status === 'active' ? 'rgba(0, 214, 93,0.08)' : 'rgba(138, 109, 59,0.08)',
+                              border: `1px solid ${ad.status === 'active' ? 'rgba(0, 214, 93,0.2)' : 'rgba(138, 109, 59,0.2)'}`,
+                              color: ad.status === 'active' ? '#0A7D3C' : '#8A6D3B',
                               padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600, marginLeft: 8,
                             }}>{ad.status || 'draft'}</span>
                           </div>
                         </div>
-                        <div style={{ color: '#444', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>AD SCRIPT</div>
-                        <p style={{ color: '#ccc', fontSize: 13, lineHeight: 1.6, margin: 0, fontStyle: 'italic' }}>"{ad.script}"</p>
+                        <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>AD SCRIPT</div>
+                        <p style={{ color: '#2B3033', fontSize: 13, lineHeight: 1.6, margin: 0, fontStyle: 'italic' }}>"{ad.script}"</p>
                       </div>
                     </td>
                   </tr>
@@ -3276,7 +3276,7 @@ function AdsFromDBSection({ ads, onAction }: { ads: any; onAction?: (item: any) 
           </tbody>
         </table>
       </div>
-      <div style={{ marginTop: 12, color: '#444', fontSize: 12 }}>+ {adsCreated} ads created in the past 24h</div>
+      <div style={{ marginTop: 12, color: '#939799', fontSize: 12 }}>+ {adsCreated} ads created in the past 24h</div>
     </IntelCard>
   );
 }
@@ -3312,17 +3312,17 @@ function HeyGenAdsSection({ companyInfo, ads }: { companyInfo: any; ads: any }) 
       <IntelLabel>HeyGen Video Ads</IntelLabel>
       {spendToday > 0 && (
         <div style={{ marginBottom: 16 }}>
-          <span style={{ color: '#fff', fontSize: 14, fontWeight: 700 }}>Spend Today: ${Number(spendToday).toFixed(2)}</span>
-          {dailyBudget > 0 && <span style={{ color: '#555', fontSize: 13, marginLeft: 8 }}>(${Number(dailyBudget).toFixed(2)}/day budget)</span>}
+          <span style={{ color: '#111111', fontSize: 14, fontWeight: 700 }}>Spend Today: ${Number(spendToday).toFixed(2)}</span>
+          {dailyBudget > 0 && <span style={{ color: '#939799', fontSize: 13, marginLeft: 8 }}>(${Number(dailyBudget).toFixed(2)}/day budget)</span>}
         </div>
       )}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {avatarAds.map((ad: any, i: number) => (
-          <div key={i} style={{ background: '#0d0d0d', border: `1px solid ${ad.status === 'top performer' ? 'rgba(0,255,136,0.2)' : '#151515'}`, borderRadius: 8, padding: '14px 16px' }}>
+          <div key={i} style={{ background: '#FFFFFF', border: `1px solid ${ad.status === 'top performer' ? 'rgba(0, 214, 93,0.2)' : '#F7F8F9'}`, borderRadius: 8, padding: '14px 16px' }}>
             <div style={{ display: 'flex', gap: 14, marginBottom: 10 }}>
               {/* Avatar thumbnail */}
               <div style={{
-                width: 56, height: 56, borderRadius: 8, background: '#1a1a1a',
+                width: 56, height: 56, borderRadius: 8, background: '#F1F4F5',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 flexShrink: 0, overflow: 'hidden',
               }}>
@@ -3334,33 +3334,33 @@ function HeyGenAdsSection({ companyInfo, ads }: { companyInfo: any; ads: any }) 
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-                  <span style={{ color: '#fff', fontSize: 13, fontWeight: 600 }}>{ad.avatar}</span>
+                  <span style={{ color: '#111111', fontSize: 13, fontWeight: 600 }}>{ad.avatar}</span>
                   {ad.status === 'top performer' && (
-                    <span style={{ background: 'rgba(0,255,136,0.1)', border: '1px solid rgba(0,255,136,0.2)', color: '#00ff88', padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600 }}>⭐ Top Performer</span>
+                    <span style={{ background: 'rgba(0, 214, 93,0.1)', border: '1px solid rgba(0, 214, 93,0.2)', color: '#0A7D3C', padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600 }}>⭐ Top Performer</span>
                   )}
                 </div>
-                <p style={{ color: '#888', fontSize: 12, lineHeight: 1.4, margin: 0 }}>"{ad.script}"</p>
+                <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.4, margin: 0 }}>"{ad.script}"</p>
               </div>
             </div>
             {/* Metrics row */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 8 }}>
               {[
-                { label: 'Spend', value: `$${Number(ad.spend).toFixed(2)}`, color: '#fff' },
-                { label: 'Impr.', value: Number(ad.impressions).toLocaleString(), color: '#888' },
-                { label: 'CTR', value: `${Number(ad.ctr).toFixed(2)}%`, color: ad.ctr >= 2 ? '#00ff88' : '#888' },
-                { label: 'CPC', value: `$${Number(ad.cpc).toFixed(2)}`, color: ad.cpc < 0.20 ? '#00ff88' : '#888' },
-                { label: 'CPM', value: `$${Number(ad.cpm).toFixed(2)}`, color: ad.cpm < 4 ? '#00ff88' : '#ff8800' },
+                { label: 'Spend', value: `$${Number(ad.spend).toFixed(2)}`, color: '#111111' },
+                { label: 'Impr.', value: Number(ad.impressions).toLocaleString(), color: '#5E6366' },
+                { label: 'CTR', value: `${Number(ad.ctr).toFixed(2)}%`, color: ad.ctr >= 2 ? '#0A7D3C' : '#C8CBCC' },
+                { label: 'CPC', value: `$${Number(ad.cpc).toFixed(2)}`, color: ad.cpc < 0.20 ? '#0A7D3C' : '#C8CBCC' },
+                { label: 'CPM', value: `$${Number(ad.cpm).toFixed(2)}`, color: ad.cpm < 4 ? '#0A7D3C' : '#8A6D3B' },
               ].map((m, j) => (
                 <div key={j} style={{ textAlign: 'center' }}>
                   <div style={{ color: m.color, fontSize: 14, fontWeight: 700 }}>{m.value}</div>
-                  <div style={{ color: '#444', fontSize: 9, letterSpacing: '0.05em', textTransform: 'uppercase' }}>{m.label}</div>
+                  <div style={{ color: '#939799', fontSize: 9, letterSpacing: '0.05em', textTransform: 'uppercase' }}>{m.label}</div>
                 </div>
               ))}
             </div>
           </div>
         ))}
       </div>
-      <div style={{ marginTop: 12, color: '#444', fontSize: 12 }}>+ {avatarAds.length} avatar variations tested in the past 24h</div>
+      <div style={{ marginTop: 12, color: '#939799', fontSize: 12 }}>+ {avatarAds.length} avatar variations tested in the past 24h</div>
     </IntelCard>
   );
 }
@@ -3422,8 +3422,8 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
   if (loading) {
     return (
       <div style={{ padding: '60px 0', textAlign: 'center' }}>
-        <div style={{ color: '#00d4ff', fontSize: 13, letterSpacing: '0.15em' }}>LOADING INTELLIGENCE DATA...</div>
-        <div style={{ color: '#333', fontSize: 12, marginTop: 8 }}>Fetching from ClawAPI endpoints</div>
+        <div style={{ color: '#0A7D3C', fontSize: 13, letterSpacing: '0.15em' }}>LOADING INTELLIGENCE DATA...</div>
+        <div style={{ color: '#5E6366', fontSize: 12, marginTop: 8 }}>Fetching from ClawAPI endpoints</div>
       </div>
     );
   }
@@ -3431,7 +3431,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
   if (error || !data) {
     return (
       <div style={{ padding: '40px 0', textAlign: 'center' }}>
-        <div style={{ color: '#ff4444', fontSize: 13 }}>Failed to load intelligence data</div>
+        <div style={{ color: '#C0392B', fontSize: 13 }}>Failed to load intelligence data</div>
       </div>
     );
   }
@@ -3446,7 +3446,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
 
       {/* Intelligence sub-nav */}
       <div style={{
-        display: 'flex', gap: 0, borderBottom: '1px solid #1a1a1a',
+        display: 'flex', gap: 0, borderBottom: '1px solid #F1F4F5',
         overflowX: 'auto', marginBottom: 32, paddingBottom: 0,
       }}>
         {INTEL_SECTIONS.map(s => (
@@ -3454,10 +3454,10 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
             key={s.id}
             onClick={() => scrollToSection(s.id)}
             style={{
-              background: activeSection === s.id ? 'rgba(0,212,255,0.08)' : 'transparent',
-              color: activeSection === s.id ? '#00d4ff' : '#555',
+              background: activeSection === s.id ? 'rgba(10, 125, 60,0.08)' : 'transparent',
+              color: activeSection === s.id ? '#0A7D3C' : '#C8CBCC',
               border: 'none',
-              borderBottom: activeSection === s.id ? '2px solid #00d4ff' : '2px solid transparent',
+              borderBottom: activeSection === s.id ? '2px solid #0A7D3C' : '2px solid transparent',
               padding: '10px 18px',
               fontSize: 12, fontWeight: activeSection === s.id ? 700 : 400,
               cursor: 'pointer',
@@ -3473,165 +3473,165 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
       <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
         {/* Company Overview — FREE (always visible) */}
         <section id="intel-overview">
-          <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Company Overview</div>
+          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Company Overview</div>
           <CompanyOverviewSection companyInfo={data.companyInfo} domain={data.domain} />
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
 
         {/* Brand DNA */}
         <section id="intel-brand">
-          <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Brand DNA</div>
+          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Brand DNA</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={120} label="Unlock Brand DNA">
             <BrandDNASection data={data.brandDna} />
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
 
         {/* Market & Metrics */}
         <section id="intel-market">
-          <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Market & Metrics</div>
+          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Market & Metrics</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={120} label="Unlock Market Data">
             <MarketMetricsSection competitors={data.competitors} metrics={data.metrics} />
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
 
         {/* Analytics Overview (Tabbed) */}
         <section id="intel-analytics">
-          <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Analytics Overview</div>
+          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Analytics Overview</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={120} label="Unlock Analytics">
             <AnalyticsOverviewSection seo={data.seoData} geo={data.geoData} />
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
 
         {/* Competitors Chips */}
         <section id="intel-competitors">
-          <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Competitors</div>
+          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Competitors</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={140} label="Unlock Competitor Intel">
             <CompetitorChipsSection competitors={data.competitors} onAction={openChat} />
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
 
         {/* Patents & Grants */}
         <section id="intel-ip">
-          <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Patents & Grants</div>
+          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Patents & Grants</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock IP Intelligence">
             <PatentsGrantsSection patents={data.patents} grants={data.grants} />
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
 
         {/* Documents */}
         <section id="intel-docs">
-          <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Documents</div>
+          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Documents</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock Documents">
             <DocumentsSection documents={data.documents} />
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
 
         {/* Social */}
         <section id="intel-social">
-          <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Social Analytics</div>
+          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Social Analytics</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={100} label="Unlock Social">
             <SocialSection social={data.social} />
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
 
         {/* Emails */}
         <section id="intel-emails">
-          <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Emails Drafted</div>
+          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Emails Drafted</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock Email Drafts">
             <EmailsDraftedSection brandDna={data.brandDna} companyInfo={data.companyInfo} onAction={openChat} />
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
 
         {/* LinkedIn */}
         <section id="intel-linkedin">
-          <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>LinkedIn Posts</div>
+          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>LinkedIn Posts</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={100} label="Unlock LinkedIn">
             <LinkedInDraftedSection brandDna={data.brandDna} companyInfo={data.companyInfo} goals={data.goals} onAction={openChat} />
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
 
         {/* Ads */}
         <section id="intel-ads">
-          <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Ads</div>
+          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Ads</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock Ads">
             <AdsFromDBSection ads={adsData} onAction={openChat} />
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
 
         {/* Goals */}
         <section id="intel-goals">
-          <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Goals Overview</div>
+          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Goals Overview</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={100} label="Unlock Goals">
             <GoalsSection goals={data.goals} />
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
 
         {/* Investors */}
         <section id="intel-investors">
-          <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Investor Pipeline</div>
+          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Investor Pipeline</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock Investors">
             <InvestorSection investors={data.investors} />
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
 
         {/* AI CMO Feed */}
         <section id="intel-cmo">
-          <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>AI CMO Feed</div>
+          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>AI CMO Feed</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={100} label="Unlock AI CMO">
             <AICMOFeedSection feed={data.feed} seo={data.seoData} geo={data.geoData} goals={data.goals} storedCmo={feedData?.cmo_feed} onAction={openChat} companyInfo={data.companyInfo} brandDna={data.brandDna} storedHn={hnData?.items} storedReddit={redditData?.items} />
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
 
         {/* Activity Feed */}
         <section id="intel-feed">
-          <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Activity Feed</div>
+          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Activity Feed</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={100} label="Unlock Activity Feed">
             <ActivityFeedSection feed={data.feed} updates={data.updates} goals={data.goals} seo={data.seoData} geo={data.geoData} storedFeed={feedData?.feed_items} onAction={openChat} />
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
 
         {/* ClawOS Updates */}
         <section id="intel-updates">
-          <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>ClawOS Updates</div>
+          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>ClawOS Updates</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock Updates">
             <ClawOSUpdatesSection updates={data.updates} />
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #0d0d0d' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
 
         {/* Hiring */}
         <section id="intel-hiring">
-          <div style={{ color: '#444', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Team & Hiring</div>
+          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Team & Hiring</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock Hiring">
             <HiringSection hiring={data.hiring} />
           </LockedSection>

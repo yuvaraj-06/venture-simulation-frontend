@@ -109,7 +109,7 @@ export default function LockedSection({
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 20%, rgba(0,0,0,0.85) 60%)',
+          background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 20%, rgba(255,255,255,0.88) 60%)',
           backdropFilter: 'blur(8px)',
           WebkitBackdropFilter: 'blur(8px)',
           border: '1px solid rgba(255,255,255,0.04)',
@@ -128,8 +128,8 @@ export default function LockedSection({
             width: 48,
             height: 48,
             borderRadius: '50%',
-            background: pipelineRunning ? 'rgba(255,136,0,0.08)' : 'rgba(0,212,255,0.08)',
-            border: `1px solid ${pipelineRunning ? 'rgba(255,136,0,0.2)' : 'rgba(0,212,255,0.2)'}`,
+            background: pipelineRunning ? 'rgba(138, 109, 59,0.08)' : 'rgba(10, 125, 60,0.08)',
+            border: `1px solid ${pipelineRunning ? 'rgba(138, 109, 59,0.2)' : 'rgba(10, 125, 60,0.2)'}`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -142,9 +142,9 @@ export default function LockedSection({
         {/* Unlock button or Coming Soon */}
         {pipelineRunning ? (
           <div style={{
-            background: 'rgba(255,136,0,0.08)',
-            color: '#ff8800',
-            border: '1px solid rgba(255,136,0,0.2)',
+            background: 'rgba(138, 109, 59,0.08)',
+            color: '#8A6D3B',
+            border: '1px solid rgba(138, 109, 59,0.2)',
             borderRadius: 8,
             padding: '12px 28px',
             fontSize: 14,
@@ -159,9 +159,9 @@ export default function LockedSection({
             disabled={!buttonReady || creating}
             style={{
               background: buttonReady
-                ? 'linear-gradient(135deg, #00d4ff, #0066ff)'
+                ? '#FFFFFF'
                 : 'rgba(255,255,255,0.05)',
-              color: buttonReady ? '#fff' : '#555',
+              color: buttonReady ? '#111111' : '#C8CBCC',
               border: 'none',
               borderRadius: 8,
               padding: '12px 28px',
@@ -170,25 +170,25 @@ export default function LockedSection({
               cursor: buttonReady && !creating ? 'pointer' : 'not-allowed',
               letterSpacing: '0.02em',
               transition: 'all 0.2s',
-              boxShadow: buttonReady ? '0 4px 20px rgba(0,212,255,0.2)' : 'none',
+              boxShadow: buttonReady ? '0 4px 20px rgba(10, 125, 60,0.2)' : 'none',
               opacity: creating ? 0.7 : 1,
             }}
             onMouseOver={(e) => {
               if (buttonReady && !creating) {
                 (e.target as HTMLButtonElement).style.transform = 'scale(1.03)';
-                (e.target as HTMLButtonElement).style.boxShadow = '0 6px 30px rgba(0,212,255,0.35)';
+                (e.target as HTMLButtonElement).style.boxShadow = '0 6px 30px rgba(10, 125, 60,0.35)';
               }
             }}
             onMouseOut={(e) => {
               (e.target as HTMLButtonElement).style.transform = 'scale(1)';
-              (e.target as HTMLButtonElement).style.boxShadow = buttonReady ? '0 4px 20px rgba(0,212,255,0.2)' : 'none';
+              (e.target as HTMLButtonElement).style.boxShadow = buttonReady ? '0 4px 20px rgba(10, 125, 60,0.2)' : 'none';
             }}
           >
             {creating ? '⏳ Creating checkout...' : `🔒 ${label}`}
           </button>
         )}
 
-        <div style={{ color: '#444', fontSize: 11, marginTop: 4 }}>
+        <div style={{ color: '#939799', fontSize: 11, marginTop: 4 }}>
           {pipelineRunning
             ? 'Your venture is being analyzed. Unlock will be available shortly.'
             : 'One-time payment to unlock all premium features'}
