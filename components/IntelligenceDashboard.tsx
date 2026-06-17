@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import LockedSection from './LockedSection';
+import { Glyph } from './Brand';
 import { useVentureAccess as __useVentureAccess } from '@/lib/useVentureAccess';
 
 // Safe render helper: ensures a value is always a string for JSX rendering
@@ -149,7 +150,7 @@ interface HiringData {
 function IntelCard({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   return (
     <div style={{
-      background: '#FFFFFF', border: '1px solid #F1F4F5', borderRadius: 8, padding: 20,
+      background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 20,
       ...style
     }}>
       {children}
@@ -308,7 +309,7 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
           <IntelLabel>Unique Selling Points</IntelLabel>
           {usps.map((u: string, i: number) => (
             <div key={i} style={{ display: 'flex', gap: 8, padding: '6px 0' }}>
-              <span style={{ color: '#0A7D3C', fontSize: 12 }}>✓</span>
+              <span style={{ color: '#0A7D3C', fontSize: 12 }}><Glyph name="check" /></span>
               <span style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.5 }}>{u}</span>
             </div>
           ))}
@@ -321,8 +322,8 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
           <IntelLabel>Target Personas</IntelLabel>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             {personas.map((p: any, i: number) => (
-              <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F1F4F5', borderRadius: 8, padding: 16, flex: '1 1 250px', minWidth: 200 }}>
-                <div style={{ color: '#111111', fontSize: 14, fontWeight: 600, marginBottom: 6 }}>{safeStr(p.name || '')}</div>
+              <div key={i} style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 16, flex: '1 1 250px', minWidth: 200 }}>
+                <div style={{ color: '#000000', fontSize: 14, fontWeight: 600, marginBottom: 6 }}>{safeStr(p.name || '')}</div>
                 <div style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5 }}>{safeStr(p.description || '')}</div>
               </div>
             ))}
@@ -342,7 +343,7 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
                 <div style={{ marginTop: 10 }}>
                   {((bd.competitive_positioning as any).differentiators as any[]).slice(0, 5).map((d: any, i: number) => (
                     <div key={i} style={{ display: 'flex', gap: 8, padding: '4px 0' }}>
-                      <span style={{ color: '#0A7D3C', fontSize: 12 }}>✓</span>
+                      <span style={{ color: '#0A7D3C', fontSize: 12 }}><Glyph name="check" /></span>
                       <span style={{ color: '#5E6366', fontSize: 12 }}>{typeof d === 'string' ? d : (d?.feature || d?.name || d?.title || safeStr(d))}</span>
                     </div>
                   ))}
@@ -378,7 +379,7 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
                 return (
                   <div key={i} style={{ background: '#FFFFFF', border: `1px solid ${i === 0 ? 'rgba(10, 125, 60,0.3)' : '#F1F4F5'}`, borderRadius: 8, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: desc ? 8 : 0 }}>
-                      <div style={{ color: '#111111', fontSize: 15, fontWeight: 700 }}>{name}</div>
+                      <div style={{ color: '#000000', fontSize: 15, fontWeight: 700 }}>{name}</div>
                       <span style={{ background: i === 0 ? 'rgba(10, 125, 60,0.1)' : 'rgba(255,255,255,0.04)', border: `1px solid ${i === 0 ? 'rgba(10, 125, 60,0.3)' : '#F1F4F5'}`, color: i === 0 ? '#0A7D3C' : '#D8DBDC', padding: '2px 10px', borderRadius: 20, fontSize: 10, fontWeight: 600 }}>
                         {i === 0 ? 'Primary' : 'Secondary'}
                       </span>
@@ -393,16 +394,16 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
               {(bd.brand_archetypes as any).primary && (
                 <div style={{ background: '#FFFFFF', border: '1px solid rgba(10, 125, 60,0.3)', borderRadius: 8, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                    <div style={{ color: '#111111', fontSize: 15, fontWeight: 700 }}>{String((bd.brand_archetypes as any).primary)}</div>
+                    <div style={{ color: '#000000', fontSize: 15, fontWeight: 700 }}>{String((bd.brand_archetypes as any).primary)}</div>
                     <span style={{ background: 'rgba(10, 125, 60,0.1)', border: '1px solid rgba(10, 125, 60,0.3)', color: '#0A7D3C', padding: '2px 10px', borderRadius: 20, fontSize: 10, fontWeight: 600 }}>Primary</span>
                   </div>
                 </div>
               )}
               {(bd.brand_archetypes as any).secondary && (
-                <div style={{ background: '#FFFFFF', border: '1px solid #F1F4F5', borderRadius: 8, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
+                <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                    <div style={{ color: '#111111', fontSize: 15, fontWeight: 700 }}>{String((bd.brand_archetypes as any).secondary)}</div>
-                    <span style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #F1F4F5', color: '#5E6366', padding: '2px 10px', borderRadius: 20, fontSize: 10, fontWeight: 600 }}>Secondary</span>
+                    <div style={{ color: '#000000', fontSize: 15, fontWeight: 700 }}>{String((bd.brand_archetypes as any).secondary)}</div>
+                    <span style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #E8E6E4', color: '#5E6366', padding: '2px 10px', borderRadius: 20, fontSize: 10, fontWeight: 600 }}>Secondary</span>
                   </div>
                 </div>
               )}
@@ -430,7 +431,7 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
       {(bd.tagline || messaging.tagline || (messaging.primary && typeof messaging.primary === 'string')) ? (
         <IntelCard style={{ gridColumn: '1/-1' }}>
           <IntelLabel>Tagline</IntelLabel>
-          <p style={{ color: '#111111', fontSize: 18, fontWeight: 700, fontStyle: 'italic' }}>&ldquo;{safeStr(bd.tagline || messaging.tagline || messaging.primary)}&rdquo;</p>
+          <p style={{ color: '#000000', fontSize: 18, fontWeight: 700, fontStyle: 'italic' }}>&ldquo;{safeStr(bd.tagline || messaging.tagline || messaging.primary)}&rdquo;</p>
         </IntelCard>
       ) : null}
     </div>
@@ -464,7 +465,7 @@ function SEOGEOSection({ seo, geo }: { seo: Record<string, unknown> | null; geo:
                 <span style={{ fontSize: 22, fontWeight: 800, color: seoScore >= 70 ? '#0A7D3C' : seoScore >= 40 ? '#8A6D3B' : '#C0392B' }}>{seoScore}</span>
               </div>
               <div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: '#111111' }}>Overall Score</div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: '#000000' }}>Overall Score</div>
                 <div style={{ fontSize: 12, color: '#5E6366' }}>{seoScore >= 70 ? 'Good' : seoScore >= 40 ? 'Needs Work' : 'Critical Issues'}</div>
               </div>
             </div>
@@ -475,7 +476,7 @@ function SEOGEOSection({ seo, geo }: { seo: Record<string, unknown> | null; geo:
               { label: 'Mobile', val: seo?.mobile_score },
               { label: 'Page Speed', val: seo?.page_speed },
             ].filter(s => s.val && typeof s.val !== 'object').map((s, i) => (
-              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', borderBottom: '1px solid #F1F4F5' }}>
+              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', borderBottom: '1px solid #E8E6E4' }}>
                 <span style={{ color: '#5E6366', fontSize: 12 }}>{s.label}</span>
                 <span style={{ color: '#5E6366', fontSize: 12, fontWeight: 600 }}>{String(s.val)}</span>
               </div>
@@ -496,7 +497,7 @@ function SEOGEOSection({ seo, geo }: { seo: Record<string, unknown> | null; geo:
                 <div style={{ color: '#5E6366', fontSize: 11, textTransform: 'uppercase', marginBottom: 6 }}>Keywords</div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
                   {keywords.slice(0, 10).map((kw: string, i: number) => (
-                    <span key={i} style={{ background: '#FFFFFF', border: '1px solid #F1F4F5', color: '#5E6366', padding: '2px 8px', borderRadius: 3, fontSize: 11 }}>{kw}</span>
+                    <span key={i} style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#5E6366', padding: '2px 8px', borderRadius: 3, fontSize: 11 }}>{kw}</span>
                   ))}
                 </div>
               </div>
@@ -515,14 +516,14 @@ function SEOGEOSection({ seo, geo }: { seo: Record<string, unknown> | null; geo:
                 <span style={{ fontSize: 22, fontWeight: 800, color: geoScore >= 50 ? '#0A7D3C' : geoScore >= 20 ? '#8A6D3B' : '#C0392B' }}>{geoScore}</span>
               </div>
               <div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: '#111111' }}>AI Visibility Score</div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: '#000000' }}>AI Visibility Score</div>
                 <div style={{ fontSize: 12, color: '#5E6366' }}>{geoScore >= 50 ? 'Visible' : geoScore >= 20 ? 'Low Visibility' : 'Not Visible'}</div>
               </div>
             </div>
             {platforms.map((p: any, i: number) => (
               <div key={i} style={{ padding: '10px 0', borderBottom: i < platforms.length - 1 ? '1px solid #F1F4F5' : 'none' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                  <span style={{ color: '#111111', fontSize: 13, fontWeight: 600 }}>{p.name}</span>
+                  <span style={{ color: '#000000', fontSize: 13, fontWeight: 600 }}>{p.name}</span>
                   <span style={{ color: p.score >= 50 ? '#0A7D3C' : p.score >= 20 ? '#8A6D3B' : '#C0392B', fontSize: 13, fontWeight: 700 }}>{p.score}/100</span>
                 </div>
                 <p style={{ color: '#5E6366', fontSize: 11, lineHeight: 1.4, margin: 0 }}>{p.summary?.slice(0, 150)}{p.summary?.length > 150 ? '...' : ''}</p>
@@ -575,7 +576,7 @@ function CompetitorsSection({ competitors }: { competitors: IntelligenceData['co
               <IntelLabel>Competitive Advantages</IntelLabel>
               {competitiveAdvantages.map((a: string, i: number) => (
                 <div key={i} style={{ color: '#5E6366', fontSize: 12, padding: '5px 0', display: 'flex', gap: 6, borderBottom: i < competitiveAdvantages.length - 1 ? '1px solid #FFFFFF' : 'none' }}>
-                  <span style={{ color: '#0A7D3C', flexShrink: 0 }}>✓</span><span>{a}</span>
+                  <span style={{ color: '#0A7D3C', flexShrink: 0 }}><Glyph name="check" /></span><span>{a}</span>
                 </div>
               ))}
             </IntelCard>
@@ -606,7 +607,7 @@ function CompetitorsSection({ competitors }: { competitors: IntelligenceData['co
           <IntelCard key={i}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
               <div>
-                <div style={{ color: '#111111', fontWeight: 700, fontSize: 14 }}>{c.name}</div>
+                <div style={{ color: '#000000', fontWeight: 700, fontSize: 14 }}>{c.name}</div>
                 {domain && <a href={domain.startsWith('http') ? domain : `https://${domain}`} target="_blank" rel="noopener noreferrer" style={{ color: '#939799', fontSize: 11, textDecoration: 'none' }}>{domain} ↗</a>}
               </div>
               <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
@@ -631,7 +632,7 @@ function CompetitorsSection({ competitors }: { competitors: IntelligenceData['co
                 ))}
               </div>
             )}
-            {c.pricing && <div style={{ marginTop: 8, color: '#5E6366', fontSize: 11 }}>Pricing: {typeof c.pricing === 'string' ? c.pricing : `${c.pricing.model || ''} ${c.pricing.details ? '— ' + c.pricing.details : ''}`.trim()}</div>}
+            {c.pricing && <div style={{ marginTop: 8, color: '#5E6366', fontSize: 11 }}>Pricing: {typeof c.pricing === 'string' ? c.pricing : `${c.pricing.model || ''} ${c.pricing.details ? '(' + c.pricing.details + ')' : ''}`.trim()}</div>}
             {c.funding && <div style={{ marginTop: 4, color: '#0A7D3C', fontSize: 12 }}>{c.funding}</div>}
           </IntelCard>
         );
@@ -665,7 +666,7 @@ function PatentsGrantsSection({ patents, grants }: { patents: Record<string, unk
             {landscape && typeof landscape === 'string' && <p style={{ color: '#5E6366', fontSize: 12, marginBottom: 12, lineHeight: 1.5 }}>{landscape.slice(0, 200)}</p>}
             {visiblePatents.map((p: any, i: number) => (
               <div key={i} style={{ padding: '10px 0', borderBottom: i < visiblePatents.length - 1 ? '1px solid #F1F4F5' : 'none' }}>
-                <div style={{ color: '#111111', fontSize: 13, fontWeight: 600, marginBottom: 2 }}>{p.title || 'Untitled Patent'}</div>
+                <div style={{ color: '#000000', fontSize: 13, fontWeight: 600, marginBottom: 2 }}>{p.title || 'Untitled Patent'}</div>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
                   {p.patent_number && <span style={{ color: '#0A7D3C', fontSize: 11 }}>{p.patent_number}</span>}
                   {p.assignee && p.assignee !== 'Not specified' && <span style={{ color: '#5E6366', fontSize: 11 }}>· {p.assignee}</span>}
@@ -708,7 +709,7 @@ function PatentsGrantsSection({ patents, grants }: { patents: Record<string, unk
             {visibleGrants.map((g: any, i: number) => (
               <div key={i} style={{ padding: '12px 0', borderBottom: i < visibleGrants.length - 1 ? '1px solid #F1F4F5' : 'none' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4 }}>
-                  <div style={{ color: '#111111', fontSize: 13, fontWeight: 600 }}>{g.name || 'Unnamed Grant'}</div>
+                  <div style={{ color: '#000000', fontSize: 13, fontWeight: 600 }}>{g.name || 'Unnamed Grant'}</div>
                   {g.url && (
                     <a href={g.url} target="_blank" rel="noopener noreferrer"
                       style={{ background: 'rgba(10, 125, 60,0.1)', border: '1px solid rgba(10, 125, 60,0.3)', color: '#0A7D3C', padding: '3px 10px', borderRadius: 4, fontSize: 11, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
@@ -776,7 +777,7 @@ function SocialSection({ social }: { social: IntelligenceData['social'] }) {
               { label: 'Monthly Visits', value: semrush.monthly_visits, color: '#0A7D3C' },
               { label: 'Global Rank', value: semrush.global_rank ? `#${semrush.global_rank}` : '--', color: '#0A7D3C' },
               { label: 'MoM Growth', value: `${semrush.monthly_growth || 0}%`, color: '#8A6D3B' },
-              { label: 'Top Country', value: semrush.top_country || '--', color: '#111111' },
+              { label: 'Top Country', value: semrush.top_country || '--', color: '#000000' },
             ].map((m) => (
               <div key={m.label} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '10px 12px' }}>
                 <div style={{ color: '#939799', fontSize: 10, marginBottom: 4 }}>{m.label}</div>
@@ -806,7 +807,7 @@ function SocialSection({ social }: { social: IntelligenceData['social'] }) {
           {Object.entries(links).filter(([, v]) => v).map(([platform, url]) => (
             <a key={platform} href={url} target="_blank" rel="noopener noreferrer" style={{
               display: 'flex', alignItems: 'center', gap: 10,
-              background: '#FFFFFF', border: '1px solid #F1F4F5', borderRadius: 6, padding: '10px 14px',
+              background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 6, padding: '10px 14px',
               textDecoration: 'none', transition: 'border-color 0.15s',
             }}>
               <span style={{ color: '#0A7D3C', fontSize: 13, fontWeight: 600, textTransform: 'capitalize', width: 80 }}>{platform}</span>
@@ -872,7 +873,7 @@ function InvestorSection({ investors }: { investors: IntelligenceData['investors
           <IntelLabel>Current Investors</IntelLabel>
           <div style={{ display: 'flex', flex: 1, gap: 10, flexWrap: 'wrap' }}>
             {coInvestors.map((inv, i) => (
-              <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F1F4F5', borderRadius: 6, padding: '8px 14px', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div key={i} style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 6, padding: '8px 14px', display: 'flex', alignItems: 'center', gap: 8 }}>
                 {inv.is_lead && <span style={{ background: 'rgba(10, 125, 60,0.1)', color: '#0A7D3C', border: '1px solid rgba(10, 125, 60,0.2)', borderRadius: 3, padding: '1px 6px', fontSize: 9, fontWeight: 700 }}>LEAD</span>}
                 <span style={{ color: '#5E6366', fontSize: 13 }}>{inv.name}</span>
               </div>
@@ -887,7 +888,7 @@ function InvestorSection({ investors }: { investors: IntelligenceData['investors
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid #F1F4F5' }}>
+                <tr style={{ borderBottom: '1px solid #E8E6E4' }}>
                   {['Name', 'Firm', 'Stage', 'Amount', 'Status'].map(h => (
                     <th key={h} style={{ color: '#939799', padding: '6px 10px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{h}</th>
                   ))}
@@ -945,20 +946,20 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
     if (action === 'Fix' || action === 'Fix Now') {
       const sev = item.severity || 'High';
       const cat = item.category || 'SEO';
-      greeting = `🔧 **${sev} ${cat} Issue**\n\n${title}\n\n${desc ? desc + '\n\n' : ''}I can fix this issue on the ${ventureId || ''} website. Hit Send to proceed or edit the instruction.`;
+      greeting = `**${sev} ${cat} Issue**\n\n${title}\n\n${desc ? desc + '\n\n' : ''}I can fix this issue on the ${ventureId || ''} website. Hit Send to proceed or edit the instruction.`;
       prefill = `Fix this ${sev.toLowerCase()} ${cat} issue on ${ventureId}'s website: "${title}". Update the code/content to resolve this and verify the fix.`;
       quickActions.push('Fix it now', 'Show me what needs to change', 'Fix all critical issues', 'Skip this one');
     } else if (action === 'Post') {
       if (section === 'LinkedIn' || item.chatSection === 'linkedin') {
-        greeting = `📝 **LinkedIn Post Ready**\n\nAuthor: ${item.author || 'CEO'}\n\n"${desc?.slice(0, 300)}"\n\nI'll publish this to the ${item.author || 'CEO'}'s LinkedIn profile.`;
+        greeting = `**LinkedIn Post Ready**\n\nAuthor: ${item.author || 'CEO'}\n\n"${desc?.slice(0, 300)}"\n\nI'll publish this to the ${item.author || 'CEO'}'s LinkedIn profile.`;
         prefill = `Publish this LinkedIn post to ${item.author || 'CEO'}'s profile for ${ventureId}:\n\n"${desc?.slice(0, 250)}"`;
         quickActions.push('Publish now', 'Schedule for tomorrow 9am', 'Rewrite for more engagement', 'Add relevant hashtags');
       } else if (item.chatSection === 'hn') {
-        greeting = `🟧 **Hacker News Comment**\n\nPost: "${title}"\nURL: ${item.url || ''}\n\nI'll draft a thoughtful comment on this HN thread that subtly positions ${ventureId} as relevant to the discussion.`;
+        greeting = `**Hacker News Comment**\n\nPost: "${title}"\nURL: ${item.url || ''}\n\nI'll draft a thoughtful comment on this HN thread that subtly positions ${ventureId} as relevant to the discussion.`;
         prefill = `Write a helpful, non-promotional comment on this Hacker News post: "${title}" (${item.url || ''}). The comment should add genuine value to the discussion while naturally mentioning ${ventureId}'s approach to this problem. Keep it authentic, no hard sell.`;
         quickActions.push('Write the comment', 'Make it more technical', 'Make it shorter', 'Draft a Show HN post instead');
       } else if (item.chatSection === 'reddit') {
-        greeting = `🟠 **Reddit Reply**\n\nPost: "${title}"\nSubreddit: ${item.subreddit || 'r/startup'} | ▲${item.upvotes || 0} | 💬${item.comments || 0}\n\nI'll draft a reply that adds value while positioning ${ventureId}.`;
+        greeting = `**Reddit Reply**\n\nPost: "${title}"\nSubreddit: ${item.subreddit || 'r/startup'} | upvotes ${item.upvotes || 0} | comments ${item.comments || 0}\n\nI'll draft a reply that adds value while positioning ${ventureId}.`;
         prefill = `Write a helpful Reddit reply for ${item.subreddit || 'the thread'} post: "${title}". The reply should genuinely answer the question or add to the discussion. Mention ${ventureId} naturally only if relevant. Do not sound like an ad. Match the subreddit's tone.`;
         quickActions.push('Write helpful reply', 'Write technical reply', 'Just observe, skip posting', 'Find similar threads');
       } else if (item.chatSection === 'x') {
@@ -966,42 +967,42 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
         prefill = `Post this tweet from ${ventureId}'s X account:\n\n"${item.text || desc?.slice(0, 250)}"\n\nOptimize for engagement. Add relevant hashtags if appropriate.`;
         quickActions.push('Post as-is', 'Make it punchier', 'Add a thread (3 tweets)', 'Generate 3 variations to A/B test');
       } else {
-        greeting = `📋 **Content Ready**\n\n"${title}"\n\nReady to publish.`;
+        greeting = `**Content Ready**\n\n"${title}"\n\nReady to publish.`;
         prefill = `Publish this content for ${ventureId}: "${title}"`;
         quickActions.push('Publish now', 'Edit first', 'Schedule for later');
       }
     } else if (action === 'Write') {
-      greeting = `✏️ **Article Brief**\n\nTopic: "${title}"\nCategory: ${item.topic || 'Growth'}\n\nI'll write a full SEO-optimized article targeting this topic for ${ventureId}'s blog.`;
+      greeting = `**Article Brief**\n\nTopic: "${title}"\nCategory: ${item.topic || 'Growth'}\n\nI'll write a full SEO-optimized article targeting this topic for ${ventureId}'s blog.`;
       prefill = `Write a 1000-word SEO-optimized blog article for ${ventureId} about: "${title}". Target keyword: "${title.split(' ').slice(0, 4).join(' ')}". Include: compelling intro, 3-4 subheadings, actionable takeaways, and a CTA to try ${ventureId}. Category: ${item.topic || 'Growth'}.`;
       quickActions.push('Write full article', 'Create outline first', 'Generate 5 headline options', 'Write as a listicle instead');
     } else if (action === 'Send') {
-      greeting = `✉️ **Email Ready to Send**\n\nTo: ${item.to || 'recipients'}\nSubject: ${item.subject || title}\n\n"${desc?.slice(0, 300)}"\n\nI'll send this email through the configured email provider.`;
+      greeting = `**Email Ready to Send**\n\nTo: ${item.to || 'recipients'}\nSubject: ${item.subject || title}\n\n"${desc?.slice(0, 300)}"\n\nI'll send this email through the configured email provider.`;
       prefill = `Send this email for ${ventureId}:\nTo: ${item.to || 'recipients'}\nSubject: "${item.subject || title}"\nBody: "${desc?.slice(0, 300)}"\n\nPersonalize the [Name] and [domain] placeholders before sending.`;
       quickActions.push('Send now', 'Personalize and send', 'A/B test subject line', 'Schedule for 9am tomorrow');
     } else if (action === 'Edit') {
-      greeting = `✏️ **Edit Draft**\n\n"${desc?.slice(0, 300)}"\n\nI'll update this draft based on your feedback.`;
+      greeting = `**Edit Draft**\n\n"${desc?.slice(0, 300)}"\n\nI'll update this draft based on your feedback.`;
       prefill = `Edit this draft for ${ventureId}: "${desc?.slice(0, 200)}". Make it more ${item.chatSection === 'email' ? 'personal and compelling' : item.chatSection === 'linkedin' ? 'engaging with a stronger hook' : 'concise and impactful'}.`;
       quickActions.push('Make it shorter', 'Make it more compelling', 'Change the tone', 'Rewrite completely');
     } else if (action === 'Publish') {
-      greeting = `📤 **LinkedIn Post**\n\nAuthor: ${item.author || 'CEO'}\n\n"${desc?.slice(0, 300)}"\n\nI'll publish this to LinkedIn.`;
+      greeting = `**LinkedIn Post**\n\nAuthor: ${item.author || 'CEO'}\n\n"${desc?.slice(0, 300)}"\n\nI'll publish this to LinkedIn.`;
       prefill = `Publish this LinkedIn post as ${item.author || 'CEO'} for ${ventureId}:\n\n"${desc?.slice(0, 250)}"\n\nOptimize posting time for maximum reach.`;
       quickActions.push('Publish now', 'Schedule for peak hours (Tue/Wed 8-10am)', 'Add an image/carousel', 'Rewrite the hook');
     } else if (action === 'Kickoff') {
       const details = (item.details || []).filter((d: string) => !d?.startsWith('Attributed'));
-      greeting = `🚀 **Goal Kickoff: ${title}**\n\nThis goal hasn't started yet. Here's the recommended plan:\n\n${details.map((d: string, i: number) => `${i + 1}. ${d}`).join('\n')}\n\nShould I proceed?`;
+      greeting = `**Goal Kickoff: ${title}**\n\nThis goal hasn't started yet. Here's the recommended plan:\n\n${details.map((d: string, i: number) => `${i + 1}. ${d}`).join('\n')}\n\nShould I proceed?`;
       prefill = `Kickoff goal "${title}" for ${ventureId}. Create the first milestone, assign tasks, set deadlines for the next 2 weeks, and begin execution. Report back with the plan.`;
       quickActions.push('Yes, start now', 'Show me the full timeline first', 'Who should own this goal?', 'Deprioritize this');
     } else if (action === 'Intervene') {
       const details = (item.details || []).filter((d: string) => !d?.startsWith('Attributed'));
-      greeting = `⚠️ **Goal Behind Target: ${title}**\n\nPerformance: ${item.performanceScore || 0}% | Execution: ${item.executionScore || 0}%\n\n${details.map((d: string, i: number) => `${i + 1}. ${d}`).join('\n')}\n\nWhat should I prioritize?`;
+      greeting = `**Goal Behind Target: ${title}**\n\nPerformance: ${item.performanceScore || 0}% | Execution: ${item.executionScore || 0}%\n\n${details.map((d: string, i: number) => `${i + 1}. ${d}`).join('\n')}\n\nWhat should I prioritize?`;
       prefill = `Intervene on "${title}" for ${ventureId}. Current performance is ${item.performanceScore || 0}%. Identify the top 3 blockers, propose fixes for each, and reallocate resources to get this goal back on track within 2 weeks.`;
       quickActions.push('Identify and fix blockers', 'Extend the deadline', 'Reassign to a different agent', 'Deprioritize this goal');
     } else if (action === 'Review') {
-      greeting = `📋 **Review: ${title}**\n\n${desc || 'Ready for your review.'}\n\nWhat would you like me to do with this?`;
+      greeting = `**Review: ${title}**\n\n${desc || 'Ready for your review.'}\n\nWhat would you like me to do with this?`;
       prefill = `Review "${title}" for ${ventureId}. Summarize the current status, highlight what needs attention, and recommend next steps.`;
       quickActions.push('Approve as-is', 'Suggest improvements', 'Escalate to team', 'Mark as done');
     } else {
-      greeting = `📋 **${title}**\n\n${desc || 'Ready for action.'}\n\nWhat would you like me to do?`;
+      greeting = `**${title}**\n\n${desc || 'Ready for action.'}\n\nWhat would you like me to do?`;
       prefill = `Act on "${title}" for ${ventureId}. Provide details and execute.`;
       quickActions.push('Proceed', 'Tell me more', 'Skip', 'Assign to someone');
     }
@@ -1038,7 +1039,7 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
       if (data.session_id) setSessionId(data.session_id);
       setMessages(prev => [...prev, { role: 'agent', text: data.response || data.message || 'Done.' }]);
     } catch (err) {
-      setMessages(prev => [...prev, { role: 'agent', text: '⚠️ Failed to connect to agent. Please try again.' }]);
+      setMessages(prev => [...prev, { role: 'agent', text: 'Failed to connect to agent. Please try again.' }]);
     }
     setLoading(false);
   }
@@ -1054,7 +1055,7 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
     }}>
       {/* Header */}
       <div style={{
-        padding: '14px 20px', borderBottom: '1px solid #F1F4F5',
+        padding: '14px 20px', borderBottom: '1px solid #E8E6E4',
         display: 'flex', alignItems: 'center', gap: 12, background: '#FFFFFF',
       }}>
         <div style={{
@@ -1062,9 +1063,9 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
           background: `${item.sourceColor || '#0A7D3C'}15`,
           border: `1px solid ${item.sourceColor || '#0A7D3C'}33`,
           display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
-        }}>{item.sourceIcon || item.icon || '🤖'}</div>
+        }}><Glyph name={item.sourceIcon || item.icon || 'bot'} /></div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ color: '#111111', fontSize: 13, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <div style={{ color: '#000000', fontSize: 13, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {item.goalName || item.title || item.headline?.split(':')[0] || item.subject || item.source || 'Agent Chat'}
           </div>
           <div style={{ color: '#939799', fontSize: 11 }}>
@@ -1075,7 +1076,7 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
           background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#5E6366',
           width: 28, height: 28, borderRadius: 6, cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
-        }}>✕</button>
+        }}><Glyph name="cross" /></button>
       </div>
 
       {/* Messages */}
@@ -1084,23 +1085,23 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
           <div key={i} style={{ alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '85%' }}>
             <div className={msg.role === 'agent' ? 'chat-md' : ''} style={{
               background: msg.role === 'user' ? '#0A7D3C' : '#F7F8F9',
-              color: msg.role === 'user' ? '#111111' : '#E8E6E4',
+              color: msg.role === 'user' ? '#000000' : '#E8E6E4',
               padding: '10px 14px', borderRadius: msg.role === 'user' ? '12px 12px 4px 12px' : '12px 12px 12px 4px',
               fontSize: 13, lineHeight: 1.6,
             }}>
               {msg.role === 'agent' ? (
                 <ReactMarkdown components={{
                   p: ({children}) => <p style={{margin: '6px 0'}}>{children}</p>,
-                  strong: ({children}) => <strong style={{color: '#111111'}}>{children}</strong>,
+                  strong: ({children}) => <strong style={{color: '#000000'}}>{children}</strong>,
                   em: ({children}) => <em style={{color: '#5E6366'}}>{children}</em>,
-                  h1: ({children}) => <div style={{fontSize: 16, fontWeight: 700, color: '#111111', margin: '10px 0 6px'}}>{children}</div>,
-                  h2: ({children}) => <div style={{fontSize: 15, fontWeight: 700, color: '#111111', margin: '8px 0 4px'}}>{children}</div>,
+                  h1: ({children}) => <div style={{fontSize: 16, fontWeight: 700, color: '#000000', margin: '10px 0 6px'}}>{children}</div>,
+                  h2: ({children}) => <div style={{fontSize: 15, fontWeight: 700, color: '#000000', margin: '8px 0 4px'}}>{children}</div>,
                   h3: ({children}) => <div style={{fontSize: 14, fontWeight: 600, color: '#2B3033', margin: '6px 0 4px'}}>{children}</div>,
                   ul: ({children}) => <ul style={{paddingLeft: 18, margin: '6px 0'}}>{children}</ul>,
                   ol: ({children}) => <ol style={{paddingLeft: 18, margin: '6px 0'}}>{children}</ol>,
                   li: ({children}) => <li style={{margin: '3px 0', color: '#2B3033'}}>{children}</li>,
                   code: ({children, className}) => className ? (
-                    <pre style={{background: '#FFFFFF', border: '1px solid #F1F4F5', borderRadius: 6, padding: '10px 12px', margin: '6px 0', overflowX: 'auto', fontSize: 12, color: '#5E6366'}}><code>{children}</code></pre>
+                    <pre style={{background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 6, padding: '10px 12px', margin: '6px 0', overflowX: 'auto', fontSize: 12, color: '#5E6366'}}><code>{children}</code></pre>
                   ) : (
                     <code style={{background: '#F1F4F5', padding: '1px 5px', borderRadius: 3, fontSize: 12, color: '#0A7D3C'}}>{children}</code>
                   ),
@@ -1108,7 +1109,7 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
                   a: ({href, children}) => <a href={href} target="_blank" rel="noopener noreferrer" style={{color: '#0A7D3C', textDecoration: 'underline'}}>{children}</a>,
                   table: ({children}) => <div style={{overflowX: 'auto', margin: '8px 0'}}><table style={{width: '100%', borderCollapse: 'collapse', fontSize: 12}}>{children}</table></div>,
                   th: ({children}) => <th style={{background: '#F1F4F5', color: '#5E6366', padding: '6px 10px', textAlign: 'left', border: '1px solid #E8E6E4', fontSize: 11, fontWeight: 600}}>{children}</th>,
-                  td: ({children}) => <td style={{padding: '6px 10px', border: '1px solid #F1F4F5', color: '#2B3033'}}>{children}</td>,
+                  td: ({children}) => <td style={{padding: '6px 10px', border: '1px solid #E8E6E4', color: '#2B3033'}}>{children}</td>,
                   blockquote: ({children}) => <blockquote style={{borderLeft: '3px solid #0A7D3C', paddingLeft: 12, margin: '8px 0', color: '#5E6366'}}>{children}</blockquote>,
                 }}>{msg.text}</ReactMarkdown>
               ) : msg.text}
@@ -1133,12 +1134,12 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
           onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
           placeholder="Give instructions to the agent..."
           style={{
-            flex: 1, background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#111111',
+            flex: 1, background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#000000',
             padding: '10px 14px', borderRadius: 8, fontSize: 13, outline: 'none',
           }}
         />
         <button onClick={handleSend} disabled={loading} style={{
-          background: loading ? '#E8E6E4' : '#0A7D3C', color: '#111111', border: 'none',
+          background: loading ? '#E8E6E4' : '#0A7D3C', color: '#000000', border: 'none',
           padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 700,
           cursor: loading ? 'wait' : 'pointer', flexShrink: 0,
         }}>Send</button>
@@ -1148,7 +1149,7 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
       <div style={{ padding: '8px 20px 16px', display: 'flex', gap: 6, flexWrap: 'wrap' }}>
         {quickActions.map((q: string) => (
           <button key={q} onClick={() => { setInput(q); }} style={{
-            background: '#FFFFFF', border: '1px solid #F1F4F5', color: '#5E6366',
+            background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#5E6366',
             padding: '5px 12px', borderRadius: 6, fontSize: 11, cursor: 'pointer',
             transition: 'all 0.15s',
           }}>{q}</button>
@@ -1227,7 +1228,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 padding: '12px 16px',
                 background: '#FFFFFF',
-                border: '1px solid #F1F4F5',
+                border: '1px solid #E8E6E4',
                 borderRadius: isExpanded ? '8px 8px 0 0' : 8,
                 cursor: 'pointer',
                 transition: 'all 0.15s',
@@ -1251,7 +1252,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
             {/* Updates list */}
             {isExpanded && (
               <div style={{
-                border: '1px solid #F1F4F5',
+                border: '1px solid #E8E6E4',
                 borderTop: 'none',
                 borderRadius: '0 0 8px 8px',
                 overflow: 'hidden',
@@ -1325,7 +1326,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
                               <img
                                 src={img}
                                 alt="screenshot"
-                                style={{ height: 60, width: 'auto', borderRadius: 4, border: '1px solid #F1F4F5', objectFit: 'cover' }}
+                                style={{ height: 60, width: 'auto', borderRadius: 4, border: '1px solid #E8E6E4', objectFit: 'cover' }}
                                 onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
                               />
                             </a>
@@ -1604,7 +1605,7 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
       <IntelCard>
         <IntelLabel>CEO Action Feed</IntelLabel>
         <div style={{ textAlign: 'center', padding: '40px 0' }}>
-          <div style={{ fontSize: 32, marginBottom: 12 }}>✅</div>
+          <div style={{ fontSize: 32, marginBottom: 12, color: '#0A7D3C' }}><Glyph name="check" size={32} /></div>
           <div style={{ color: '#0A7D3C', fontSize: 15, fontWeight: 600, marginBottom: 4 }}>All Clear</div>
           <p style={{ color: '#939799', fontSize: 13 }}>No pending actions or decisions required right now.</p>
         </div>
@@ -1636,10 +1637,10 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
       {/* Summary bar */}
       <div style={{ display: 'flex', gap: 12 }}>
         {[
-          { key: 'all' as const, label: 'All', count: actionItems.length, color: '#111111' },
-          { key: 'action' as const, label: '🔴 Needs Action', count: actionCount, color: '#C0392B' },
-          { key: 'review' as const, label: '🟡 Review', count: reviewCount, color: '#8A6D3B' },
-          { key: 'info' as const, label: '🟢 Info', count: infoCount, color: '#0A7D3C' },
+          { key: 'all' as const, label: 'All', count: actionItems.length, color: '#000000' },
+          { key: 'action' as const, label: 'Needs Action', dot: '🔴', count: actionCount, color: '#C0392B' },
+          { key: 'review' as const, label: 'Review', dot: '🟡', count: reviewCount, color: '#8A6D3B' },
+          { key: 'info' as const, label: 'Info', dot: '🟢', count: infoCount, color: '#0A7D3C' },
         ].map(f => (
           <button key={f.key} onClick={() => setActiveFilter(f.key)} style={{
             background: activeFilter === f.key ? `${f.color}12` : '#FFFFFF',
@@ -1649,6 +1650,7 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
             fontWeight: activeFilter === f.key ? 700 : 400,
             display: 'flex', alignItems: 'center', gap: 8,
           }}>
+            {f.dot && <Glyph name={f.dot} />}
             {f.label}
             <span style={{
               background: `${f.color}18`, color: f.color,
@@ -1691,7 +1693,7 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
                   border: `1px solid ${item.sourceColor}33`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: 16, flexShrink: 0,
-                }}>{item.sourceIcon}</div>
+                }}><Glyph name={item.sourceIcon} /></div>
 
                 {/* Content */}
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -1726,7 +1728,7 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
               {isExpanded && (
                 <div style={{
                   padding: '0 18px 18px 68px',
-                  borderTop: '1px solid #FFFFFF',
+                  borderTop: '1px solid #E8E6E4',
                   background: urgencyBg[item.urgency],
                 }}>
                   {/* Description */}
@@ -1975,15 +1977,15 @@ function HiringSection({ hiring }: { hiring: HiringData | null }) {
           {(hiring.employees || []).map((emp, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', borderBottom: '1px solid #FFFFFF' }}>
               {emp.image_id && emp.image_id.startsWith('http') && (
-                <img src={emp.image_id} alt={emp.name} style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover', border: '1px solid #F1F4F5' }} />
+                <img src={emp.image_id} alt={emp.name} style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover', border: '1px solid #E8E6E4' }} />
               )}
               {(!emp.image_id || !emp.image_id.startsWith('http')) && (
-                <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#111111', fontWeight: 700, fontSize: 14 }}>
+                <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#000000', fontWeight: 700, fontSize: 14 }}>
                   {emp.name?.[0]}
                 </div>
               )}
               <div>
-                <div style={{ color: '#111111', fontSize: 13, fontWeight: 600 }}>{emp.name}</div>
+                <div style={{ color: '#000000', fontSize: 13, fontWeight: 600 }}>{emp.name}</div>
                 <div style={{ color: '#939799', fontSize: 11 }}>{emp.title}</div>
               </div>
               {emp.link && (
@@ -2002,7 +2004,7 @@ function HiringSection({ hiring }: { hiring: HiringData | null }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {hiring.hiring_tasks.map((task, i) => (
               <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '10px 14px' }}>
-                <div style={{ color: '#111111', fontSize: 13, fontWeight: 600, marginBottom: 4 }}>{task.title}</div>
+                <div style={{ color: '#000000', fontSize: 13, fontWeight: 600, marginBottom: 4 }}>{task.title}</div>
                 {task.description && <p style={{ color: '#5E6366', fontSize: 12, margin: 0 }}>{task.description}</p>}
               </div>
             ))}
@@ -2044,13 +2046,13 @@ function CompanyOverviewSection({ companyInfo, domain }: { companyInfo: Record<s
       <IntelCard>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
           <div>
-            <div style={{ color: '#111111', fontSize: 22, fontWeight: 800, marginBottom: 4 }}>{ci.name || domain}</div>
+            <div style={{ color: '#000000', fontSize: 22, fontWeight: 800, marginBottom: 4 }}>{ci.name || domain}</div>
             {ci.tagline && <div style={{ color: '#0A7D3C', fontSize: 14, fontStyle: 'italic', marginBottom: 8 }}>&ldquo;{ci.tagline}&rdquo;</div>}
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 8 }}>
               {ci.industry && <span style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '3px 10px', borderRadius: 20, fontSize: 11 }}>{ci.industry}</span>}
-              {ci.location && <span style={{ color: '#5E6366', fontSize: 12 }}>📍 {ci.location}</span>}
+              {ci.location && <span style={{ color: '#5E6366', fontSize: 12 }}><Glyph name="pin" /> {ci.location}</span>}
               {ci.founded && <span style={{ color: '#5E6366', fontSize: 12 }}>Est. {ci.founded}</span>}
-              {ci.team_size && <span style={{ color: '#5E6366', fontSize: 12 }}>👥 {ci.team_size}</span>}
+              {ci.team_size && <span style={{ color: '#5E6366', fontSize: 12 }}><Glyph name="people" /> {ci.team_size}</span>}
             </div>
           </div>
           {websiteUrl && (
@@ -2081,7 +2083,7 @@ function CompanyOverviewSection({ companyInfo, domain }: { companyInfo: Record<s
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 12 }}>
             {products.map((p: any, i: number) => (
               <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 8, padding: 14 }}>
-                <div style={{ color: '#111111', fontSize: 13, fontWeight: 600, marginBottom: 4 }}>{typeof p === 'string' ? p : (p.name || p.title || 'Product')}</div>
+                <div style={{ color: '#000000', fontSize: 13, fontWeight: 600, marginBottom: 4 }}>{typeof p === 'string' ? p : (p.name || p.title || 'Product')}</div>
                 {p.category && <span style={{ background: 'rgba(255,255,255,0.04)', color: '#939799', padding: '2px 8px', borderRadius: 3, fontSize: 10 }}>{p.category}</span>}
                 {p.description && <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.4, margin: '6px 0 0' }}>{String(p.description).slice(0, 100)}</p>}
                 {p.pricing && <div style={{ color: '#0A7D3C', fontSize: 11, marginTop: 6 }}>{typeof p.pricing === 'string' ? p.pricing : p.pricing.amount || ''}</div>}
@@ -2109,7 +2111,7 @@ function CompanyOverviewSection({ companyInfo, domain }: { companyInfo: Record<s
           <IntelLabel>Social Profiles</IntelLabel>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             {Object.entries(socialLinks).filter(([, v]) => v).map(([platform, url]) => (
-              <a key={platform} href={String(url)} target="_blank" rel="noopener noreferrer" style={{ background: '#FFFFFF', border: '1px solid #F1F4F5', color: '#0A7D3C', padding: '6px 14px', borderRadius: 6, fontSize: 12, textDecoration: 'none', textTransform: 'capitalize' }}>
+              <a key={platform} href={String(url)} target="_blank" rel="noopener noreferrer" style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#0A7D3C', padding: '6px 14px', borderRadius: 6, fontSize: 12, textDecoration: 'none', textTransform: 'capitalize' }}>
                 {platform.replace(/_/g, ' ')} ↗
               </a>
             ))}
@@ -2164,7 +2166,7 @@ function MarketMetricsSection({ competitors, metrics }: { competitors: any; metr
             <div style={{ color: '#0A7D3C', fontSize: 10, letterSpacing: '0.1em', marginBottom: 8 }}>COMPETITIVE ADVANTAGES</div>
             {advantages.map((a: string, i: number) => (
               <div key={i} style={{ color: '#5E6366', fontSize: 12, padding: '4px 0', display: 'flex', gap: 6 }}>
-                <span style={{ color: '#0A7D3C' }}>✓</span><span>{a}</span>
+                <span style={{ color: '#0A7D3C' }}><Glyph name="check" /></span><span>{a}</span>
               </div>
             ))}
           </div>
@@ -2181,7 +2183,7 @@ function MarketMetricsSection({ competitors, metrics }: { competitors: any; metr
                 { label: 'Current Valuation', value: metrics.current_valuation ? `$${(Number(metrics.current_valuation) / 1e6).toFixed(1)}M` : '--', color: '#0A7D3C' },
                 { label: 'Target Valuation', value: metrics.target_valuation ? `$${(Number(metrics.target_valuation) / 1e6).toFixed(1)}M` : '--', color: '#0A7D3C' },
                 { label: 'ROI', value: metrics.roi || '--', color: '#8A6D3B' },
-                { label: 'Total Investment', value: metrics.total_investment || '--', color: '#111111' },
+                { label: 'Total Investment', value: metrics.total_investment || '--', color: '#000000' },
               ].filter(m => m.value !== '--').map(m => (
                 <div key={m.label} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '10px 12px' }}>
                   <div style={{ color: '#939799', fontSize: 10, marginBottom: 4 }}>{m.label}</div>
@@ -2191,7 +2193,7 @@ function MarketMetricsSection({ competitors, metrics }: { competitors: any; metr
             </div>
             {metrics.burn && (
               <div style={{ marginTop: 12, padding: '8px 12px', background: 'rgba(192, 57, 43,0.06)', border: '1px solid rgba(192, 57, 43,0.15)', borderRadius: 6 }}>
-                <span style={{ color: '#C0392B', fontSize: 12 }}>🔥 Monthly Burn: {metrics.burn}</span>
+                <span style={{ color: '#C0392B', fontSize: 12 }}><Glyph name="fire" /> Monthly Burn: {metrics.burn}</span>
               </div>
             )}
           </div>
@@ -2265,18 +2267,18 @@ function MarkdownPopup({ url, title, onClose }: { url: string; title: string; on
       padding: 20,
     }} onClick={onClose}>
       <div style={{
-        background: '#FFFFFF', border: '1px solid #F1F4F5', borderRadius: 12,
+        background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 12,
         width: '100%', maxWidth: 900, maxHeight: '90vh',
         display: 'flex', flexDirection: 'column', overflow: 'hidden',
       }} onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div style={{
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-          padding: '14px 20px', borderBottom: '1px solid #F1F4F5', flexShrink: 0,
+          padding: '14px 20px', borderBottom: '1px solid #E8E6E4', flexShrink: 0,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <span style={{ fontSize: 18 }}>📄</span>
-            <span style={{ color: '#111111', fontSize: 15, fontWeight: 700 }}>{title}</span>
+            <Glyph name="doc" size={18} />
+            <span style={{ color: '#000000', fontSize: 15, fontWeight: 700 }}>{title}</span>
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
             <a href={url} target="_blank" rel="noopener noreferrer" style={{
@@ -2284,9 +2286,9 @@ function MarkdownPopup({ url, title, onClose }: { url: string; title: string; on
               color: '#0A7D3C', padding: '5px 14px', borderRadius: 6, fontSize: 11, textDecoration: 'none',
             }}>Download ↓</a>
             <button onClick={onClose} style={{
-              background: 'rgba(255,255,255,0.06)', border: '1px solid #F1F4F5',
+              background: 'rgba(255,255,255,0.06)', border: '1px solid #E8E6E4',
               color: '#5E6366', padding: '5px 12px', borderRadius: 6, fontSize: 14, cursor: 'pointer',
-            }}>✕</button>
+            }}><Glyph name="cross" /></button>
           </div>
         </div>
         {/* Content */}
@@ -2305,11 +2307,11 @@ function MarkdownPopup({ url, title, onClose }: { url: string; title: string; on
         </div>
       </div>
       <style>{`
-        .md-viewer h1 { color: #111111; font-size: 24px; font-weight: 800; margin: 0 0 16px; border-bottom: 1px solid #F1F4F5; padding-bottom: 12px; }
-        .md-viewer h2 { color: #111111; font-size: 18px; font-weight: 700; margin: 28px 0 12px; }
+        .md-viewer h1 { color: #000000; font-size: 24px; font-weight: 800; margin: 0 0 16px; border-bottom: 1px solid #F1F4F5; padding-bottom: 12px; }
+        .md-viewer h2 { color: #000000; font-size: 18px; font-weight: 700; margin: 28px 0 12px; }
         .md-viewer h3 { color: #2B3033; font-size: 15px; font-weight: 600; margin: 20px 0 8px; }
         .md-viewer p { margin: 8px 0; }
-        .md-viewer strong { color: #111111; }
+        .md-viewer strong { color: #000000; }
         .md-viewer em { color: #5E6366; }
         .md-viewer a { color: #0A7D3C; text-decoration: underline; text-decoration-color: rgba(10, 125, 60,0.3); }
         .md-viewer code { background: #F1F4F5; padding: 2px 6px; border-radius: 4px; font-size: 13px; color: #5E6366; font-family: monospace; }
@@ -2392,9 +2394,9 @@ function DocumentsSection({ documents }: { documents: any }) {
                     background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 8, padding: '12px 14px',
                     textDecoration: 'none', display: 'flex', gap: 10, alignItems: 'flex-start', transition: 'border-color 0.15s', cursor: 'pointer',
                   }}>
-                    <span style={{ fontSize: 20, flexShrink: 0 }}>{doc.type === 'md' ? '📝' : doc.type === 'pdf' ? '📄' : doc.type === 'spreadsheet' ? '📊' : doc.source?.includes('notion') ? '📝' : '📁'}</span>
+                    <span style={{ fontSize: 20, flexShrink: 0 }}><Glyph size={20} name={doc.type === 'md' ? 'edit' : doc.type === 'pdf' ? 'doc' : doc.type === 'spreadsheet' ? 'bars' : doc.source?.includes('notion') ? 'edit' : 'folder'} /></span>
                     <div style={{ overflow: 'hidden' }}>
-                      <div style={{ color: '#111111', fontSize: 13, fontWeight: 600 }}>{docTitle}</div>
+                      <div style={{ color: '#000000', fontSize: 13, fontWeight: 600 }}>{docTitle}</div>
                       <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
                         {doc.source && <span style={{ color: '#939799', fontSize: 10 }}>{doc.source}</span>}
                         {(doc.workstream || doc.category) && <span style={{ color: '#0A7D3C', fontSize: 10 }}>{doc.workstream || doc.category}</span>}
@@ -2432,11 +2434,11 @@ function VideosSection({ videos }: { videos: any }) {
                   <img src={v.thumbnail} alt={v.title || ''} style={{ width: '100%', height: 120, objectFit: 'cover' }} />
                 ) : (
                   <div style={{ width: '100%', height: 120, background: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span style={{ fontSize: 32 }}>🎬</span>
+                    <Glyph name="film" size={32} />
                   </div>
                 )}
                 <div style={{ padding: '10px 12px' }}>
-                  <div style={{ color: '#111111', fontSize: 12, fontWeight: 600 }}>{v.title || v.name || 'Video'}</div>
+                  <div style={{ color: '#000000', fontSize: 12, fontWeight: 600 }}>{v.title || v.name || 'Video'}</div>
                   {v.duration && <div style={{ color: '#939799', fontSize: 10, marginTop: 4 }}>{v.duration}</div>}
                   {v.views && <div style={{ color: '#0A7D3C', fontSize: 10, marginTop: 2 }}>{v.views} views</div>}
                 </div>
@@ -2486,7 +2488,7 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
     <IntelCard>
       <IntelLabel>Analytics Overview</IntelLabel>
       {/* Tab bar */}
-      <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid #F1F4F5', marginBottom: 20 }}>
+      <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid #E8E6E4', marginBottom: 20 }}>
         {tabs.map(t => (
           <button key={t.key} onClick={() => setTab(t.key)} style={{
             background: 'transparent', border: 'none',
@@ -2506,7 +2508,7 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
               <span style={{ fontSize: 22, fontWeight: 800, color: seoScore >= 70 ? '#0A7D3C' : seoScore >= 40 ? '#8A6D3B' : '#C0392B' }}>{seoScore}</span>
             </div>
             <div>
-              <div style={{ fontSize: 14, fontWeight: 600, color: '#111111' }}>Overall Score</div>
+              <div style={{ fontSize: 14, fontWeight: 600, color: '#000000' }}>Overall Score</div>
               <div style={{ fontSize: 12, color: '#5E6366' }}>{seoScore >= 70 ? 'Good' : seoScore >= 40 ? 'Needs Work' : 'Critical Issues'}</div>
             </div>
           </div>
@@ -2516,7 +2518,7 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
             { label: 'Mobile', val: seo?.mobile_score },
             { label: 'Page Speed', val: seo?.page_speed },
           ].filter(s => s.val && typeof s.val !== 'object').map((s, i) => (
-            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid #F1F4F5' }}>
+            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid #E8E6E4' }}>
               <span style={{ color: '#5E6366', fontSize: 12 }}>{s.label}</span>
               <span style={{ color: '#5E6366', fontSize: 12, fontWeight: 600 }}>{String(s.val)}</span>
             </div>
@@ -2540,11 +2542,11 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
         <div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 20 }}>
             <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '12px 14px', textAlign: 'center' }}>
-              <div style={{ color: '#111111', fontSize: 22, fontWeight: 800 }}>{da || '--'}</div>
+              <div style={{ color: '#000000', fontSize: 22, fontWeight: 800 }}>{da || '--'}</div>
               <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.05em' }}>Domain Authority</div>
             </div>
             <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '12px 14px', textAlign: 'center' }}>
-              <div style={{ color: '#111111', fontSize: 22, fontWeight: 800 }}>{referringDomains || '--'}</div>
+              <div style={{ color: '#000000', fontSize: 22, fontWeight: 800 }}>{referringDomains || '--'}</div>
               <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.05em' }}>Referring Domains</div>
             </div>
             <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '12px 14px', textAlign: 'center' }}>
@@ -2557,7 +2559,7 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
               <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>Top Referring Domains</div>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid #F1F4F5' }}>
+                  <tr style={{ borderBottom: '1px solid #E8E6E4' }}>
                     <th style={{ color: '#939799', padding: '6px 10px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase' }}>Domain</th>
                     <th style={{ color: '#939799', padding: '6px 10px', textAlign: 'right', fontSize: 10, textTransform: 'uppercase' }}>Rating</th>
                   </tr>
@@ -2566,7 +2568,7 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
                   {topDomains.slice(0, 8).map((d: any, i: number) => (
                     <tr key={i} style={{ borderBottom: '1px solid #FFFFFF' }}>
                       <td style={{ padding: '8px 10px', color: '#5E6366', display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <div style={{ width: 20, height: 20, borderRadius: 4, background: ['#22c55e','#8A6D3B','#F1F4F5','#E8E6E4','#8A6D3B'][i%5], display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, color: '#111111', fontWeight: 700 }}>
+                        <div style={{ width: 20, height: 20, borderRadius: 4, background: ['#22c55e','#8A6D3B','#F1F4F5','#E8E6E4','#8A6D3B'][i%5], display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, color: '#000000', fontWeight: 700 }}>
                           {(d.domain || d.name || '?').slice(0,2).toUpperCase()}
                         </div>
                         {d.domain || d.name}
@@ -2592,7 +2594,7 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
               <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.05em' }}>GEO Score</div>
             </div>
             <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '14px', textAlign: 'center' }}>
-              <div style={{ color: '#111111', fontSize: 18, fontWeight: 700 }}>{geoScore >= 60 ? 'High' : geoScore >= 30 ? 'Medium' : 'Low'}</div>
+              <div style={{ color: '#000000', fontSize: 18, fontWeight: 700 }}>{geoScore >= 60 ? 'High' : geoScore >= 30 ? 'Medium' : 'Low'}</div>
               <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.05em' }}>Citation Potential</div>
             </div>
           </div>
@@ -2601,9 +2603,9 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 20 }}>
             {[
               { label: 'Visibility', value: geoScore || 0, color: geoScore >= 50 ? '#0A7D3C' : '#C0392B' },
-              { label: 'Sentiment', value: ((geo as any)?.sentiment || 0).toFixed ? Number((geo as any)?.sentiment || 0).toFixed(2) : '0.00', color: '#111111' },
+              { label: 'Sentiment', value: ((geo as any)?.sentiment || 0).toFixed ? Number((geo as any)?.sentiment || 0).toFixed(2) : '0.00', color: '#000000' },
               { label: 'Avg Position', value: (geo as any)?.avg_position || '--', color: '#C0392B' },
-              { label: 'Mentions', value: (geo as any)?.mentions || (geo as any)?.total_mentions || 0, color: '#111111' },
+              { label: 'Mentions', value: (geo as any)?.mentions || (geo as any)?.total_mentions || 0, color: '#000000' },
             ].map((m, i) => (
               <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '10px 12px' }}>
                 <div style={{ color: m.color, fontSize: 18, fontWeight: 700 }}>{m.value}</div>
@@ -2617,7 +2619,7 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
               <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>Platform Status</div>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid #F1F4F5' }}>
+                  <tr style={{ borderBottom: '1px solid #E8E6E4' }}>
                     <th style={{ color: '#939799', padding: '6px 10px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase' }}>Platform</th>
                     <th style={{ color: '#939799', padding: '6px 10px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase' }}>Status</th>
                   </tr>
@@ -2629,8 +2631,8 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
                     const icon = Object.entries(icons).find(([k]) => pName.includes(k))?.[1] || '🌐';
                     return (
                       <tr key={i} style={{ borderBottom: '1px solid #FFFFFF' }}>
-                        <td style={{ padding: '10px', color: '#111111', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <span style={{ fontSize: 16 }}>{icon}</span> {p.name}
+                        <td style={{ padding: '10px', color: '#000000', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <Glyph name={icon} size={16} /> {p.name}
                           <span style={{ color: p.score >= 50 ? '#0A7D3C' : p.score >= 20 ? '#8A6D3B' : '#C0392B', fontSize: 11, marginLeft: 'auto', fontWeight: 700 }}>{p.score}/100</span>
                         </td>
                         <td style={{ padding: '10px', color: '#5E6366', fontSize: 11, lineHeight: 1.5 }}>{p.summary}</td>
@@ -2651,7 +2653,7 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {passedChecks.map((c, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6 }}>
-                  <span style={{ color: c.pass ? '#0A7D3C' : '#C0392B', fontSize: 16 }}>{c.pass ? '✓' : '✗'}</span>
+                  <span style={{ color: c.pass ? '#0A7D3C' : '#C0392B', fontSize: 16 }}><Glyph name={c.pass ? 'check' : 'cross'} /></span>
                   <span style={{ color: '#5E6366', fontSize: 13, flex: 1 }}>{c.label}</span>
                   <span style={{ color: c.pass ? '#0A7D3C' : '#C0392B', fontSize: 13, fontWeight: 600 }}>{String(c.val)}</span>
                 </div>
@@ -2716,15 +2718,15 @@ function CompetitorChipsSection({ competitors, onAction }: { competitors: Intell
                   width: 28, height: 28, borderRadius: 6,
                   background: chipColors[i % chipColors.length],
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 10, fontWeight: 700, color: '#111111', flexShrink: 0,
+                  fontSize: 10, fontWeight: 700, color: '#000000', flexShrink: 0,
                 }}>{initials}</div>
                 <span style={{ color: '#5E6366', fontSize: 13, flex: 1 }}>{displayName}</span>
                 <span onClick={(e) => { e.stopPropagation(); onAction?.({ actionLabel: 'Review', title: `Remove competitor: ${c.name || displayName}`, description: `Remove ${c.name || displayName} from the competitive landscape tracking.`, source: 'Competitors', sourceIcon: '⚔️', sourceColor: '#8A6D3B', chatSection: 'competitors' }); }} style={{ color: '#5E6366', fontSize: 14, cursor: 'pointer', flexShrink: 0 }}>×</span>
               </div>
               {/* Expanded competitor info */}
               {isSelected && (
-                <div style={{ background: '#FFFFFF', border: '1px solid #F1F4F5', borderTop: 'none', borderRadius: '0 0 8px 8px', padding: '12px 14px', marginTop: -4 }}>
-                  <div style={{ color: '#111111', fontSize: 14, fontWeight: 700, marginBottom: 6 }}>{c.name || displayName}</div>
+                <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderTop: 'none', borderRadius: '0 0 8px 8px', padding: '12px 14px', marginTop: -4 }}>
+                  <div style={{ color: '#000000', fontSize: 14, fontWeight: 700, marginBottom: 6 }}>{c.name || displayName}</div>
                   {c.description && <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5, margin: '0 0 8px' }}>{c.description}</p>}
                   {c.features && <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5, margin: '0 0 8px' }}>{c.features}</p>}
                   {(c.strengths || c.pros) && Array.isArray(c.strengths || c.pros) && (
@@ -2795,16 +2797,16 @@ function AdsSection({ ads }: { ads: any }) {
   return (
     <IntelCard>
       <div style={{ borderBottom: '2px solid #FFFFFF', paddingBottom: 12, marginBottom: 16 }}>
-        <div style={{ color: '#111111', fontSize: 18, fontWeight: 800 }}>Ads</div>
+        <div style={{ color: '#000000', fontSize: 18, fontWeight: 800 }}>Ads</div>
       </div>
       <div style={{ marginBottom: 16 }}>
-        <span style={{ color: '#111111', fontSize: 14, fontWeight: 700 }}>Spend Today: ${Number(spendToday).toFixed(2)}</span>
+        <span style={{ color: '#000000', fontSize: 14, fontWeight: 700 }}>Spend Today: ${Number(spendToday).toFixed(2)}</span>
         {dailyBudget > 0 && <span style={{ color: '#939799', fontSize: 13, marginLeft: 8 }}>(${Number(dailyBudget).toFixed(2)}/day budget)</span>}
       </div>
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
           <thead>
-            <tr style={{ borderBottom: '1px solid #F1F4F5' }}>
+            <tr style={{ borderBottom: '1px solid #E8E6E4' }}>
               {['Ad', 'Spend', 'Impr.', 'Clicks', 'CTR', 'CPC'].map(h => (
                 <th key={h} style={{ color: '#939799', padding: '6px 10px', textAlign: h === 'Ad' ? 'left' : 'right', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{h}</th>
               ))}
@@ -2815,7 +2817,7 @@ function AdsSection({ ads }: { ads: any }) {
               <tr key={i} style={{ borderBottom: '1px solid #FFFFFF' }}>
                 <td style={{ padding: '8px 10px' }}>
                   <div style={{ width: 32, height: 32, borderRadius: 4, background: '#F1F4F5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {ad.thumbnail ? <img src={ad.thumbnail} style={{ width: 32, height: 32, borderRadius: 4, objectFit: 'cover' }} /> : <span style={{ fontSize: 14 }}>📷</span>}
+                    {ad.thumbnail ? <img src={ad.thumbnail} style={{ width: 32, height: 32, borderRadius: 4, objectFit: 'cover' }} /> : <span style={{ fontSize: 14, color: '#939799' }}><Glyph name="camera" size={14} /></span>}
                   </div>
                 </td>
                 <td style={{ padding: '8px 10px', color: '#5E6366', textAlign: 'right' }}>${Number(ad.spend || 0).toFixed(2)}</td>
@@ -2882,9 +2884,9 @@ function AICMOFeedSection({ feed, seo, geo, goals, storedCmo, onAction, companyI
     text: x.message || x.content || x.idea || '',
     topic: 'Social',
   })) : [
-    ...(seoKeywords.length > 0 ? [{ text: `Thread idea: "Why ${seoKeywords[0]?.keyword || seoKeywords[0] || 'AI matching'} is broken and how we fix it" — position as thought leader`, topic: 'Thought Leadership' }] : []),
-    ...(lowPerfGoals.length > 0 ? [{ text: `Share progress update: "${lowPerfGoals[0].name}" — transparency builds trust with early adopters`, topic: 'Building in Public' }] : []),
-    ...((geo as any)?.overall_score < 50 ? [{ text: `Reply to AI tool comparison threads — increase brand mentions for GEO visibility (current score: ${(geo as any)?.overall_score || 0}/100)`, topic: 'GEO Strategy' }] : []),
+    ...(seoKeywords.length > 0 ? [{ text: `Thread idea: "Why ${seoKeywords[0]?.keyword || seoKeywords[0] || 'AI matching'} is broken and how we fix it" position as thought leader`, topic: 'Thought Leadership' }] : []),
+    ...(lowPerfGoals.length > 0 ? [{ text: `Share progress update: "${lowPerfGoals[0].name}": transparency builds trust with early adopters`, topic: 'Building in Public' }] : []),
+    ...((geo as any)?.overall_score < 50 ? [{ text: `Reply to AI tool comparison threads to increase brand mentions for GEO visibility (current score: ${(geo as any)?.overall_score || 0}/100)`, topic: 'GEO Strategy' }] : []),
   ].filter(x => x.text);
 
   // Articles: generate from SEO weaknesses and goal topics
@@ -2895,8 +2897,8 @@ function AICMOFeedSection({ feed, seo, geo, goals, storedCmo, onAction, companyI
     topic: a.topic || a.category || 'Growth',
   })) : [
     ...(seoScore > 0 && seoScore < 50 ? [{ title: `SEO score is ${seoScore}/100. Publish a comparison article targeting "${seoKeywords[0]?.keyword || seoKeywords[0] || 'AI expert matching'}" to build indexable content`, topic: 'SEO Recovery' }] : []),
-    ...(issues.length > 3 ? [{ title: `Create FAQ page addressing ${issues.length} SEO issues — structured data will boost AI citation potential`, topic: 'Technical SEO' }] : []),
-    ...((goals?.workstreams || []).some(ws => ws.name?.toLowerCase().includes('demand')) ? [{ title: `Write case study on expert matching ROI — target "how to find domain experts" search intent`, topic: 'Demand Generation' }] : []),
+    ...(issues.length > 3 ? [{ title: `Create FAQ page addressing ${issues.length} SEO issues: structured data will boost AI citation potential`, topic: 'Technical SEO' }] : []),
+    ...((goals?.workstreams || []).some(ws => ws.name?.toLowerCase().includes('demand')) ? [{ title: `Write case study on expert matching ROI: target "how to find domain experts" search intent`, topic: 'Demand Generation' }] : []),
   ].filter(a => a.title);
 
   // Hacker News: use stored data from venture_hn_feed collection
@@ -2913,7 +2915,7 @@ function AICMOFeedSection({ feed, seo, geo, goals, storedCmo, onAction, companyI
     { key: 'hn', icon: '🟧', label: 'Hacker News', count: hnItems.length, color: '#8A6D3B', isHn: true },
     { key: 'reddit', icon: '🟠', label: 'Reddit Opportunities', count: redditOpportunities.length, color: '#8A6D3B' },
     { key: 'seo', icon: '🌐', label: 'SEO + GEO Recommendations', count: allRecs.length, color: '#0A7D3C' },
-    { key: 'x', icon: '𝕏', label: 'X Ideas', count: xIdeas.length, color: '#111111' },
+    { key: 'x', icon: '𝕏', label: 'X Ideas', count: xIdeas.length, color: '#000000' },
     { key: 'articles', icon: '✏️', label: 'Articles', count: articles.length, color: '#5E6366' },
   ];
 
@@ -2933,8 +2935,8 @@ function AICMOFeedSection({ feed, seo, geo, goals, storedCmo, onAction, companyI
               cursor: 'pointer', borderBottom: '1px solid #FFFFFF',
               background: expanded[s.key] ? '#FFFFFF' : 'transparent',
             }}>
-              <span style={{ fontSize: 16 }}>{s.icon}</span>
-              <span style={{ color: '#111111', fontSize: 14, fontWeight: 600, flex: 1 }}>{s.label}</span>
+              <Glyph name={s.icon} size={16} />
+              <span style={{ color: '#000000', fontSize: 14, fontWeight: 600, flex: 1 }}>{s.label}</span>
               <span style={{ color: '#939799', fontSize: 11, whiteSpace: 'nowrap', flexShrink: 0 }}>
                 {s.count > 0 ? (s.key === 'seo' ? `Found ${s.count} issues` : s.key === 'reddit' ? `Found ${s.count} mentions` : s.key === 'hn' ? `${s.count} posts` : s.key === 'x' ? `Generated ${s.count} idea${s.count !== 1 ? 's' : ''}` : `Generated ${s.count} topic${s.count !== 1 ? 's' : ''}`) : 'None yet'}
               </span>
@@ -2955,12 +2957,12 @@ function AICMOFeedSection({ feed, seo, geo, goals, storedCmo, onAction, companyI
                       <div style={{ display: 'flex', gap: 10, marginTop: 4, alignItems: 'center' }}>
                         <span style={{ background: 'rgba(138, 109, 59,0.12)', border: '1px solid rgba(138, 109, 59,0.3)', color: '#8A6D3B', padding: '1px 8px', borderRadius: 10, fontSize: 10, fontWeight: 600 }}>HN</span>
                         <span style={{ color: '#939799', fontSize: 11 }}>▲ {h.points}</span>
-                        <span style={{ color: '#939799', fontSize: 11 }}>💬 {h.comments}</span>
+                        <span style={{ color: '#939799', fontSize: 11 }}><Glyph name="chat" /> {h.comments}</span>
                       </div>
                     </div>
                     <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
                       <a href={h.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                        <button style={{ background: '#FFFFFF', color: '#111111', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>Read</button>
+                        <button style={{ background: '#FFFFFF', color: '#000000', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>Read</button>
                       </a>
                       <a href={`https://news.ycombinator.com/item?id=${h.objectID}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                         <button onClick={(e) => { e.preventDefault(); onAction?.({ actionLabel: 'Post', title: h.title, source: 'Hacker News', sourceIcon: '🟧', sourceColor: '#8A6D3B', chatSection: 'hn', url: h.url }); }} style={{ background: '#F1F4F5', color: '#8A6D3B', border: '1px solid #8A6D3B33', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>Post</button>
@@ -2977,10 +2979,10 @@ function AICMOFeedSection({ feed, seo, geo, goals, storedCmo, onAction, companyI
                       <div style={{ display: 'flex', gap: 10, marginTop: 4, alignItems: 'center' }}>
                         <span style={{ background: 'rgba(255,69,0,0.12)', border: '1px solid rgba(255,69,0,0.3)', color: '#8A6D3B', padding: '1px 8px', borderRadius: 10, fontSize: 10, fontWeight: 600 }}>{r.subreddit}</span>
                         <span style={{ color: '#939799', fontSize: 11 }}>▲ {r.upvotes}</span>
-                        <span style={{ color: '#939799', fontSize: 11 }}>💬 {r.comments}</span>
+                        <span style={{ color: '#939799', fontSize: 11 }}><Glyph name="chat" /> {r.comments}</span>
                       </div>
                     </div>
-                    <button onClick={() => onAction?.({ actionLabel: 'Post', title: r.title, source: 'Reddit', sourceIcon: '🟠', sourceColor: '#8A6D3B', chatSection: 'reddit', subreddit: r.subreddit, upvotes: r.upvotes, comments: r.comments })} style={{ background: '#FFFFFF', color: '#111111', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>Post</button>
+                    <button onClick={() => onAction?.({ actionLabel: 'Post', title: r.title, source: 'Reddit', sourceIcon: '🟠', sourceColor: '#8A6D3B', chatSection: 'reddit', subreddit: r.subreddit, upvotes: r.upvotes, comments: r.comments })} style={{ background: '#FFFFFF', color: '#000000', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>Post</button>
                   </div>
                 )) : <p style={{ color: '#939799', fontSize: 12 }}>No Reddit opportunities detected yet.</p>)}
 
@@ -2996,7 +2998,7 @@ function AICMOFeedSection({ feed, seo, geo, goals, storedCmo, onAction, companyI
                         padding: '1px 8px', borderRadius: 4, fontSize: 10, fontWeight: 700,
                       }}>{r.severity}</span>
                       <span style={{ color: '#939799', fontSize: 11 }}>{r.category}</span>
-                      <button onClick={() => onAction?.({ actionLabel: 'Fix', title: r.title, description: r.title, source: 'SEO/GEO', sourceIcon: '🔧', sourceColor: '#8A6D3B', chatSection: 'seo', category: r.category, severity: r.severity })} style={{ background: '#FFFFFF', color: '#111111', border: 'none', padding: '4px 14px', borderRadius: 6, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>Fix</button>
+                      <button onClick={() => onAction?.({ actionLabel: 'Fix', title: r.title, description: r.title, source: 'SEO/GEO', sourceIcon: '🔧', sourceColor: '#8A6D3B', chatSection: 'seo', category: r.category, severity: r.severity })} style={{ background: '#FFFFFF', color: '#000000', border: 'none', padding: '4px 14px', borderRadius: 6, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>Fix</button>
                     </div>
                   </div>
                 )) : <p style={{ color: '#939799', fontSize: 12 }}>No SEO/GEO issues to fix.</p>)}
@@ -3007,7 +3009,7 @@ function AICMOFeedSection({ feed, seo, geo, goals, storedCmo, onAction, companyI
                     <div style={{ flex: 1 }}>
                       <div style={{ color: '#2B3033', fontSize: 13 }}>{x.text}</div>
                     </div>
-                    <button onClick={() => onAction?.({ actionLabel: 'Post', text: x.text, source: 'X', sourceIcon: '𝕏', sourceColor: '#FFFFFF', chatSection: 'x' })} style={{ background: '#FFFFFF', color: '#111111', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>Post</button>
+                    <button onClick={() => onAction?.({ actionLabel: 'Post', text: x.text, source: 'X', sourceIcon: '𝕏', sourceColor: '#FFFFFF', chatSection: 'x' })} style={{ background: '#FFFFFF', color: '#000000', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>Post</button>
                   </div>
                 )) : <p style={{ color: '#939799', fontSize: 12 }}>No tweet ideas generated yet.</p>)}
 
@@ -3018,7 +3020,7 @@ function AICMOFeedSection({ feed, seo, geo, goals, storedCmo, onAction, companyI
                       <div style={{ color: '#2B3033', fontSize: 13 }}>{a.title}</div>
                       <span style={{ color: '#939799', fontSize: 11 }}>{a.topic}</span>
                     </div>
-                    <button onClick={() => onAction?.({ actionLabel: 'Write', title: a.title, topic: a.topic, source: 'Articles', sourceIcon: '✏️', sourceColor: '#5E6366', chatSection: 'articles' })} style={{ background: '#FFFFFF', color: '#111111', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>Write</button>
+                    <button onClick={() => onAction?.({ actionLabel: 'Write', title: a.title, topic: a.topic, source: 'Articles', sourceIcon: '✏️', sourceColor: '#5E6366', chatSection: 'articles' })} style={{ background: '#FFFFFF', color: '#000000', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>Write</button>
                   </div>
                 )) : <p style={{ color: '#939799', fontSize: 12 }}>No article topics generated yet.</p>)}
               </div>
@@ -3061,7 +3063,7 @@ function EmailsDraftedSection({ brandDna, companyInfo, onAction }: { brandDna: a
     },
     {
       to: 'Seed Investors',
-      subject: `${companyName}: ${industry ? industry + ' — ' : ''}Pre-seed opportunity`,
+      subject: `${companyName}: ${industry ? industry + ': ' : ''}Pre-seed opportunity`,
       preview: `Hi [Name],\n\n${desc ? desc.slice(0, 150) : `${companyName} is ${vp || tagline || 'solving a critical problem in this space'}`}.\n\n${keyMsgs[0] ? 'Our core insight: ' + keyMsgs[0].slice(0, 120) : ''}\n\nWe're raising a pre-seed round. ${usps[0] ? 'Key differentiator: ' + usps[0].slice(0, 100) : ''}\n\nWould love 20 minutes to walk you through the opportunity.`,
       status: 'ready',
       type: 'Fundraising',
@@ -3083,8 +3085,8 @@ function EmailsDraftedSection({ brandDna, companyInfo, onAction }: { brandDna: a
           <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 8, padding: '14px 16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 14 }}>✉️</span>
-                <span style={{ color: '#111111', fontSize: 13, fontWeight: 600 }}>{e.subject}</span>
+                <Glyph name="mail" size={14} />
+                <span style={{ color: '#000000', fontSize: 13, fontWeight: 600 }}>{e.subject}</span>
               </div>
               <div style={{ display: 'flex', gap: 6 }}>
                 <span style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600 }}>{e.type}</span>
@@ -3099,7 +3101,7 @@ function EmailsDraftedSection({ brandDna, companyInfo, onAction }: { brandDna: a
             <div style={{ color: '#939799', fontSize: 11, marginBottom: 6 }}>To: {e.to}</div>
             <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5, margin: 0 }}>{e.preview}</p>
             <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
-              <button onClick={() => onAction?.({ actionLabel: e.status === 'ready' ? 'Send' : 'Edit', subject: e.subject, to: e.to, description: e.preview, source: 'Email', sourceIcon: '✉️', sourceColor: '#0A7D3C', chatSection: 'email' })} style={{ background: e.status === 'ready' ? '#FFFFFF' : '#F1F4F5', color: e.status === 'ready' ? '#111111' : '#C8CBCC', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+              <button onClick={() => onAction?.({ actionLabel: e.status === 'ready' ? 'Send' : 'Edit', subject: e.subject, to: e.to, description: e.preview, source: 'Email', sourceIcon: '✉️', sourceColor: '#0A7D3C', chatSection: 'email' })} style={{ background: e.status === 'ready' ? '#FFFFFF' : '#F1F4F5', color: e.status === 'ready' ? '#000000' : '#C8CBCC', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
                 {e.status === 'ready' ? 'Send' : 'Edit'}
               </button>
               <button onClick={() => onAction?.({ actionLabel: 'Review', subject: e.subject, to: e.to, description: e.preview, source: 'Email', sourceIcon: '✉️', sourceColor: '#0A7D3C', chatSection: 'email' })} style={{ background: '#FFFFFF', color: '#939799', border: '1px solid #E8E6E4', padding: '6px 16px', borderRadius: 6, fontSize: 12, cursor: 'pointer' }}>Preview</button>
@@ -3131,14 +3133,14 @@ function LinkedInDraftedSection({ brandDna, companyInfo, goals, onAction }: { br
       author: 'CEO',
       content: themes[0]
         ? `${themes[0]}\n\n${keyMsgs[0] ? keyMsgs[0] : ''}\n\n${usps[0] ? `At ${companyName}, we took a different approach: ${usps[0].slice(0, 150)}` : `That's why we built ${companyName}.`}\n\nWe're in early access now. DM me if you want in.`
-        : `The ${industry || 'industry'} is broken. Here's why.\n\n${desc ? desc.slice(0, 200) : `Most solutions in this space are built for the wrong user.`}\n\n${vp ? `${companyName}: ${vp.slice(0, 120)}` : `We built ${companyName} to fix this.`}\n\nThoughts? 👇`,
+        : `The ${industry || 'industry'} is broken. Here's why.\n\n${desc ? desc.slice(0, 200) : `Most solutions in this space are built for the wrong user.`}\n\n${vp ? `${companyName}: ${vp.slice(0, 120)}` : `We built ${companyName} to fix this.`}\n\nThoughts? `,
       type: 'Thought Leadership',
       status: 'ready',
       engagement: '~2.5K impressions',
     },
     {
       author: 'Company Page',
-      content: `Introducing ${companyName}${tagline ? `: ${tagline}` : ''}.\n\n${keyMsgs.length > 0 ? keyMsgs.slice(0, 2).map((m: string, i: number) => `${i === 0 ? '→' : '→'} ${m}`).join('\n') : `→ ${vp || desc?.slice(0, 120) || 'A new approach to an old problem.'}`}\n\n${usps.length > 0 ? `What makes us different:\n${usps.slice(0, 2).map((u: string) => `✓ ${u.slice(0, 100)}`).join('\n')}` : ''}\n\nJoin the waitlist → Link in comments`,
+      content: `Introducing ${companyName}${tagline ? `: ${tagline}` : ''}.\n\n${keyMsgs.length > 0 ? keyMsgs.slice(0, 2).map((m: string, i: number) => `${i === 0 ? '→' : '→'} ${m}`).join('\n') : `→ ${vp || desc?.slice(0, 120) || 'A new approach to an old problem.'}`}\n\n${usps.length > 0 ? `What makes us different:\n${usps.slice(0, 2).map((u: string) => `${u.slice(0, 100)}`).join('\n')}` : ''}\n\nJoin the waitlist → Link in comments`,
       type: 'Brand Awareness',
       status: 'ready',
       engagement: '~1.2K impressions',
@@ -3147,7 +3149,7 @@ function LinkedInDraftedSection({ brandDna, companyInfo, goals, onAction }: { br
       author: 'CEO',
       content: positioning
         ? `Where does ${companyName} sit in the market?\n\n${typeof positioning === 'string' ? positioning.slice(0, 300) : JSON.stringify(positioning).slice(0, 300)}\n\nWe're not trying to be everything to everyone. We're building for the people who need this most.`
-        : `I spent the last 6 months talking to ${industry ? industry.toLowerCase() + ' professionals' : 'users'} about what's broken.\n\nThe #1 complaint: "${keyMsgs[0] ? keyMsgs[0].slice(0, 100) : 'existing tools don\'t solve the real problem'}."\n\nThat's exactly what ${companyName} addresses.\n\nWhat's your biggest pain point? 👇`,
+        : `I spent the last 6 months talking to ${industry ? industry.toLowerCase() + ' professionals' : 'users'} about what's broken.\n\nThe #1 complaint: "${keyMsgs[0] ? keyMsgs[0].slice(0, 100) : 'existing tools don\'t solve the real problem'}."\n\nThat's exactly what ${companyName} addresses.\n\nWhat's your biggest pain point? `,
       type: 'Engagement',
       status: 'draft',
       engagement: '~800 impressions',
@@ -3162,7 +3164,7 @@ function LinkedInDraftedSection({ brandDna, companyInfo, goals, onAction }: { br
           <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 8, padding: '14px 16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <div style={{ width: 24, height: 24, borderRadius: 4, background: '#0A7D3C', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: '#111111', fontWeight: 700 }}>in</div>
+                <div style={{ width: 24, height: 24, borderRadius: 4, background: '#0A7D3C', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: '#000000', fontWeight: 700 }}>in</div>
                 <span style={{ color: '#5E6366', fontSize: 12, fontWeight: 600 }}>{p.author}</span>
                 <span style={{ color: '#5E6366', fontSize: 11 }}>· {p.engagement}</span>
               </div>
@@ -3178,7 +3180,7 @@ function LinkedInDraftedSection({ brandDna, companyInfo, goals, onAction }: { br
             </div>
             <p style={{ color: '#2B3033', fontSize: 13, lineHeight: 1.6, margin: 0, whiteSpace: 'pre-wrap' }}>{p.content}</p>
             <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
-              <button onClick={() => onAction?.({ actionLabel: p.status === 'ready' ? 'Publish' : 'Edit', content: p.content, author: p.author, description: p.content, source: 'LinkedIn', sourceIcon: 'in', sourceColor: '#0A7D3C', chatSection: 'linkedin' })} style={{ background: p.status === 'ready' ? '#0A7D3C' : '#F1F4F5', color: '#111111', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+              <button onClick={() => onAction?.({ actionLabel: p.status === 'ready' ? 'Publish' : 'Edit', content: p.content, author: p.author, description: p.content, source: 'LinkedIn', sourceIcon: 'in', sourceColor: '#0A7D3C', chatSection: 'linkedin' })} style={{ background: p.status === 'ready' ? '#0A7D3C' : '#F1F4F5', color: '#000000', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
                 {p.status === 'ready' ? 'Publish' : 'Edit'}
               </button>
               <button onClick={() => onAction?.({ actionLabel: 'Post', content: p.content, author: p.author, description: p.content, source: 'LinkedIn', sourceIcon: 'in', sourceColor: '#0A7D3C', chatSection: 'linkedin', title: 'Schedule LinkedIn Post' })} style={{ background: '#FFFFFF', color: '#939799', border: '1px solid #E8E6E4', padding: '6px 16px', borderRadius: 6, fontSize: 12, cursor: 'pointer' }}>Schedule</button>
@@ -3212,12 +3214,12 @@ function AdsFromDBSection({ ads, onAction }: { ads: any; onAction?: (item: any) 
     <IntelCard>
       {/* Header with line */}
       <div style={{ borderBottom: '2px solid #FFFFFF', paddingBottom: 10, marginBottom: 14 }}>
-        <div style={{ color: '#111111', fontSize: 18, fontWeight: 800 }}>Ads</div>
+        <div style={{ color: '#000000', fontSize: 18, fontWeight: 800 }}>Ads</div>
       </div>
 
       {/* Spend summary */}
       <div style={{ marginBottom: 16 }}>
-        <span style={{ color: '#111111', fontSize: 14, fontWeight: 700 }}>Spend Today: ${Number(spendToday).toFixed(2)}</span>
+        <span style={{ color: '#000000', fontSize: 14, fontWeight: 700 }}>Spend Today: ${Number(spendToday).toFixed(2)}</span>
         {dailyBudget > 0 && <span style={{ color: '#939799', fontSize: 13, marginLeft: 8 }}>(${Number(dailyBudget).toFixed(2)}/day budget)</span>}
       </div>
 
@@ -3225,7 +3227,7 @@ function AdsFromDBSection({ ads, onAction }: { ads: any; onAction?: (item: any) 
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
           <thead>
-            <tr style={{ borderBottom: '1px solid #F1F4F5' }}>
+            <tr style={{ borderBottom: '1px solid #E8E6E4' }}>
               {['Ad', 'Spend', 'Impr.', 'Clicks', 'CTR', 'CPC'].map(h => (
                 <th key={h} style={{ color: '#939799', padding: '8px 12px', textAlign: h === 'Ad' ? 'left' : 'right', fontSize: 11, fontWeight: 600 }}>{h}</th>
               ))}
@@ -3240,11 +3242,11 @@ function AdsFromDBSection({ ads, onAction }: { ads: any; onAction?: (item: any) 
                       {ad.preview_image_url ? (
                         <img src={ad.preview_image_url} alt={ad.avatar_name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                       ) : (
-                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>🎬</div>
+                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}><Glyph name="film" size={18} /></div>
                       )}
                     </div>
                   </td>
-                  <td style={{ padding: '10px 12px', color: '#111111', textAlign: 'right', fontWeight: 600 }}>${Number(ad.spend || 0).toFixed(2)}</td>
+                  <td style={{ padding: '10px 12px', color: '#000000', textAlign: 'right', fontWeight: 600 }}>${Number(ad.spend || 0).toFixed(2)}</td>
                   <td style={{ padding: '10px 12px', color: '#5E6366', textAlign: 'right' }}>{Number(ad.impressions || 0).toLocaleString()}</td>
                   <td style={{ padding: '10px 12px', color: '#5E6366', textAlign: 'right' }}>{ad.clicks || 0}</td>
                   <td style={{ padding: '10px 12px', color: '#5E6366', textAlign: 'right' }}>{Number(ad.ctr || 0).toFixed(2)}%</td>
@@ -3253,10 +3255,10 @@ function AdsFromDBSection({ ads, onAction }: { ads: any; onAction?: (item: any) 
                 {expandedAd === i && (
                   <tr key={`${i}-script`}>
                     <td colSpan={6} style={{ padding: '0 12px 14px 12px', background: '#FFFFFF' }}>
-                      <div style={{ padding: '12px 16px', background: '#FFFFFF', border: '1px solid #F1F4F5', borderRadius: 8 }}>
+                      <div style={{ padding: '12px 16px', background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8 }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                           <div>
-                            <span style={{ color: '#111111', fontSize: 13, fontWeight: 600 }}>{ad.avatar_name}</span>
+                            <span style={{ color: '#000000', fontSize: 13, fontWeight: 600 }}>{ad.avatar_name}</span>
                             <span style={{
                               background: ad.status === 'active' ? 'rgba(0, 214, 93,0.08)' : 'rgba(138, 109, 59,0.08)',
                               border: `1px solid ${ad.status === 'active' ? 'rgba(0, 214, 93,0.2)' : 'rgba(138, 109, 59,0.2)'}`,
@@ -3292,7 +3294,7 @@ function HeyGenAdsSection({ companyInfo, ads }: { companyInfo: any; ads: any }) 
   // Generate avatar ad cards
   const avatarAds = adsList.length > 0 ? adsList.slice(0, 5).map((ad: any, i: number) => ({
     avatar: ad.avatar || `Avatar ${i + 1}`,
-    script: ad.script || ad.headline || `${companyName} — your next breakthrough starts here`,
+    script: ad.script || ad.headline || `${companyName}: your next breakthrough starts here`,
     spend: ad.spend || 0,
     impressions: ad.impressions || 0,
     clicks: ad.clicks || 0,
@@ -3302,7 +3304,7 @@ function HeyGenAdsSection({ companyInfo, ads }: { companyInfo: any; ads: any }) 
     thumbnail: ad.thumbnail,
     status: ad.status || 'active',
   })) : [
-    { avatar: 'Professional Male', script: `${companyName} — stop searching, start matching`, spend: 12.40, impressions: 3200, clicks: 48, ctr: 1.50, cpc: 0.26, cpm: 3.88, status: 'active' },
+    { avatar: 'Professional Male', script: `${companyName}: stop searching, start matching`, spend: 12.40, impressions: 3200, clicks: 48, ctr: 1.50, cpc: 0.26, cpm: 3.88, status: 'active' },
     { avatar: 'Professional Female', script: `Two messages to the right expert. That's ${companyName}.`, spend: 8.90, impressions: 2800, clicks: 62, ctr: 2.21, cpc: 0.14, cpm: 3.18, status: 'active' },
     { avatar: 'Casual Founder', script: `We built ${companyName} because finding the right expert shouldn't take weeks`, spend: 15.20, impressions: 4100, clicks: 89, ctr: 2.17, cpc: 0.17, cpm: 3.71, status: 'top performer' },
   ];
@@ -3312,7 +3314,7 @@ function HeyGenAdsSection({ companyInfo, ads }: { companyInfo: any; ads: any }) 
       <IntelLabel>HeyGen Video Ads</IntelLabel>
       {spendToday > 0 && (
         <div style={{ marginBottom: 16 }}>
-          <span style={{ color: '#111111', fontSize: 14, fontWeight: 700 }}>Spend Today: ${Number(spendToday).toFixed(2)}</span>
+          <span style={{ color: '#000000', fontSize: 14, fontWeight: 700 }}>Spend Today: ${Number(spendToday).toFixed(2)}</span>
           {dailyBudget > 0 && <span style={{ color: '#939799', fontSize: 13, marginLeft: 8 }}>(${Number(dailyBudget).toFixed(2)}/day budget)</span>}
         </div>
       )}
@@ -3329,14 +3331,14 @@ function HeyGenAdsSection({ companyInfo, ads }: { companyInfo: any; ads: any }) 
                 {ad.thumbnail ? (
                   <img src={ad.thumbnail} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
-                  <span style={{ fontSize: 24 }}>🎬</span>
+                  <Glyph name="film" size={24} />
                 )}
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-                  <span style={{ color: '#111111', fontSize: 13, fontWeight: 600 }}>{ad.avatar}</span>
+                  <span style={{ color: '#000000', fontSize: 13, fontWeight: 600 }}>{ad.avatar}</span>
                   {ad.status === 'top performer' && (
-                    <span style={{ background: 'rgba(0, 214, 93,0.1)', border: '1px solid rgba(0, 214, 93,0.2)', color: '#0A7D3C', padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600 }}>⭐ Top Performer</span>
+                    <span style={{ background: 'rgba(0, 214, 93,0.1)', border: '1px solid rgba(0, 214, 93,0.2)', color: '#0A7D3C', padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600 }}><Glyph name="star" /> Top Performer</span>
                   )}
                 </div>
                 <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.4, margin: 0 }}>"{ad.script}"</p>
@@ -3345,7 +3347,7 @@ function HeyGenAdsSection({ companyInfo, ads }: { companyInfo: any; ads: any }) 
             {/* Metrics row */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 8 }}>
               {[
-                { label: 'Spend', value: `$${Number(ad.spend).toFixed(2)}`, color: '#111111' },
+                { label: 'Spend', value: `$${Number(ad.spend).toFixed(2)}`, color: '#000000' },
                 { label: 'Impr.', value: Number(ad.impressions).toLocaleString(), color: '#5E6366' },
                 { label: 'CTR', value: `${Number(ad.ctr).toFixed(2)}%`, color: ad.ctr >= 2 ? '#0A7D3C' : '#C8CBCC' },
                 { label: 'CPC', value: `$${Number(ad.cpc).toFixed(2)}`, color: ad.cpc < 0.20 ? '#0A7D3C' : '#C8CBCC' },
@@ -3446,7 +3448,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
 
       {/* Intelligence sub-nav */}
       <div style={{
-        display: 'flex', gap: 0, borderBottom: '1px solid #F1F4F5',
+        display: 'flex', gap: 0, borderBottom: '1px solid #E8E6E4',
         overflowX: 'auto', marginBottom: 32, paddingBottom: 0,
       }}>
         {INTEL_SECTIONS.map(s => (
@@ -3471,13 +3473,13 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
-        {/* Company Overview — FREE (always visible) */}
+        {/* Company Overview - FREE (always visible) */}
         <section id="intel-overview">
           <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Company Overview</div>
           <CompanyOverviewSection companyInfo={data.companyInfo} domain={data.domain} />
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #E8E6E4' }} />
 
         {/* Brand DNA */}
         <section id="intel-brand">
@@ -3487,7 +3489,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #E8E6E4' }} />
 
         {/* Market & Metrics */}
         <section id="intel-market">
@@ -3497,7 +3499,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #E8E6E4' }} />
 
         {/* Analytics Overview (Tabbed) */}
         <section id="intel-analytics">
@@ -3507,7 +3509,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #E8E6E4' }} />
 
         {/* Competitors Chips */}
         <section id="intel-competitors">
@@ -3517,7 +3519,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #E8E6E4' }} />
 
         {/* Patents & Grants */}
         <section id="intel-ip">
@@ -3527,7 +3529,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #E8E6E4' }} />
 
         {/* Documents */}
         <section id="intel-docs">
@@ -3537,7 +3539,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #E8E6E4' }} />
 
         {/* Social */}
         <section id="intel-social">
@@ -3547,7 +3549,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #E8E6E4' }} />
 
         {/* Emails */}
         <section id="intel-emails">
@@ -3557,7 +3559,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #E8E6E4' }} />
 
         {/* LinkedIn */}
         <section id="intel-linkedin">
@@ -3567,7 +3569,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #E8E6E4' }} />
 
         {/* Ads */}
         <section id="intel-ads">
@@ -3577,7 +3579,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #E8E6E4' }} />
 
         {/* Goals */}
         <section id="intel-goals">
@@ -3587,7 +3589,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #E8E6E4' }} />
 
         {/* Investors */}
         <section id="intel-investors">
@@ -3597,7 +3599,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #E8E6E4' }} />
 
         {/* AI CMO Feed */}
         <section id="intel-cmo">
@@ -3607,7 +3609,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #E8E6E4' }} />
 
         {/* Activity Feed */}
         <section id="intel-feed">
@@ -3617,7 +3619,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #E8E6E4' }} />
 
         {/* ClawOS Updates */}
         <section id="intel-updates">
@@ -3627,7 +3629,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
           </LockedSection>
         </section>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #FFFFFF' }} />
+        <hr style={{ border: 'none', borderTop: '1px solid #E8E6E4' }} />
 
         {/* Hiring */}
         <section id="intel-hiring">

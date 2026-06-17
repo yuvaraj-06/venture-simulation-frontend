@@ -1,44 +1,62 @@
-# ShareOS Venture Simulation — Design System
+# Share Ventures Design System — Venture Simulation Frontend
 
-## Brand
-- Platform: ShareOS (stack.shareos.ai)
-- Theme: Ultra-dark, data-dense, premium fintech aesthetic
-- Vibe: Bloomberg terminal meets modern SaaS dashboard
+Canonical reference for this app. Source of truth: `/home/ubuntu/.hermes/workspace/brand/SHARE_VENTURES_DESIGN_SYSTEM.md`.
 
-## Colors
-- Background: #000000, #0a0a0a, #0d0d0d, #111111
-- Borders: #1a1a1a, #222222
-- Text: #ffffff (primary), #cccccc, #aaaaaa, #888888, #666666, #555555, #444444
-- Accent primary: #00d4ff (cyan)
-- Accent secondary: #0066ff (blue)  
-- Success: #00ff88 (green)
-- Warning: #ff8800 (orange)
-- Error: #ff3333 (red)
-- NEVER use: purple, pink, violet, indigo, teal
+## Mode
+Light editorial. Background `#F1F4F5` / `#FFFFFF`, text `#000000`. Dark emphasis bands `#2B3033` on hero sections only (never dark whole-body).
 
-## Stage Colors
-- Explore: #00d4ff
-- Generate: #0066ff
-- Validate: #00ff88
-- Pilot: #ff8800
-- Launch: #ff3300
-- Scale: #ffcc00
-- Exit: #ffcc00
+## Greyscale tokens
+```
+--black     #000000
+--white     #FFFFFF
+--xdark     #2B3033   /* dark band / emphasis bg */
+--dark      #5E6366
+--mid       #939799
+--light     #C8CBCC
+--offwhite  #E8E6E4   /* hairline borders */
+--bg        #F1F4F5   /* canvas */
+```
+
+## Functional colors (use ONLY for meaning, never decoration)
+- `--cta: #00D65D` — live / active / CTA button fill / "answer" cells.
+- `--ink: #0A7D3C` — green-as-text on white (positive metrics, links).
+- `--accent-orange: #8A6D3B` — restrained warning.
+- `--accent-red: #C0392B` — error / no-go.
+
+Green is reserved for actual signal. Never apply it as a decorative accent.
+
+## Hard bans
+- No blue `#2335CC` or any blue.
+- No em dashes `—` or en-dashes `–` in body copy (numeric ranges like `12-14x` are fine).
+- No emojis in UI — every glyph goes through `<Glyph name="..." />` (concept SVG).
+- No `#111111` — use pure `#000000`.
+- No bg-on-bg borders (border same color as page bg reads invisible). Use `--offwhite #E8E6E4` for hairlines on `--bg`.
+- No parent Share Ventures corporate logo on product surfaces. Always the **shareOS** product wordmark lockup.
+- No decorative stock photography. Real photos only when subject IS a real person/product/place.
 
 ## Typography
-- Font: Inter, system-ui, -apple-system, sans-serif
-- Weight: 400 (body), 600 (labels), 700 (headings), 800 (numbers)
-- Sizes: 10px (micro labels), 11px (tags/badges), 12px (body small), 13px (body), 14px (body large), 16-20px (headings), 24px+ (hero numbers)
-- Letter spacing: 0.05-0.15em for uppercase labels
+Stack: `'Aeonik Pro', 'General Sans', Arial, sans-serif`. General Sans (Fontshare) is the approved Aeonik stand-in — already wired in `layout.tsx`.
 
-## Component Patterns
-- Cards: bg #0d0d0d, border 1px solid #222, border-radius 12px, padding 28px
-- Inner cards: bg #111, border-radius 8px, padding 12-14px
-- Badges/tags: bg with 18% opacity of color, 1px border at 44% opacity, border-radius 3-4px
-- Score circles: 64px diameter, 3px border colored by threshold
-- Hover: border-color #333, bg #111
+- Display/hero: 56–72px, weight 600, line-height ~1.05, letter-spacing -0.02em, **lowercase preferred**.
+- H1: 32–44px, weight 600.
+- Body: 14–16px, weight 400, line-height 1.6.
+- Caption / eyebrow: 11px, weight 600, letter-spacing 0.12em, UPPERCASE.
 
-## Layout
-- Grid: auto-fill, minmax responsive
-- Gap: 12-16px between cards
-- Max content width: contained by parent grid
+## Components
+- `<Brand />` — product wordmark lockup: hexagon-S symbol + `shareOS™`. `on-dark` flips to white.
+- `<Glyph name="..." />` — monochrome inline SVG, stroke=currentColor. Maps every emoji we used.
+- `<Gauge value={0..1} />` — circular stat gauge, the unifying workshop motif.
+- `.dark-band` — emphasis hero band with ghost-S at 3% opacity.
+
+## Layout grammar (workshop visualization-first)
+- Hairline card grids: `display: grid; gap: 1px; background: var(--offwhite);` — cells fill white, the 1px gap reads as a divider.
+- Stat-gauge row over plain numbers wherever you have a 0..100% or n-of-N value.
+- 7-stage journey strip (`Explore → Exit`) as filled segments on every venture card.
+- Section eyebrow + thin divider, not big white space.
+
+## Visualization priority (per Hamet, workshop canon)
+1. Concept-explaining SVG diagram
+2. Chart / data viz
+3. Real photo (subject only, never decorative)
+
+Never use AI-generated illustrations or stock decorative imagery.

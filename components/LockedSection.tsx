@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useRef, useEffect, useState } from 'react';
+import { Glyph } from './Brand';
 
 interface LockedSectionProps {
   isLocked: boolean;
@@ -109,7 +110,7 @@ export default function LockedSection({
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 20%, rgba(255,255,255,0.88) 60%)',
+          background: 'linear-gradient(to bottom, transparent 0%, rgba(241,244,245,0.55) 22%, rgba(241,244,245,0.92) 58%)',
           backdropFilter: 'blur(8px)',
           WebkitBackdropFilter: 'blur(8px)',
           border: '1px solid rgba(255,255,255,0.04)',
@@ -136,7 +137,7 @@ export default function LockedSection({
             fontSize: 20,
           }}
         >
-          {pipelineRunning ? '⏳' : '🔒'}
+          <span style={{ color: pipelineRunning ? '#8A6D3B' : '#0A7D3C' }}><Glyph name={pipelineRunning ? 'hourglass' : 'lock'} size={20} /></span>
         </div>
 
         {/* Unlock button or Coming Soon */}
@@ -151,7 +152,7 @@ export default function LockedSection({
             fontWeight: 700,
             letterSpacing: '0.02em',
           }}>
-            ⏳ Coming Soon
+            <Glyph name="hourglass" /> Coming Soon
           </div>
         ) : (
           <button
@@ -159,9 +160,9 @@ export default function LockedSection({
             disabled={!buttonReady || creating}
             style={{
               background: buttonReady
-                ? '#FFFFFF'
-                : 'rgba(255,255,255,0.05)',
-              color: buttonReady ? '#111111' : '#C8CBCC',
+                ? '#00D65D'
+                : 'rgba(0,0,0,0.04)',
+              color: buttonReady ? '#000000' : '#C8CBCC',
               border: 'none',
               borderRadius: 8,
               padding: '12px 28px',
@@ -184,7 +185,7 @@ export default function LockedSection({
               (e.target as HTMLButtonElement).style.boxShadow = buttonReady ? '0 4px 20px rgba(10, 125, 60,0.2)' : 'none';
             }}
           >
-            {creating ? '⏳ Creating checkout...' : `🔒 ${label}`}
+            {creating ? <><Glyph name="hourglass" /> Creating checkout...</> : <><Glyph name="lock" /> {label}</>}
           </button>
         )}
 

@@ -1,30 +1,71 @@
 /* ─── FONTS: General Sans (Aeonik Pro stand-in) loaded via <link> in layout.tsx ─── */
 @import "tailwindcss";
 
-/* ─── SHARE VENTURES BRAND TOKENS (light editorial) ─────────────────── */
+/* ─── SHARE VENTURES BRAND TOKENS (verbatim canon, light editorial) ──── */
 :root {
+  /* Canon greyscale */
+  --black: #000000;
+  --white: #FFFFFF;
+  --xdark: #2B3033;           /* emphasis / dark bands */
+  --dark: #5E6366;
+  --mid: #939799;
+  --light: #C8CBCC;
+  --offwhite: #E8E6E4;
+  --bg: #F1F4F5;              /* brand home grey */
+  /* Functional green (NEVER decorative) */
+  --cta: #00D65D;             /* live / active / CTA fill */
+  --cta-hover: #00B84F;
+  --ink: #0A7D3C;             /* green-as-text on white (functional only) */
+
   /* Surfaces */
-  --bg-primary: #F1F4F5;      /* brand home grey */
+  --bg-primary: #F1F4F5;
   --bg-secondary: #FFFFFF;
   --bg-card: #FFFFFF;
   --bg-card-hover: #F7F8F9;
   --bg-inset: #F1F4F5;
-  --border: #E8E6E4;          /* brand light grey */
-  --border-bright: #C8CBCC;   /* brand grey */
+  --border: #E8E6E4;
+  --border-bright: #C8CBCC;
   /* Text */
-  --text-primary: #111111;    /* near-black brand */
-  --text-secondary: #5E6366;  /* brand mid grey */
-  --text-muted: #939799;      /* brand grey */
-  /* Brand accent — green reserved for CTA / positive */
-  --cta: #00D65D;             /* brand CTA green (button bg only) */
-  --cta-hover: #00B84F;
-  --accent: #0A7D3C;          /* dark green — safe as TEXT on white */
-  --accent-cyan: #0A7D3C;     /* legacy var remap → green text */
+  --text-primary: #000000;    /* pure black, canon */
+  --text-secondary: #5E6366;
+  --text-muted: #939799;
+  /* Legacy var remaps — functional only */
+  --accent: #0A7D3C;
+  --accent-cyan: #0A7D3C;
   --accent-blue: #0A7D3C;
   --accent-green: #0A7D3C;
-  --accent-orange: #8A6D3B;   /* muted amber for warnings */
-  --accent-red: #C0392B;      /* restrained red */
+  --accent-orange: #8A6D3B;
+  --accent-red: #C0392B;
 }
+
+/* ─── PRODUCT WORDMARK LOCKUP (shareOS) ─────────────────────────────── */
+.brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; }
+.brand .sym { width: 26px; height: 26px; flex-shrink: 0; }
+.brand .wm { font-family: 'General Sans', Arial, sans-serif; font-size: 19px; letter-spacing: -0.01em; line-height: 1; color: #000; white-space: nowrap; }
+.brand .wm .s { font-weight: 500; }
+.brand .wm .b { font-weight: 300; }
+.brand .wm .tm { font-size: 8px; vertical-align: super; font-weight: 300; }
+.brand.on-dark .wm { color: #fff; }
+
+/* ─── MONO CONCEPT GLYPH (replaces emoji) ───────────────────────────── */
+.glyph { display: inline-flex; align-items: center; justify-content: center; vertical-align: -0.15em; }
+.glyph svg { width: 1em; height: 1em; stroke: currentColor; stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ─── STAT GAUGE (circular, unifying workshop motif) ────────────────── */
+.gauge { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+.gauge svg { transform: rotate(-90deg); }
+.gauge .gauge-track { stroke: var(--offwhite); fill: none; }
+.gauge .gauge-fill { stroke: var(--cta); fill: none; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+.gauge .gauge-label { position: absolute; font-weight: 600; color: #000; }
+
+/* ─── DARK EMPHASIS BAND (hero) with ghost-S ────────────────────────── */
+.dark-band { position: relative; background: var(--xdark); color: #fff; overflow: hidden; }
+.dark-band::before {
+  content: 'S'; position: absolute; right: -2%; top: 50%; transform: translateY(-50%);
+  font-family: 'General Sans', Arial, sans-serif; font-weight: 600; font-size: 360px;
+  line-height: 1; color: #fff; opacity: 0.03; pointer-events: none; user-select: none;
+}
+.dark-band > * { position: relative; z-index: 1; }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
