@@ -2,18 +2,12 @@
 
 import Link from 'next/link';
 
-/* S-in-hexagon product symbol. stroke=currentColor so it flips black/white by context. */
+/* Official Share Ventures "S" symbol. fill=currentColor so it flips black/white by context. */
 export function BrandSymbol({ size = 26 }: { size?: number }) {
   return (
-    <svg className="sym" width={size} height={size} viewBox="0 0 40 40" fill="none" aria-hidden>
-      <path
-        d="M20 2.5 36 11.75v18.5L20 39.5 4 30.25v-18.5L20 2.5Z"
-        stroke="currentColor" strokeWidth="2" strokeLinejoin="round"
-      />
-      <path
-        d="M25.5 15c-1.2-2-3.3-3-5.8-3-3.2 0-5.7 1.7-5.7 4.4 0 6 12 3.2 12 9.4 0 2.9-2.7 4.7-6.2 4.7-2.8 0-5.1-1.1-6.4-3.3"
-        stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      />
+    <svg className="sym" height={size} width={size * 0.889} viewBox="718.9 259.6 482.2 542.7" fill="currentColor" aria-hidden>
+      <path d="M 1170.29 386.41 L 980.81 277.01 C 967.97 269.60 952.03 269.60 939.19 277.01 L 746.45 388.29 C 735.62 394.54 728.89 406.19 728.89 418.70 L 728.89 514.41 L 960.00 647.83 L 1030.23 607.29 L 799.12 473.86 L 799.12 438.97 L 960.00 346.09 L 1191.10 479.51 L 1191.10 422.46 C 1191.10 407.63 1183.13 393.82 1170.29 386.41 Z" />
+      <path d="M 889.77 456.41 L 1120.88 589.84 L 1120.88 624.74 L 960.00 717.62 L 728.89 584.19 L 728.89 641.25 C 728.89 656.07 736.87 669.89 749.71 677.30 L 939.19 786.69 C 945.61 790.40 952.80 792.25 960.00 792.25 C 967.19 792.25 974.39 790.40 980.81 786.69 L 1177.95 672.88 C 1186.07 668.19 1191.10 659.46 1191.10 650.09 L 1191.10 549.30 L 960.00 415.87 L 889.77 456.41 Z" />
     </svg>
   );
 }

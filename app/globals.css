@@ -40,7 +40,7 @@
 
 /* ─── PRODUCT WORDMARK LOCKUP (shareOS) ─────────────────────────────── */
 .brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; }
-.brand .sym { width: 26px; height: 26px; flex-shrink: 0; }
+.brand .sym { height: 26px; width: auto; flex-shrink: 0; }
 .brand .wm { font-family: 'General Sans', Arial, sans-serif; font-size: 19px; letter-spacing: -0.01em; line-height: 1; color: #000; white-space: nowrap; }
 .brand .wm .s { font-weight: 500; }
 .brand .wm .b { font-weight: 300; }
