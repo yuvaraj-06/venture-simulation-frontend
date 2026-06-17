@@ -73,12 +73,13 @@ function StatusBadge({ status }: { status: string }) {
 
 function SectionHeader({ id, label, children }: { id: string; label: string; children?: React.ReactNode }) {
   return (
-    <div id={id} style={{ scrollMarginTop: 80, marginBottom: 32 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-        <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600 }}>
+    <div id={id} style={{ scrollMarginTop: 80, marginBottom: 36 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#00D65D', flexShrink: 0, boxShadow: '0 0 0 3px rgba(0,214,93,0.12)' }} />
+        <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 600 }}>
           {label}
         </div>
-        <div style={{ flex: 1, height: 1, background: '#F1F4F5' }} />
+        <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg, #E8E6E4, transparent)' }} />
       </div>
       {children}
     </div>
@@ -88,10 +89,10 @@ function SectionHeader({ id, label, children }: { id: string; label: string; chi
 function MetricCard({ label, value, sub, color = '#000000' }: { label: string; value: string; sub?: string; color?: string }) {
   const c = color === '#FFFFFF' ? '#000000' : color;
   return (
-    <div className="sim-metric-card" style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: '22px 24px' }}>
-      <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 10, fontWeight: 600 }}>{label}</div>
-      <div className="sim-metric-value" style={{ color: c, fontSize: 30, fontWeight: 600, lineHeight: 1.05, marginBottom: 4, letterSpacing: '-0.02em' }}>{value}</div>
-      {sub && <div style={{ color: '#939799', fontSize: 12 }}>{sub}</div>}
+    <div className="sim-metric-card" style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 12, padding: '22px 24px' }}>
+      <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12, fontWeight: 600 }}>{label}</div>
+      <div className="sim-metric-value" style={{ color: c, fontSize: 32, fontWeight: 600, lineHeight: 1.0, marginBottom: 5, letterSpacing: '-0.03em' }}>{value}</div>
+      {sub && <div style={{ color: '#939799', fontSize: 12, fontWeight: 500 }}>{sub}</div>}
     </div>
   );
 }
@@ -228,7 +229,7 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
         </div>
       </nav>
 
-      <div className="sim-layout" style={{ display: 'flex' }}>
+      <div className="sim-layout" style={{ display: 'flex', background: 'linear-gradient(90deg, #FFFFFF 0, #FFFFFF 220px, transparent 220px)' }}>
         {/* Sidebar */}
         <aside className="sim-sidebar" style={{
           width: 220, minWidth: 220, position: 'sticky', top: 56,
@@ -381,19 +382,13 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
 
                 <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 24 }}>
                   <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>Market Context</div>
-                  <div style={{ display: 'flex', gap: 16, marginBottom: 12 }}>
-                    <div>
-                      <div style={{ color: '#939799', fontSize: 11 }}>VERTICAL</div>
-                      <div style={{ color: '#000000', fontSize: 14, fontWeight: 600 }}>{signal.vertical}</div>
-                    </div>
-                    <div>
-                      <div style={{ color: '#939799', fontSize: 11 }}>SUBDOMAIN</div>
-                      <div style={{ color: '#000000', fontSize: 14, fontWeight: 600 }}>{signal.subdomain}</div>
-                    </div>
-                    <div>
-                      <div style={{ color: '#939799', fontSize: 11 }}>TAM</div>
-                      <div style={{ color: '#0A7D3C', fontSize: 14, fontWeight: 600 }}>{signal.tam}</div>
-                    </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', columnGap: 20, rowGap: 12, marginBottom: 16, alignItems: 'start' }}>
+                    <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', paddingTop: 2 }}>Vertical</div>
+                    <div style={{ color: '#000000', fontSize: 14, fontWeight: 600 }}>{signal.vertical}</div>
+                    <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', paddingTop: 2 }}>Subdomain</div>
+                    <div style={{ color: '#000000', fontSize: 14, fontWeight: 600, lineHeight: 1.5, overflowWrap: 'anywhere' }}>{signal.subdomain}</div>
+                    <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', paddingTop: 2 }}>TAM</div>
+                    <div style={{ color: '#0A7D3C', fontSize: 14, fontWeight: 700 }}>{signal.tam}</div>
                   </div>
                   <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.6, marginBottom: 12 }}>{signal.domain_context}</p>
                   {signal.core_scientific_thesis && (

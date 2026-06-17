@@ -94,7 +94,7 @@ export default async function HomePage() {
                 shareOS AGI
               </span>
             </div>
-            <h1 style={{ fontSize: 72, fontWeight: 600, lineHeight: 1.02, marginBottom: 22, letterSpacing: '-0.02em', textTransform: 'lowercase', color: '#fff' }}>
+            <h1 className="dash-display" style={{ fontSize: 'clamp(40px, 7vw, 72px)', fontWeight: 600, lineHeight: 1.02, marginBottom: 22, letterSpacing: '-0.03em', textTransform: 'lowercase', color: '#fff' }}>
               venture<br />simulation engine
             </h1>
             <p style={{ color: '#C8CBCC', fontSize: 18, maxWidth: 560, lineHeight: 1.7, marginBottom: 44 }}>

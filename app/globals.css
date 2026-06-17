@@ -646,3 +646,111 @@ body {
     margin-bottom: 8px !important;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   ELEVATION LAYER v2 — canon-disciplined depth, rhythm & refinement
+   Greyscale + functional green only. Adds the polish the flat v1 lacked:
+   real shadows, type scale, card system, sidebar fix, hover intent.
+   ═══════════════════════════════════════════════════════════════════ */
+:root {
+  /* Elevation tokens — soft, neutral, never colored */
+  --shadow-xs: 0 1px 2px rgba(16,24,28,0.04);
+  --shadow-sm: 0 1px 3px rgba(16,24,28,0.06), 0 1px 2px rgba(16,24,28,0.04);
+  --shadow-md: 0 4px 12px rgba(16,24,28,0.06), 0 1px 3px rgba(16,24,28,0.05);
+  --shadow-lg: 0 12px 32px rgba(16,24,28,0.10), 0 2px 8px rgba(16,24,28,0.05);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  /* Fluid type scale (canon: General Sans, tight tracking on display) */
+  --fs-display: clamp(34px, 4vw, 52px);
+  --fs-h1: clamp(28px, 3vw, 40px);
+  --fs-h2: clamp(22px, 2.2vw, 28px);
+}
+
+/* Display headings: tighten tracking + balance wrapping (canon editorial) */
+.sim-main h1,
+.dash-display {
+  letter-spacing: -0.025em !important;
+  text-wrap: balance;
+}
+.sim-main h2 { letter-spacing: -0.015em; }
+
+/* ─── CARD SYSTEM: depth + intentional hover (replaces flat 1px boxes) ─── */
+.sim-metric-card {
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.18s var(--ease), box-shadow 0.18s var(--ease), border-color 0.18s var(--ease);
+  border-radius: var(--radius-md) !important;
+  position: relative;
+}
+.sim-metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: #D8DDDF !important;
+}
+/* Top accent rule on metric cards — hairline, lights green only on hover */
+.sim-metric-card::after {
+  content: '';
+  position: absolute; left: 0; top: 0; height: 3px; width: 100%;
+  background: linear-gradient(90deg, var(--cta), var(--ink));
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  opacity: 0; transition: opacity 0.2s var(--ease);
+}
+.sim-metric-card:hover::after { opacity: 0.9; }
+
+/* General card depth pass — anything using the canonical white box */
+.card { box-shadow: var(--shadow-sm); border-radius: var(--radius-md); }
+.card:hover { box-shadow: var(--shadow-md); }
+
+/* ─── SIDEBAR FIX: full-height fill, no hard cutoff against grey bg ─── */
+.sim-sidebar {
+  background: #FFFFFF !important;
+  box-shadow: var(--shadow-xs);
+  /* fill viewport so the white panel never stops mid-page */
+  min-height: calc(100vh - 56px) !important;
+}
+.sim-sidebar button { border-radius: 0 6px 6px 0; transition: all 0.15s var(--ease); }
+.sim-sidebar button:hover { background: #F4F6F7 !important; color: #2B3033 !important; }
+
+/* ─── NAV: subtle depth so the sticky bar reads as a layer ─── */
+.sim-nav { box-shadow: 0 1px 0 rgba(16,24,28,0.04), 0 2px 12px rgba(16,24,28,0.03); }
+
+/* ─── METRIC VALUE: tabular figures so numbers align in grids ─── */
+.sim-metric-value { font-variant-numeric: tabular-nums; }
+
+/* ─── TABLES: cleaner zebra + hover, canon greys ─── */
+.sim-table { border-collapse: separate; border-spacing: 0; }
+.sim-table tbody tr { transition: background 0.12s var(--ease); }
+.sim-table tbody tr:hover { background: #F7F8F9; }
+
+/* ─── SECTION ENTER ANIMATION: gentle reveal, respects reduced-motion ─── */
+@keyframes sim-fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.sim-main > section,
+.sim-main > div > section { animation: sim-fade-up 0.4s var(--ease) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ─── FOCUS VISIBILITY: keyboard a11y, brand green ring ─── */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--cta);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ─── CHIP / PILL refinement — consistent pill radius across dashboards ─── */
+.sim-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: 999px;
+  font-size: 12px; font-weight: 500;
+  background: #FFFFFF; border: 1px solid var(--border); color: #2B3033;
+  transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+.sim-chip:hover { border-color: var(--border-bright); background: #F7F8F9; }

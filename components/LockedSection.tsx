@@ -110,7 +110,7 @@ export default function LockedSection({
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'linear-gradient(to bottom, transparent 0%, rgba(241,244,245,0.55) 22%, rgba(241,244,245,0.92) 58%)',
+          background: 'linear-gradient(to bottom, transparent 0%, rgba(247,248,249,0.6) 20%, rgba(247,248,249,0.94) 55%)',
           backdropFilter: 'blur(8px)',
           WebkitBackdropFilter: 'blur(8px)',
           border: '1px solid rgba(255,255,255,0.04)',

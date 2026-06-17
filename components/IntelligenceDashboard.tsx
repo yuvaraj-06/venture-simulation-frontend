@@ -149,8 +149,8 @@ interface HiringData {
 
 function IntelCard({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   return (
-    <div style={{
-      background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 20,
+    <div className="card" style={{
+      background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 12, padding: 22,
       ...style
     }}>
       {children}
@@ -160,8 +160,11 @@ function IntelCard({ children, style }: { children: React.ReactNode; style?: Rea
 
 function IntelLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 10 }}>
-      {children}
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+      <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#00D65D', flexShrink: 0 }} />
+      <span style={{ color: '#5E6366', fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600 }}>
+        {children}
+      </span>
     </div>
   );
 }
