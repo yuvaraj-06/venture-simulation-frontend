@@ -1,0 +1,152 @@
+/* ============================================================
+   Share Ventures Design System — Design Tokens 3.0.0 · 2026-08-27
+   Source of truth: ShareVentures_Brand_Guidelines.pdf (v1.0)
+   Canonical token file. tokens.json and tailwind.preset.js
+   mirror these values — change all three together.
+   ============================================================ */
+
+:root {
+  /* ---------------------------------------------------------
+     COLOR / PRIMITIVES
+     Brand chrome is black, white, and gray. Full-colour imagery
+     supplies energy; green is reserved for the primary CTA.
+     --------------------------------------------------------- */
+  --sv-black: #000000;
+  --sv-white: #ffffff;
+  --sv-off-white: #e8e6e4;      /* warm print-leaning off-white */
+  --sv-home-bg: #f1f4f5;        /* default cool page background (digital) */
+  --sv-gray-light: #c8cbcc;
+  --sv-gray-mid: #939799;
+  --sv-gray-dark: #5e6366;
+  --sv-gray-xdark: #2b3033;
+  --sv-green: #00d65d;          /* CTA green — RARE. Reserved for the single most
+                                   important action on the page (typically one green
+                                   element per page); all other buttons are ink.
+                                   Note: brand PDF p.21 prints "#0038C7" beside a
+                                   green swatch; that hex is a typo. #00D65D from
+                                   the digital style guide (p.31) is canonical. */
+
+  /* ---------------------------------------------------------
+     COLOR / SEMANTIC (light surfaces — default)
+     --------------------------------------------------------- */
+  --sv-surface: var(--sv-home-bg);
+  --sv-surface-raised: var(--sv-white);
+  --sv-surface-sunken: var(--sv-off-white);
+  --sv-ink: var(--sv-black);              /* primary text */
+  --sv-ink-secondary: var(--sv-gray-dark);/* supporting text (4.5:1+ on light) */
+  --sv-ink-tertiary: var(--sv-gray-mid);  /* large/decorative text only */
+  --sv-hairline: var(--sv-gray-light);    /* 1px rules and borders */
+  --sv-accent: var(--sv-green);           /* CTAs + interactive accents only */
+  --sv-accent-ink: var(--sv-black);       /* text on green */
+
+  /* ---------------------------------------------------------
+     TYPOGRAPHY
+     Aeonik Pro (CoType Foundry). Brand-sanctioned fallback: Arial.
+     Weights: 100 Thin / 300 Light / 400 Regular / 500 Medium /
+              700 Bold / 900 Black
+     --------------------------------------------------------- */
+  --sv-font-sans: var(--font-aeonik, "Aeonik Pro"), "Aeonik", Arial, "Helvetica Neue", Helvetica, sans-serif;
+
+  --sv-text-display: clamp(3rem, 8vw, 6rem);        /* XL headlines — Regular 400 */
+  --sv-text-h1: clamp(2.5rem, 5vw, 3.5rem);         /* Medium 500 */
+  --sv-text-h2: clamp(2rem, 3.5vw, 2.5rem);         /* Medium 500 */
+  --sv-text-h3: 1.75rem;                            /* Medium 500 */
+  --sv-text-h4: 1.25rem;                            /* Regular 400 */
+  --sv-text-intro: 1.5rem;                          /* intro copy — Regular 400 */
+  --sv-text-body: 1.125rem;                         /* Regular 400 */
+  --sv-text-small: 0.9375rem;                       /* Regular 400 */
+  --sv-text-caption: 0.8125rem;                     /* Light 300 / Regular 400 */
+  --sv-text-stat: clamp(4rem, 10vw, 8rem);          /* stat numerals — Regular 400 */
+
+  --sv-leading-display: 1.02;
+  --sv-leading-heading: 1.1;
+  --sv-leading-intro: 1.35;
+  --sv-leading-body: 1.6;
+
+  --sv-tracking-display: -0.02em;
+  --sv-tracking-heading: -0.01em;
+  --sv-tracking-body: 0;
+  --sv-tracking-caps: 0.04em;   /* the only sanctioned positive tracking (tiny labels) */
+
+  /* ---------------------------------------------------------
+     SPACE  (4px base — use steps, never arbitrary values)
+     --------------------------------------------------------- */
+  --sv-space-1: 0.25rem;   /*   4 */
+  --sv-space-2: 0.5rem;    /*   8 */
+  --sv-space-3: 0.75rem;   /*  12 */
+  --sv-space-4: 1rem;      /*  16 */
+  --sv-space-6: 1.5rem;    /*  24 */
+  --sv-space-8: 2rem;      /*  32 */
+  --sv-space-12: 3rem;     /*  48 */
+  --sv-space-16: 4rem;     /*  64 */
+  --sv-space-24: 6rem;     /*  96 */
+  --sv-space-32: 8rem;     /* 128 */
+  --sv-space-48: 12rem;    /* 192 */
+
+  /* ---------------------------------------------------------
+     LAYOUT
+     --------------------------------------------------------- */
+  --sv-container: 90rem;          /* 1440px content max-width */
+  --sv-gutter: clamp(1.25rem, 4vw, 4rem);
+  --sv-rail: 18rem;               /* editorial left-rail column width */
+  --sv-radius: 0;                 /* the brand is sharp-cornered. Always 0. */
+  --sv-hairline-w: 1px;
+
+  /* ---------------------------------------------------------
+     MOTION
+     Signature ease: exponential ease-out. Motion is confident,
+     brief, and rare. See motion.md.
+     --------------------------------------------------------- */
+  --sv-ease-out: cubic-bezier(0.16, 1, 0.3, 1);      /* signature — entrances, reveals */
+  --sv-ease-inout: cubic-bezier(0.76, 0, 0.24, 1);   /* position/size swaps */
+  --sv-ease-linear: linear;                          /* marquees, progress tracks, scroll scrubs */
+
+  --sv-dur-instant: 100ms;   /* color/opacity hovers */
+  --sv-dur-fast: 200ms;      /* small UI state changes */
+  --sv-dur-base: 300ms;      /* default transitions */
+  --sv-dur-slow: 600ms;      /* reveals, image zooms */
+  --sv-dur-cine: 1000ms;     /* hero entrances, 3D camera moves */
+
+  --sv-stagger: 80ms;        /* max stagger step between siblings */
+  --sv-reveal-distance: 24px;/* translateY for scroll reveals */
+
+  /* ---------------------------------------------------------
+     Z-INDEX
+     --------------------------------------------------------- */
+  --sv-z-nav: 100;
+  --sv-z-overlay: 200;
+  --sv-z-modal: 300;
+}
+
+/* Dark-surface context: apply .sv-dark to any section on
+   black / x-dark backgrounds. Components read these vars.
+   Color AND background are applied here directly so a dark element can
+   never silently inherit black body text (black-on-black) or sit
+   transparent over a light page (white-on-light). Elements that need a
+   transparent dark context (e.g. a nav floating over a hero) override
+   background explicitly. */
+.sv-dark {
+  color: var(--sv-ink);
+  background: var(--sv-surface);
+  --sv-surface: var(--sv-black);
+  --sv-surface-raised: var(--sv-gray-xdark);
+  --sv-surface-sunken: var(--sv-black);
+  --sv-ink: var(--sv-white);
+  --sv-ink-secondary: var(--sv-gray-light);
+  --sv-ink-tertiary: var(--sv-gray-mid);
+  --sv-hairline: var(--sv-gray-dark);
+  --sv-accent: var(--sv-green);
+  --sv-accent-ink: var(--sv-black);
+}
+
+/* Reduced motion: opacity-only, near-instant. Non-negotiable. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --sv-dur-instant: 1ms;
+    --sv-dur-fast: 1ms;
+    --sv-dur-base: 1ms;
+    --sv-dur-slow: 1ms;
+    --sv-dur-cine: 1ms;
+    --sv-reveal-distance: 0px;
+  }
+}

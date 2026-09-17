@@ -1,0 +1,14 @@
+{
+  "name": "@sharevc/design-system",
+  "version": "3.0.0",
+  "private": true,
+  "description": "Share Ventures design language, tokens, implementation kit, and agent skill.",
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sharevc/design-system.git"
+  },
+  "license": "UNLICENSED"
+}

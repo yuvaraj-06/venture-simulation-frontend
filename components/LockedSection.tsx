@@ -96,7 +96,7 @@ export function LockedSectionPaywalled({
   const buttonReady = !pipelineRunning && (hasUrl || !!ventureId);
 
   return (
-    <div style={{ position: 'relative', overflow: 'hidden', height: clampedHeight, borderRadius: 12 }}>
+    <div style={{ position: 'relative', overflow: 'hidden', height: clampedHeight, borderRadius: 0 }}>
       {/* Content (rendered but clipped) */}
       <div
         ref={containerRef}
@@ -120,7 +120,7 @@ export function LockedSectionPaywalled({
           backdropFilter: 'blur(8px)',
           WebkitBackdropFilter: 'blur(8px)',
           border: '1px solid rgba(255,255,255,0.04)',
-          borderRadius: '0 0 12px 12px',
+          borderRadius: 0,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -152,7 +152,7 @@ export function LockedSectionPaywalled({
             background: 'rgba(138, 109, 59,0.08)',
             color: '#8A6D3B',
             border: '1px solid rgba(138, 109, 59,0.2)',
-            borderRadius: 8,
+            borderRadius: 0,
             padding: '12px 28px',
             fontSize: 14,
             fontWeight: 700,
@@ -170,7 +170,7 @@ export function LockedSectionPaywalled({
                 : 'rgba(0,0,0,0.04)',
               color: buttonReady ? '#000000' : '#C8CBCC',
               border: 'none',
-              borderRadius: 8,
+              borderRadius: 0,
               padding: '12px 28px',
               fontSize: 14,
               fontWeight: 700,
@@ -195,7 +195,7 @@ export function LockedSectionPaywalled({
           </button>
         )}
 
-        <div style={{ color: '#939799', fontSize: 11, marginTop: 4 }}>
+        <div style={{ color: '#5E6366', fontSize: 11, marginTop: 4 }}>
           {pipelineRunning
             ? 'Your venture is being analyzed. Unlock will be available shortly.'
             : 'One-time payment to unlock all premium features'}

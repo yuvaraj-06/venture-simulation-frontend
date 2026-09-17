@@ -1,0 +1,25 @@
+/* Example app/globals.css for a Share Ventures Next.js site.
+   Copy into your project as app/globals.css and fix the import paths
+   to wherever you vendored the design system (see nextjs/README.md). */
+
+@import '../design-system/tokens/tokens.css';
+@import '../design-system/nextjs/styles/sv-base.css';
+
+/* Fold the next/font variable into the brand token; Arial remains the
+   sanctioned fallback if the licensed files are missing. */
+:root {
+  --sv-font-sans: var(--font-aeonik, 'Aeonik Pro'), Arial, 'Helvetica Neue', Helvetica, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--sv-surface);
+  color: var(--sv-ink);
+  font: 400 var(--sv-text-body)/var(--sv-leading-body) var(--sv-font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, p, figure { margin: 0; }

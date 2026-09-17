@@ -1,0 +1,91 @@
+/* Aeonik Pro — Share Ventures official typeface (CoType Foundry).
+ * Full family: Air, Thin, Light, Regular, Medium, Semibold, Bold, Black + italics.
+ * WOFF2 first (modern), WOFF fallback. Variable fonts also available:
+ *   aeonikprovf.woff2 (roman), aeonikprovf-italic.woff2 (italic).
+ * Licensed webfonts — see CoType-EULA-WebFonts-Nov24.pdf. Do NOT redistribute
+ * outside licensed Share Ventures surfaces.
+ *
+ * Usage:  font-family: 'Aeonik Pro', Arial, sans-serif;
+ * Adjust the url() paths to wherever these files are served from.
+ */
+
+/* ---- Air (100) ---- */
+@font-face {
+  font-family: 'Aeonik Pro'; font-weight: 100; font-style: normal; font-display: swap;
+  src: url('/fonts/aeonikpro-air.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Aeonik Pro'; font-weight: 100; font-style: italic; font-display: swap;
+  src: url('/fonts/aeonikpro-airitalic.woff2') format('woff2');
+}
+
+/* ---- Thin (200) ---- */
+@font-face {
+  font-family: 'Aeonik Pro'; font-weight: 200; font-style: normal; font-display: swap;
+  src: url('/fonts/aeonikpro-thin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Aeonik Pro'; font-weight: 200; font-style: italic; font-display: swap;
+  src: url('/fonts/aeonikpro-thinitalic.woff2') format('woff2');
+}
+
+/* ---- Light (300) ---- */
+@font-face {
+  font-family: 'Aeonik Pro'; font-weight: 300; font-style: normal; font-display: swap;
+  src: url('/fonts/aeonikpro-light.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Aeonik Pro'; font-weight: 300; font-style: italic; font-display: swap;
+  src: url('/fonts/aeonikpro-lightitalic.woff2') format('woff2');
+}
+
+/* ---- Regular (400) ---- */
+@font-face {
+  font-family: 'Aeonik Pro'; font-weight: 400; font-style: normal; font-display: swap;
+  src: url('/fonts/aeonikpro-regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Aeonik Pro'; font-weight: 400; font-style: italic; font-display: swap;
+  src: url('/fonts/aeonikpro-regularitalic.woff2') format('woff2');
+}
+
+/* ---- Medium (500) ---- */
+@font-face {
+  font-family: 'Aeonik Pro'; font-weight: 500; font-style: normal; font-display: swap;
+  src: url('/fonts/aeonikpro-medium.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Aeonik Pro'; font-weight: 500; font-style: italic; font-display: swap;
+  src: url('/fonts/aeonikpro-mediumitalic.woff2') format('woff2');
+}
+
+/* ---- Semibold (600) ---- */
+@font-face {
+  font-family: 'Aeonik Pro'; font-weight: 600; font-style: normal; font-display: swap;
+  src: url('/fonts/aeonikpro-semibold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Aeonik Pro'; font-weight: 600; font-style: italic; font-display: swap;
+  src: url('/fonts/aeonikpro-semibolditalic.woff2') format('woff2');
+}
+
+/* ---- Bold (700) ---- */
+@font-face {
+  font-family: 'Aeonik Pro'; font-weight: 700; font-style: normal; font-display: swap;
+  src: url('/fonts/aeonikpro-bold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Aeonik Pro'; font-weight: 700; font-style: italic; font-display: swap;
+  src: url('/fonts/aeonikpro-bolditalic.woff2') format('woff2');
+}
+
+/* ---- Black (900) ---- */
+@font-face {
+  font-family: 'Aeonik Pro'; font-weight: 900; font-style: normal; font-display: swap;
+  src: url('/fonts/aeonikpro-black.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Aeonik Pro'; font-weight: 900; font-style: italic; font-display: swap;
+  src: url('/fonts/aeonikpro-blackitalic.woff2') format('woff2');
+}
+

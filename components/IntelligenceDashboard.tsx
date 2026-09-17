@@ -150,7 +150,7 @@ interface HiringData {
 function IntelCard({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   return (
     <div className="card" style={{
-      background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 12, padding: 22,
+      background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: 22,
       ...style
     }}>
       {children}
@@ -161,10 +161,109 @@ function IntelCard({ children, style }: { children: React.ReactNode; style?: Rea
 function IntelLabel({ children }: { children: React.ReactNode }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
-      <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#00D65D', flexShrink: 0 }} />
-      <span style={{ color: '#5E6366', fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600 }}>
+      {/* Section labels are chrome, not live state, so no green dot (canon) */}
+      <span style={{ color: '#5E6366', fontSize: 13, letterSpacing: '0.04em', textTransform: 'uppercase', fontWeight: 500 }}>
         {children}
       </span>
+    </div>
+  );
+}
+
+/* ── Reference-style data primitives ───────────────────────────────────
+   Patterns taken from the Share Ventures venture-profile reference:
+   label on the left, value right-aligned, hairline between rows; metric
+   tiles where the number dominates and a small qualifier caption sits
+   under it; and progress bars that carry an explicit "/ target" marker.
+   These replace the old centered, heavy-weight, green-by-default tiles. */
+
+// Label left, value right, hairline separated. The reference "Domain &
+// subdomain / Industry / Frontier technology / Addressable market" block.
+export function SpecRows({ rows }: { rows: Array<[string, React.ReactNode, string?]> }) {
+  const shown = rows.filter(([, v]) => v !== null && v !== undefined && v !== '' && v !== '--');
+  if (shown.length === 0) return null;
+  return (
+    <div>
+      {shown.map(([label, value, qualifier], i) => (
+        <div
+          key={label}
+          style={{
+            display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 24,
+            padding: '14px 0',
+            borderTop: i === 0 ? 'none' : '1px solid #E8E6E4',
+          }}
+        >
+          <div style={{ color: '#5E6366', fontSize: '0.9375rem', flexShrink: 0 }}>{label}</div>
+          <div style={{ textAlign: 'right', minWidth: 0 }}>
+            <div style={{ color: '#000000', fontSize: '0.9375rem', fontWeight: 400, overflowWrap: 'anywhere' }}>{value}</div>
+            {qualifier && (
+              <div style={{ color: '#5E6366', fontSize: 13, marginTop: 2 }}>{qualifier}</div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Number-dominant tile with a qualifier caption underneath, per the
+// reference "$25.0M / Scenario assumption, not realized value" cards.
+// Green only when the DISPLAYED value is non-zero and genuinely live.
+export function StatTile({
+  label, value, qualifier, live = false,
+}: { label?: string; value: React.ReactNode; qualifier?: string; live?: boolean }) {
+  const shown = String(value ?? '');
+  const n = parseFloat(shown.replace(/[^0-9.-]/g, ''));
+  const zeroish = Number.isFinite(n) && n === 0;
+  return (
+    <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: '18px 20px' }}>
+      {label && (
+        <div style={{ color: '#5E6366', fontSize: 13, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: 10 }}>{label}</div>
+      )}
+      <div style={{
+        color: live && !zeroish ? '#0A7D3C' : '#000000',
+        fontSize: '2rem', fontWeight: 400, lineHeight: 1, letterSpacing: '-0.02em',
+      }}>{value}</div>
+      {qualifier && (
+        <div style={{ color: '#5E6366', fontSize: 13, marginTop: 8, lineHeight: 1.5 }}>{qualifier}</div>
+      )}
+    </div>
+  );
+}
+
+// Progress toward an explicit target: "62% / 90%" with the bar showing
+// overshoot when the value exceeds target (the reference cost-per-run bar).
+export function TargetBar({
+  label, value, target, unit = '', lowerIsBetter = false,
+}: { label: string; value: number; target: number; unit?: string; lowerIsBetter?: boolean }) {
+  const pct = target ? Math.min((value / target) * 100, 100) : 0;
+  const over = lowerIsBetter ? value > target : false;
+  const met = lowerIsBetter ? value <= target : value >= target;
+  return (
+    <div>
+      <div style={{ color: '#5E6366', fontSize: 13, marginBottom: 8 }}>{label}</div>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 10 }}>
+        <span style={{ color: met ? '#0A7D3C' : '#000000', fontSize: '2rem', fontWeight: 400, lineHeight: 1, letterSpacing: '-0.02em' }}>
+          {value}
+        </span>
+        <span style={{ color: '#5E6366', fontSize: '0.9375rem' }}>/ {target}{unit ? ` ${unit}` : ''}</span>
+      </div>
+      <div style={{ height: 4, background: '#E8E6E4', borderRadius: 0, overflow: 'hidden' }}>
+        <div style={{
+          height: '100%', width: `${pct}%`,
+          background: over ? '#2B3033' : (met ? '#00D65D' : '#5E6366'),
+          transition: 'width 600ms cubic-bezier(.16,1,.3,1)',
+        }} />
+      </div>
+    </div>
+  );
+}
+
+// Honest empty state: says what is missing and why, never a fake zero.
+export function NoData({ what, why }: { what: string; why?: string }) {
+  return (
+    <div style={{ borderTop: '1px solid #E8E6E4', paddingTop: 14 }}>
+      <div style={{ color: '#000000', fontSize: '0.9375rem', marginBottom: why ? 4 : 0 }}>{what}</div>
+      {why && <div style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.5 }}>{why}</div>}
     </div>
   );
 }
@@ -172,8 +271,8 @@ function IntelLabel({ children }: { children: React.ReactNode }) {
 function ScoreBar({ value, max = 100, color = '#0A7D3C' }: { value: number; max?: number; color?: string }) {
   const pct = Math.min((value / max) * 100, 100);
   return (
-    <div style={{ height: 4, background: '#F1F4F5', borderRadius: 2, overflow: 'hidden' }}>
-      <div style={{ height: '100%', width: `${pct}%`, background: color, borderRadius: 2 }} />
+    <div style={{ height: 4, background: '#F1F4F5', borderRadius: 0, overflow: 'hidden' }}>
+      <div style={{ height: '100%', width: `${pct}%`, background: color, borderRadius: 0 }} />
     </div>
   );
 }
@@ -183,7 +282,7 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
     return (
       <IntelCard>
         <IntelLabel>Brand DNA</IntelLabel>
-        <p style={{ color: '#939799', fontSize: 13 }}>No brand DNA data available yet. Run a brand analysis to populate this section.</p>
+        <p style={{ color: '#5E6366', fontSize: 13 }}>No brand DNA data available yet. Run a brand analysis to populate this section.</p>
       </IntelCard>
     );
   }
@@ -259,7 +358,7 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
           <IntelLabel>Visual Identity</IntelLabel>
           <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
             {colors.map((c: string, i: number) => (
-              <div key={i} style={{ width: 32, height: 32, borderRadius: 6, background: c, border: '1px solid rgba(255,255,255,0.1)' }} title={c} />
+              <div key={i} style={{ width: 32, height: 32, borderRadius: 0, background: c, border: '1px solid rgba(255,255,255,0.1)' }} title={c} />
             ))}
           </div>
           {vi.typography && <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5 }}>{safeStr(vi.typography)}</p>}
@@ -273,20 +372,20 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
           <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.6 }}>{safeStr(bv.description || bv.tone || bd.voice)}</p>
           {bv.personality && (
             <div style={{ marginTop: 8 }}>
-              <span style={{ color: '#939799', fontSize: 11 }}>Personality: </span>
+              <span style={{ color: '#5E6366', fontSize: 11 }}>Personality: </span>
               <span style={{ color: '#2B3033', fontSize: 13 }}>{safeStr(bv.personality)}</span>
             </div>
           )}
           {bv.language_style && (
             <div style={{ marginTop: 6 }}>
-              <span style={{ color: '#939799', fontSize: 11 }}>Style: </span>
+              <span style={{ color: '#5E6366', fontSize: 11 }}>Style: </span>
               <span style={{ color: '#2B3033', fontSize: 13 }}>{safeStr(bv.language_style)}</span>
             </div>
           )}
           {bdValues.length > 0 && (
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 10 }}>
               {bdValues.map((v: string, i: number) => (
-                <span key={i} style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '3px 10px', borderRadius: 20, fontSize: 12 }}>{v}</span>
+                <span key={i} style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '3px 10px', borderRadius: 0, fontSize: 12 }}>{v}</span>
               ))}
             </div>
           )}
@@ -325,7 +424,7 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
           <IntelLabel>Target Personas</IntelLabel>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             {personas.map((p: any, i: number) => (
-              <div key={i} style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 16, flex: '1 1 250px', minWidth: 200 }}>
+              <div key={i} style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: 16, flex: '1 1 250px', minWidth: 200 }}>
                 <div style={{ color: '#000000', fontSize: 14, fontWeight: 600, marginBottom: 6 }}>{safeStr(p.name || '')}</div>
                 <div style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5 }}>{safeStr(p.description || '')}</div>
               </div>
@@ -341,7 +440,7 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
           {typeof bd.competitive_positioning === 'object' && !Array.isArray(bd.competitive_positioning) ? (
             <div>
               {(bd.competitive_positioning as any).position_statement && <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.6, marginBottom: 10 }}>{String((bd.competitive_positioning as any).position_statement)}</p>}
-              {(bd.competitive_positioning as any).category && <span style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '3px 10px', borderRadius: 20, fontSize: 11, marginRight: 8 }}>{String((bd.competitive_positioning as any).category)}</span>}
+              {(bd.competitive_positioning as any).category && <span style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '3px 10px', borderRadius: 0, fontSize: 11, marginRight: 8 }}>{String((bd.competitive_positioning as any).category)}</span>}
               {Array.isArray((bd.competitive_positioning as any).differentiators) && (
                 <div style={{ marginTop: 10 }}>
                   {((bd.competitive_positioning as any).differentiators as any[]).slice(0, 5).map((d: any, i: number) => (
@@ -380,10 +479,10 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
                 const name = isString ? arch : (arch.name || arch.archetype || 'Archetype');
                 const desc = isString ? '' : (arch.description || arch.fit || '');
                 return (
-                  <div key={i} style={{ background: '#FFFFFF', border: `1px solid ${i === 0 ? 'rgba(10, 125, 60,0.3)' : '#F1F4F5'}`, borderRadius: 8, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
+                  <div key={i} style={{ background: '#FFFFFF', border: `1px solid ${i === 0 ? 'rgba(10, 125, 60,0.3)' : '#F1F4F5'}`, borderRadius: 0, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: desc ? 8 : 0 }}>
                       <div style={{ color: '#000000', fontSize: 15, fontWeight: 700 }}>{name}</div>
-                      <span style={{ background: i === 0 ? 'rgba(10, 125, 60,0.1)' : 'rgba(255,255,255,0.04)', border: `1px solid ${i === 0 ? 'rgba(10, 125, 60,0.3)' : '#F1F4F5'}`, color: i === 0 ? '#0A7D3C' : '#D8DBDC', padding: '2px 10px', borderRadius: 20, fontSize: 10, fontWeight: 600 }}>
+                      <span style={{ background: i === 0 ? 'rgba(10, 125, 60,0.1)' : 'rgba(255,255,255,0.04)', border: `1px solid ${i === 0 ? 'rgba(10, 125, 60,0.3)' : '#F1F4F5'}`, color: i === 0 ? '#0A7D3C' : '#D8DBDC', padding: '2px 10px', borderRadius: 0, fontSize: 10, fontWeight: 600 }}>
                         {i === 0 ? 'Primary' : 'Secondary'}
                       </span>
                     </div>
@@ -395,18 +494,18 @@ function BrandDNASection({ data }: { data: Record<string, unknown> | null }) {
           ) : typeof bd.brand_archetypes === 'object' ? (
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
               {(bd.brand_archetypes as any).primary && (
-                <div style={{ background: '#FFFFFF', border: '1px solid rgba(10, 125, 60,0.3)', borderRadius: 8, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
+                <div style={{ background: '#FFFFFF', border: '1px solid rgba(10, 125, 60,0.3)', borderRadius: 0, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                     <div style={{ color: '#000000', fontSize: 15, fontWeight: 700 }}>{String((bd.brand_archetypes as any).primary)}</div>
-                    <span style={{ background: 'rgba(10, 125, 60,0.1)', border: '1px solid rgba(10, 125, 60,0.3)', color: '#0A7D3C', padding: '2px 10px', borderRadius: 20, fontSize: 10, fontWeight: 600 }}>Primary</span>
+                    <span style={{ background: 'rgba(10, 125, 60,0.1)', border: '1px solid rgba(10, 125, 60,0.3)', color: '#0A7D3C', padding: '2px 10px', borderRadius: 0, fontSize: 10, fontWeight: 600 }}>Primary</span>
                   </div>
                 </div>
               )}
               {(bd.brand_archetypes as any).secondary && (
-                <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
+                <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: 16, flex: '1 1 280px', minWidth: 240 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                     <div style={{ color: '#000000', fontSize: 15, fontWeight: 700 }}>{String((bd.brand_archetypes as any).secondary)}</div>
-                    <span style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #E8E6E4', color: '#5E6366', padding: '2px 10px', borderRadius: 20, fontSize: 10, fontWeight: 600 }}>Secondary</span>
+                    <span style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #E8E6E4', color: '#5E6366', padding: '2px 10px', borderRadius: 0, fontSize: 10, fontWeight: 600 }}>Secondary</span>
                   </div>
                 </div>
               )}
@@ -460,30 +559,52 @@ function SEOGEOSection({ seo, geo }: { seo: Record<string, unknown> | null; geo:
       <IntelCard>
         <IntelLabel>SEO Audit</IntelLabel>
         {!seo || seoScore === 0 ? (
-          <p style={{ color: '#939799', fontSize: 13 }}>No SEO data available.</p>
+          <NoData
+            what="No SEO audit recorded"
+            why="Run an audit against the live domain to populate scores, Core Web Vitals, and passing checks."
+          />
         ) : (
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
-              <div style={{ width: 64, height: 64, borderRadius: '50%', border: `3px solid ${seoScore >= 70 ? '#00D65D' : seoScore >= 40 ? '#8A6D3B' : '#C0392B'}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontSize: 22, fontWeight: 800, color: seoScore >= 70 ? '#0A7D3C' : seoScore >= 40 ? '#8A6D3B' : '#C0392B' }}>{seoScore}</span>
+            {/* Number-dominant score, reference style. Green only when the
+                score is genuinely healthy (>=70), never as decoration. */}
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 6 }}>
+                <span style={{
+                  fontSize: '3rem', fontWeight: 400, lineHeight: 1, letterSpacing: '-0.02em',
+                  color: seoScore >= 70 ? '#0A7D3C' : '#000000',
+                }}>{seoScore}</span>
+                <span style={{ color: '#5E6366', fontSize: '0.9375rem' }}>/ 100</span>
               </div>
-              <div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: '#000000' }}>Overall Score</div>
-                <div style={{ fontSize: 12, color: '#5E6366' }}>{seoScore >= 70 ? 'Good' : seoScore >= 40 ? 'Needs Work' : 'Critical Issues'}</div>
+              <div style={{ color: '#5E6366', fontSize: 13 }}>
+                Overall score · {seoScore >= 70 ? 'good' : seoScore >= 40 ? 'needs work' : 'critical issues'}
               </div>
             </div>
-            {/* Score breakdown */}
-            {[
-              { label: 'Content', val: seo?.content_score },
-              { label: 'On-Page', val: seo?.on_page_score },
-              { label: 'Mobile', val: seo?.mobile_score },
-              { label: 'Page Speed', val: seo?.page_speed },
-            ].filter(s => s.val && typeof s.val !== 'object').map((s, i) => (
-              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', borderBottom: '1px solid #E8E6E4' }}>
-                <span style={{ color: '#5E6366', fontSize: 12 }}>{s.label}</span>
-                <span style={{ color: '#5E6366', fontSize: 12, fontWeight: 600 }}>{String(s.val)}</span>
+            {/* Score breakdown. Lighthouse category scores land here when the
+                live audit ran; the legacy per-area scores still work. */}
+            <SpecRows
+              rows={[
+                ['Performance', seo?.performance_score != null ? String(seo.performance_score) : null],
+                ['Accessibility', seo?.accessibility_score != null ? String(seo.accessibility_score) : null],
+                ['Best practices', seo?.best_practices_score != null ? String(seo.best_practices_score) : null],
+                ['Content', seo?.content_score && typeof seo.content_score !== 'object' ? String(seo.content_score) : null],
+                ['On-page', seo?.on_page_score && typeof seo.on_page_score !== 'object' ? String(seo.on_page_score) : null],
+                ['Mobile', seo?.mobile_score && typeof seo.mobile_score !== 'object' ? String(seo.mobile_score) : null],
+                ['Page speed', seo?.page_speed && typeof seo.page_speed !== 'object' ? String(seo.page_speed) : null],
+              ] as Array<[string, React.ReactNode, string?]>}
+            />
+            {/* Core Web Vitals from the live Lighthouse run */}
+            {seo?.lighthouse_metrics && typeof seo.lighthouse_metrics === 'object' && (
+              <div style={{ marginTop: 20, borderTop: '1px solid #E8E6E4', paddingTop: 16 }}>
+                <div style={{ color: '#5E6366', fontSize: 13, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: 10 }}>Core web vitals</div>
+                <SpecRows
+                  rows={Object.entries(seo.lighthouse_metrics as Record<string, unknown>)
+                    .map(([k, v]) => [k.replace(/_/g, ' ').toUpperCase(), String(v)] as [string, React.ReactNode])}
+                />
+                {seo?.audit_source && (
+                  <div style={{ color: '#5E6366', fontSize: 13, marginTop: 12, lineHeight: 1.5 }}>Source: {String(seo.audit_source)}</div>
+                )}
               </div>
-            ))}
+            )}
             {issues.length > 0 && (
               <div style={{ marginTop: 12 }}>
                 <div style={{ color: '#5E6366', fontSize: 11, textTransform: 'uppercase', marginBottom: 6 }}>Issues ({issues.length})</div>
@@ -500,7 +621,7 @@ function SEOGEOSection({ seo, geo }: { seo: Record<string, unknown> | null; geo:
                 <div style={{ color: '#5E6366', fontSize: 11, textTransform: 'uppercase', marginBottom: 6 }}>Keywords</div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
                   {keywords.slice(0, 10).map((kw: string, i: number) => (
-                    <span key={i} style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#5E6366', padding: '2px 8px', borderRadius: 3, fontSize: 11 }}>{kw}</span>
+                    <span key={i} style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#5E6366', padding: '2px 8px', borderRadius: 0, fontSize: 11 }}>{kw}</span>
                   ))}
                 </div>
               </div>
@@ -511,7 +632,7 @@ function SEOGEOSection({ seo, geo }: { seo: Record<string, unknown> | null; geo:
       <IntelCard>
         <IntelLabel>GEO / AI Search Visibility</IntelLabel>
         {!geo || geoScore === 0 ? (
-          <p style={{ color: '#939799', fontSize: 13 }}>No GEO data available.</p>
+          <p style={{ color: '#5E6366', fontSize: 13 }}>No GEO data available.</p>
         ) : (
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
@@ -559,7 +680,7 @@ function CompetitorsSection({ competitors }: { competitors: IntelligenceData['co
     return (
       <IntelCard>
         <IntelLabel>Competitive Landscape</IntelLabel>
-        <p style={{ color: '#939799', fontSize: 13 }}>No competitor data found. Run a competitor analysis to populate.</p>
+        <p style={{ color: '#5E6366', fontSize: 13 }}>No competitor data found. Run a competitor analysis to populate.</p>
       </IntelCard>
     );
   }
@@ -611,11 +732,11 @@ function CompetitorsSection({ competitors }: { competitors: IntelligenceData['co
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
               <div>
                 <div style={{ color: '#000000', fontWeight: 700, fontSize: 14 }}>{c.name}</div>
-                {domain && <a href={domain.startsWith('http') ? domain : `https://${domain}`} target="_blank" rel="noopener noreferrer" style={{ color: '#939799', fontSize: 11, textDecoration: 'none' }}>{domain} ↗</a>}
+                {domain && <a href={domain.startsWith('http') ? domain : `https://${domain}`} target="_blank" rel="noopener noreferrer" style={{ color: '#5E6366', fontSize: 11, textDecoration: 'none' }}>{domain} ↗</a>}
               </div>
               <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                {similarity > 0 && <span style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '2px 8px', borderRadius: 3, fontSize: 10 }}>{similarity}% similar</span>}
-                {threat && <span style={{ background: `${threatColor}15`, border: `1px solid ${threatColor}44`, color: threatColor, padding: '2px 8px', borderRadius: 3, fontSize: 10 }}>{threat}</span>}
+                {similarity > 0 && <span style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '2px 8px', borderRadius: 0, fontSize: 10 }}>{similarity}% similar</span>}
+                {threat && <span style={{ background: `${threatColor}15`, border: `1px solid ${threatColor}44`, color: threatColor, padding: '2px 8px', borderRadius: 0, fontSize: 10 }}>{threat}</span>}
               </div>
             </div>
             {desc && <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5, marginBottom: 10 }}>{desc}</p>}
@@ -650,6 +771,9 @@ function PatentsGrantsSection({ patents, grants }: { patents: Record<string, unk
   const grantList = Array.isArray((grants as any)?.grants) ? (grants as any).grants : [];
   const whitespaces = Array.isArray((patents as any)?.white_spaces) ? (patents as any).white_spaces : [];
   const landscape = (patents as any)?.technology_landscape;
+  // The patents record carries researched IP areas even when no patent has
+  // been granted yet. Surface that real data instead of a dead end.
+  const ipAreas = Array.isArray((patents as any)?.relevant_ip_areas) ? (patents as any).relevant_ip_areas : [];
   const [showAllPatents, setShowAllPatents] = useState(false);
   const [showAllGrants, setShowAllGrants] = useState(false);
   const INITIAL_SHOW = 5;
@@ -663,7 +787,20 @@ function PatentsGrantsSection({ patents, grants }: { patents: Record<string, unk
       <IntelCard>
         <IntelLabel>Patents ({patentList.length})</IntelLabel>
         {patentList.length === 0 ? (
-          <p style={{ color: '#939799', fontSize: 13 }}>No patent data available.</p>
+          <>
+            {ipAreas.length > 0 && (
+              <div style={{ marginBottom: 16 }}>
+                <div style={{ color: '#5E6366', fontSize: 13, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: 10 }}>Patentable areas identified ({ipAreas.length})</div>
+                {ipAreas.map((a: string, i: number) => (
+                  <div key={i} style={{ color: '#5E6366', fontSize: '0.9375rem', padding: '8px 0', lineHeight: 1.6, borderTop: i === 0 ? 'none' : '1px solid #F1F4F5' }}>{a}</div>
+                ))}
+              </div>
+            )}
+            <NoData
+              what="No filed or granted patents"
+              why="Patent search returned no filings for this venture. The areas above are research candidates, not filings."
+            />
+          </>
         ) : (
           <div>
             {landscape && typeof landscape === 'string' && <p style={{ color: '#5E6366', fontSize: 12, marginBottom: 12, lineHeight: 1.5 }}>{landscape.slice(0, 200)}</p>}
@@ -673,7 +810,7 @@ function PatentsGrantsSection({ patents, grants }: { patents: Record<string, unk
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
                   {p.patent_number && <span style={{ color: '#0A7D3C', fontSize: 11 }}>{p.patent_number}</span>}
                   {p.assignee && p.assignee !== 'Not specified' && <span style={{ color: '#5E6366', fontSize: 11 }}>· {p.assignee}</span>}
-                  {p.filing_date && <span style={{ color: '#939799', fontSize: 11 }}>· Filed {p.filing_date}</span>}
+                  {p.filing_date && <span style={{ color: '#5E6366', fontSize: 11 }}>· Filed {p.filing_date}</span>}
                 </div>
                 {p.abstract && <p style={{ color: '#5E6366', fontSize: 11, lineHeight: 1.4, margin: 0 }}>{String(p.abstract).slice(0, 120)}...</p>}
                 {p.url && <a href={p.url} target="_blank" rel="noopener noreferrer" style={{ color: '#0A7D3C', fontSize: 11, textDecoration: 'none' }}>View patent ↗</a>}
@@ -682,7 +819,7 @@ function PatentsGrantsSection({ patents, grants }: { patents: Record<string, unk
             {patentList.length > INITIAL_SHOW && (
               <button
                 onClick={() => setShowAllPatents(!showAllPatents)}
-                style={{ background: 'rgba(10, 125, 60,0.06)', border: '1px solid rgba(10, 125, 60,0.15)', color: '#0A7D3C', padding: '8px 16px', borderRadius: 6, fontSize: 12, cursor: 'pointer', width: '100%', marginTop: 10, fontWeight: 500 }}
+                style={{ background: 'rgba(10, 125, 60,0.06)', border: '1px solid rgba(10, 125, 60,0.15)', color: '#0A7D3C', padding: '8px 16px', borderRadius: 0, fontSize: 12, cursor: 'pointer', width: '100%', marginTop: 10, fontWeight: 500 }}
               >
                 {showAllPatents ? 'Show less' : `View all ${patentList.length} patents ↓`}
               </button>
@@ -706,7 +843,7 @@ function PatentsGrantsSection({ patents, grants }: { patents: Record<string, unk
       <IntelCard>
         <IntelLabel>Open Grants ({grantList.length})</IntelLabel>
         {grantList.length === 0 ? (
-          <p style={{ color: '#939799', fontSize: 13 }}>No grant data available.</p>
+          <p style={{ color: '#5E6366', fontSize: 13 }}>No grant data available.</p>
         ) : (
           <div>
             {visibleGrants.map((g: any, i: number) => (
@@ -715,7 +852,7 @@ function PatentsGrantsSection({ patents, grants }: { patents: Record<string, unk
                   <div style={{ color: '#000000', fontSize: 13, fontWeight: 600 }}>{g.name || 'Unnamed Grant'}</div>
                   {g.url && (
                     <a href={g.url} target="_blank" rel="noopener noreferrer"
-                      style={{ background: 'rgba(10, 125, 60,0.1)', border: '1px solid rgba(10, 125, 60,0.3)', color: '#0A7D3C', padding: '3px 10px', borderRadius: 4, fontSize: 11, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                      style={{ background: 'rgba(10, 125, 60,0.1)', border: '1px solid rgba(10, 125, 60,0.3)', color: '#0A7D3C', padding: '3px 10px', borderRadius: 0, fontSize: 11, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
                       Apply ↗
                     </a>
                   )}
@@ -728,17 +865,17 @@ function PatentsGrantsSection({ patents, grants }: { patents: Record<string, unk
                       Deadline: {safeStr(g.deadline)}
                     </span>
                   )}
-                  {g.category && <span style={{ background: 'rgba(255,255,255,0.04)', color: '#5E6366', padding: '1px 6px', borderRadius: 3, fontSize: 10 }}>{g.category}</span>}
+                  {g.category && <span style={{ background: 'rgba(255,255,255,0.04)', color: '#5E6366', padding: '1px 6px', borderRadius: 0, fontSize: 10 }}>{g.category}</span>}
                 </div>
                 {g.description && <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.4, margin: 0 }}>{String(g.description).slice(0, 150)}{g.description.length > 150 ? '...' : ''}</p>}
-                {g.eligibility && <p style={{ color: '#939799', fontSize: 11, lineHeight: 1.4, margin: '4px 0 0' }}>Eligibility: {String(g.eligibility).slice(0, 100)}</p>}
-                {g.relevance_score && <div style={{ marginTop: 4 }}><span style={{ background: 'rgba(0, 214, 93,0.08)', border: '1px solid rgba(0, 214, 93,0.2)', color: '#0A7D3C', padding: '1px 6px', borderRadius: 3, fontSize: 10 }}>{g.relevance_score}% relevant</span></div>}
+                {g.eligibility && <p style={{ color: '#5E6366', fontSize: 11, lineHeight: 1.4, margin: '4px 0 0' }}>Eligibility: {String(g.eligibility).slice(0, 100)}</p>}
+                {g.relevance_score && <div style={{ marginTop: 4 }}><span style={{ background: 'rgba(0, 214, 93,0.08)', border: '1px solid rgba(0, 214, 93,0.2)', color: '#0A7D3C', padding: '1px 6px', borderRadius: 0, fontSize: 10 }}>{g.relevance_score}% relevant</span></div>}
               </div>
             ))}
             {grantList.length > INITIAL_SHOW && (
               <button
                 onClick={() => setShowAllGrants(!showAllGrants)}
-                style={{ background: 'rgba(255,204,0,0.06)', border: '1px solid rgba(255,204,0,0.15)', color: '#8A6D3B', padding: '8px 16px', borderRadius: 6, fontSize: 12, cursor: 'pointer', width: '100%', marginTop: 10, fontWeight: 500 }}
+                style={{ background: 'rgba(255,204,0,0.06)', border: '1px solid rgba(255,204,0,0.15)', color: '#8A6D3B', padding: '8px 16px', borderRadius: 0, fontSize: 12, cursor: 'pointer', width: '100%', marginTop: 10, fontWeight: 500 }}
               >
                 {showAllGrants ? 'Show less' : `View all ${grantList.length} grants ↓`}
               </button>
@@ -761,7 +898,10 @@ function SocialSection({ social }: { social: IntelligenceData['social'] }) {
     return (
       <IntelCard>
         <IntelLabel>Social Analytics</IntelLabel>
-        <p style={{ color: '#939799', fontSize: 13 }}>No social analytics data available. Run social analysis to populate.</p>
+        <NoData
+          what="No social profiles connected"
+          why="No social handles were found for this venture, so there is nothing to measure yet. Connect an account to populate reach and engagement."
+        />
       </IntelCard>
     );
   }
@@ -782,19 +922,19 @@ function SocialSection({ social }: { social: IntelligenceData['social'] }) {
               { label: 'MoM Growth', value: `${semrush.monthly_growth || 0}%`, color: '#8A6D3B' },
               { label: 'Top Country', value: semrush.top_country || '--', color: '#000000' },
             ].map((m) => (
-              <div key={m.label} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '10px 12px' }}>
-                <div style={{ color: '#939799', fontSize: 10, marginBottom: 4 }}>{m.label}</div>
+              <div key={m.label} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 0, padding: '10px 12px' }}>
+                <div style={{ color: '#5E6366', fontSize: 10, marginBottom: 4 }}>{m.label}</div>
                 <div style={{ color: m.color, fontWeight: 700, fontSize: 16 }}>{String(m.value)}</div>
               </div>
             ))}
           </div>
           {Object.keys(trafficSource).length > 0 && (
             <div>
-              <div style={{ color: '#939799', fontSize: 10, marginBottom: 8 }}>TRAFFIC SOURCES</div>
+              <div style={{ color: '#5E6366', fontSize: 10, marginBottom: 8 }}>TRAFFIC SOURCES</div>
               {Object.entries(trafficSource).sort((a, b) => b[1] - a[1]).map(([src, pct]) => (
                 <div key={src} style={{ display: 'grid', gridTemplateColumns: '90px 1fr 32px', gap: 8, alignItems: 'center', marginBottom: 6 }}>
                   <span style={{ color: '#5E6366', fontSize: 11, textTransform: 'capitalize' }}>{src}</span>
-                  <div style={{ height: 3, background: '#FFFFFF', borderRadius: 2, overflow: 'hidden' }}>
+                  <div style={{ height: 3, background: '#FFFFFF', borderRadius: 0, overflow: 'hidden' }}>
                     <div style={{ height: '100%', width: `${pct}%`, background: '#0A7D3C' }} />
                   </div>
                   <span style={{ color: '#0A7D3C', fontSize: 11, textAlign: 'right' }}>{pct}%</span>
@@ -810,15 +950,15 @@ function SocialSection({ social }: { social: IntelligenceData['social'] }) {
           {Object.entries(links).filter(([, v]) => v).map(([platform, url]) => (
             <a key={platform} href={url} target="_blank" rel="noopener noreferrer" style={{
               display: 'flex', alignItems: 'center', gap: 10,
-              background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 6, padding: '10px 14px',
+              background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: '10px 14px',
               textDecoration: 'none', transition: 'border-color 0.15s',
             }}>
               <span style={{ color: '#0A7D3C', fontSize: 13, fontWeight: 600, textTransform: 'capitalize', width: 80 }}>{platform}</span>
-              <span style={{ color: '#939799', fontSize: 12, wordBreak: 'break-all' }}>{url}</span>
+              <span style={{ color: '#5E6366', fontSize: 12, wordBreak: 'break-all' }}>{url}</span>
             </a>
           ))}
           {Object.values(links).filter(Boolean).length === 0 && (
-            <p style={{ color: '#939799', fontSize: 13 }}>No social profiles configured.</p>
+            <p style={{ color: '#5E6366', fontSize: 13 }}>No social profiles configured.</p>
           )}
         </div>
       </IntelCard>
@@ -831,7 +971,7 @@ function GoalsSection({ goals }: { goals: GoalsData | null }) {
     return (
       <IntelCard>
         <IntelLabel>Goals Overview</IntelLabel>
-        <p style={{ color: '#939799', fontSize: 13 }}>No goals data available.</p>
+        <p style={{ color: '#5E6366', fontSize: 13 }}>No goals data available.</p>
       </IntelCard>
     );
   }
@@ -842,18 +982,18 @@ function GoalsSection({ goals }: { goals: GoalsData | null }) {
         <IntelCard key={i}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
             <IntelLabel>{ws.name}</IntelLabel>
-            <span style={{ color: '#939799', fontSize: 12 }}>{ws.goals?.length || 0} goals</span>
+            <span style={{ color: '#5E6366', fontSize: 12 }}>{ws.goals?.length || 0} goals</span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             {(ws.goals || []).slice(0, 5).map((g, j) => (
               <div key={j} style={{ display: 'grid', gridTemplateColumns: '1fr 80px 80px', gap: 8, alignItems: 'center', padding: '6px 0', borderBottom: '1px solid #FFFFFF' }}>
                 <span style={{ color: '#5E6366', fontSize: 12 }}>{g.name}</span>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ color: '#939799', fontSize: 10 }}>PERF</div>
+                  <div style={{ color: '#5E6366', fontSize: 10 }}>PERF</div>
                   <div style={{ color: g.performanceScore >= 60 ? '#0A7D3C' : g.performanceScore >= 30 ? '#8A6D3B' : '#C0392B', fontSize: 12, fontWeight: 700 }}>{g.performanceScore}</div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ color: '#939799', fontSize: 10 }}>EXEC</div>
+                  <div style={{ color: '#5E6366', fontSize: 10 }}>EXEC</div>
                   <div style={{ color: '#0A7D3C', fontSize: 12, fontWeight: 700 }}>{g.executionScore}</div>
                 </div>
               </div>
@@ -876,8 +1016,8 @@ function InvestorSection({ investors }: { investors: IntelligenceData['investors
           <IntelLabel>Current Investors</IntelLabel>
           <div style={{ display: 'flex', flex: 1, gap: 10, flexWrap: 'wrap' }}>
             {coInvestors.map((inv, i) => (
-              <div key={i} style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 6, padding: '8px 14px', display: 'flex', alignItems: 'center', gap: 8 }}>
-                {inv.is_lead && <span style={{ background: 'rgba(10, 125, 60,0.1)', color: '#0A7D3C', border: '1px solid rgba(10, 125, 60,0.2)', borderRadius: 3, padding: '1px 6px', fontSize: 9, fontWeight: 700 }}>LEAD</span>}
+              <div key={i} style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: '8px 14px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                {inv.is_lead && <span style={{ background: 'rgba(10, 125, 60,0.1)', color: '#0A7D3C', border: '1px solid rgba(10, 125, 60,0.2)', borderRadius: 0, padding: '1px 6px', fontSize: 9, fontWeight: 700 }}>LEAD</span>}
                 <span style={{ color: '#5E6366', fontSize: 13 }}>{inv.name}</span>
               </div>
             ))}
@@ -893,7 +1033,7 @@ function InvestorSection({ investors }: { investors: IntelligenceData['investors
               <thead>
                 <tr style={{ borderBottom: '1px solid #E8E6E4' }}>
                   {['Name', 'Firm', 'Stage', 'Amount', 'Status'].map(h => (
-                    <th key={h} style={{ color: '#939799', padding: '6px 10px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{h}</th>
+                    <th key={h} style={{ color: '#5E6366', padding: '6px 10px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -909,7 +1049,7 @@ function InvestorSection({ investors }: { investors: IntelligenceData['investors
                         background: lead.status === 'committed' ? 'rgba(0, 214, 93,0.1)' : 'rgba(138, 109, 59,0.1)',
                         color: lead.status === 'committed' ? '#0A7D3C' : '#8A6D3B',
                         border: `1px solid ${lead.status === 'committed' ? 'rgba(0, 214, 93,0.3)' : 'rgba(138, 109, 59,0.3)'}`,
-                        padding: '2px 8px', borderRadius: 3, fontSize: 10, fontWeight: 700
+                        padding: '2px 8px', borderRadius: 0, fontSize: 10, fontWeight: 700
                       }}>{lead.status || 'active'}</span>
                     </td>
                   </tr>
@@ -921,7 +1061,7 @@ function InvestorSection({ investors }: { investors: IntelligenceData['investors
       ) : (
         <IntelCard>
           <IntelLabel>Investor Pipeline</IntelLabel>
-          <p style={{ color: '#939799', fontSize: 13 }}>No investor pipeline data. Leads will appear here as they are added.</p>
+          <p style={{ color: '#5E6366', fontSize: 13 }}>No investor pipeline data. Leads will appear here as they are added.</p>
         </IntelCard>
       )}
     </div>
@@ -1062,7 +1202,7 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
         display: 'flex', alignItems: 'center', gap: 12, background: '#FFFFFF',
       }}>
         <div style={{
-          width: 32, height: 32, borderRadius: 8,
+          width: 32, height: 32, borderRadius: 0,
           background: `${item.sourceColor || '#0A7D3C'}15`,
           border: `1px solid ${item.sourceColor || '#0A7D3C'}33`,
           display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
@@ -1071,13 +1211,13 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
           <div style={{ color: '#000000', fontSize: 13, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {item.goalName || item.title || item.headline?.split(':')[0] || item.subject || item.source || 'Agent Chat'}
           </div>
-          <div style={{ color: '#939799', fontSize: 11 }}>
+          <div style={{ color: '#5E6366', fontSize: 11 }}>
             {item.source || item.chatSection || ''}{item.workstream ? ` · ${item.workstream}` : ''}{sessionId ? ` · ${sessionId.slice(0, 12)}` : ' · ClawAPI'}
           </div>
         </div>
         <button onClick={onClose} style={{
           background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#5E6366',
-          width: 28, height: 28, borderRadius: 6, cursor: 'pointer',
+          width: 28, height: 28, borderRadius: 0, cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
         }}><Glyph name="cross" /></button>
       </div>
@@ -1104,9 +1244,9 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
                   ol: ({children}) => <ol style={{paddingLeft: 18, margin: '6px 0'}}>{children}</ol>,
                   li: ({children}) => <li style={{margin: '3px 0', color: '#2B3033'}}>{children}</li>,
                   code: ({children, className}) => className ? (
-                    <pre style={{background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 6, padding: '10px 12px', margin: '6px 0', overflowX: 'auto', fontSize: 12, color: '#5E6366'}}><code>{children}</code></pre>
+                    <pre style={{background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: '10px 12px', margin: '6px 0', overflowX: 'auto', fontSize: 12, color: '#5E6366'}}><code>{children}</code></pre>
                   ) : (
-                    <code style={{background: '#F1F4F5', padding: '1px 5px', borderRadius: 3, fontSize: 12, color: '#0A7D3C'}}>{children}</code>
+                    <code style={{background: '#F1F4F5', padding: '1px 5px', borderRadius: 0, fontSize: 12, color: '#0A7D3C'}}>{children}</code>
                   ),
                   hr: () => <hr style={{border: 'none', borderTop: '1px solid #F1F4F5', margin: '10px 0'}} />,
                   a: ({href, children}) => <a href={href} target="_blank" rel="noopener noreferrer" style={{color: '#0A7D3C', textDecoration: 'underline'}}>{children}</a>,
@@ -1121,7 +1261,7 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
         ))}
         {loading && (
           <div style={{ alignSelf: 'flex-start' }}>
-            <div style={{ background: '#F7F8F9', color: '#0A7D3C', padding: '10px 14px', borderRadius: '12px 12px 12px 4px', fontSize: 13, display: 'flex', gap: 4 }}>
+            <div style={{ background: '#F7F8F9', color: '#0A7D3C', padding: '10px 14px', borderRadius: 0, fontSize: 13, display: 'flex', gap: 4 }}>
               <span className="dot-pulse">●</span> OS is thinking...
             </div>
           </div>
@@ -1138,12 +1278,12 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
           placeholder="Give instructions to the agent..."
           style={{
             flex: 1, background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#000000',
-            padding: '10px 14px', borderRadius: 8, fontSize: 13, outline: 'none',
+            padding: '10px 14px', borderRadius: 0, fontSize: 13, outline: 'none',
           }}
         />
         <button onClick={handleSend} disabled={loading} style={{
           background: loading ? '#E8E6E4' : '#0A7D3C', color: '#000000', border: 'none',
-          padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 700,
+          padding: '10px 16px', borderRadius: 0, fontSize: 13, fontWeight: 700,
           cursor: loading ? 'wait' : 'pointer', flexShrink: 0,
         }}>Send</button>
       </div>
@@ -1153,7 +1293,7 @@ function ActionChatPanel({ item, onClose, ventureId }: { item: any; onClose: () 
         {quickActions.map((q: string) => (
           <button key={q} onClick={() => { setInput(q); }} style={{
             background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#5E6366',
-            padding: '5px 12px', borderRadius: 6, fontSize: 11, cursor: 'pointer',
+            padding: '5px 12px', borderRadius: 0, fontSize: 11, cursor: 'pointer',
             transition: 'all 0.15s',
           }}>{q}</button>
         ))}
@@ -1168,7 +1308,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
 
   if (!updates?.updates || Object.keys(updates.updates).length === 0) {
     return (
-      <div style={{ color: '#939799', fontSize: 13, padding: '24px 0', textAlign: 'center' }}>
+      <div style={{ color: '#5E6366', fontSize: 13, padding: '24px 0', textAlign: 'center' }}>
         No updates available
       </div>
     );
@@ -1199,7 +1339,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-        <div style={{ color: '#939799', fontSize: 11, fontFamily: 'monospace' }}>
+        <div style={{ color: '#5E6366', fontSize: 11, fontFamily: 'monospace' }}>
           {totalUpdates} total updates across {Object.keys(updates.updates).length} workstreams
         </div>
         <button
@@ -1210,7 +1350,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
             else setExpandedWorkstreams(new Set(allWs));
           }}
           style={{
-            background: 'none', border: '1px solid #E8E6E4', borderRadius: 4, color: '#939799',
+            background: 'none', border: '1px solid #E8E6E4', borderRadius: 0, color: '#5E6366',
             fontSize: 10, padding: '3px 8px', cursor: 'pointer', fontFamily: 'monospace', letterSpacing: '0.08em'
           }}
         >
@@ -1241,13 +1381,13 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
               onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.background = '#FFFFFF'}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 3, height: 16, background: color, borderRadius: 2 }} />
+                <div style={{ width: 3, height: 16, background: color, borderRadius: 0 }} />
                 <span style={{ color, fontSize: 11, fontFamily: 'monospace', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 600 }}>
                   {workstream}
                 </span>
-                <span style={{ color: '#939799', fontSize: 10, fontFamily: 'monospace' }}>· {items.length} update{items.length !== 1 ? 's' : ''}</span>
+                <span style={{ color: '#5E6366', fontSize: 10, fontFamily: 'monospace' }}>· {items.length} update{items.length !== 1 ? 's' : ''}</span>
               </div>
-              <span style={{ color: '#939799', fontSize: 12, transition: 'transform 0.15s', transform: isExpanded ? 'rotate(180deg)' : 'none', display: 'inline-block' }}>
+              <span style={{ color: '#5E6366', fontSize: 12, transition: 'transform 0.15s', transform: isExpanded ? 'rotate(180deg)' : 'none', display: 'inline-block' }}>
                 ▾
               </span>
             </div>
@@ -1257,7 +1397,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
               <div style={{
                 border: '1px solid #E8E6E4',
                 borderTop: 'none',
-                borderRadius: '0 0 8px 8px',
+                borderRadius: 0,
                 overflow: 'hidden',
               }}>
                 {items.map((item: any, i: number) => {
@@ -1284,7 +1424,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
                             <span style={{
                               background: 'rgba(10, 125, 60,0.08)', color: '#0A7D3C',
                               border: '1px solid rgba(10, 125, 60,0.2)',
-                              borderRadius: 4, padding: '3px 8px', fontSize: 10,
+                              borderRadius: 0, padding: '3px 8px', fontSize: 10,
                               fontFamily: 'monospace', letterSpacing: '0.04em', maxWidth: 280,
                               overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                             }} title={goalName}>
@@ -1295,7 +1435,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
                             <span style={{
                               background: 'rgba(255,200,0,0.08)', color: '#8A6D3B',
                               border: '1px solid rgba(255,200,0,0.2)',
-                              borderRadius: 4, padding: '3px 8px', fontSize: 10,
+                              borderRadius: 0, padding: '3px 8px', fontSize: 10,
                               fontFamily: 'monospace', letterSpacing: '0.04em', maxWidth: 240,
                               overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                             }} title={msName}>
@@ -1306,7 +1446,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
                             <span style={{
                               background: 'rgba(0, 214, 93,0.08)', color: '#0A7D3C',
                               border: '1px solid rgba(0, 214, 93,0.2)',
-                              borderRadius: 4, padding: '3px 8px', fontSize: 10,
+                              borderRadius: 0, padding: '3px 8px', fontSize: 10,
                               fontFamily: 'monospace', letterSpacing: '0.04em', maxWidth: 240,
                               overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                             }} title={taskName}>
@@ -1329,7 +1469,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
                               <img
                                 src={img}
                                 alt="screenshot"
-                                style={{ height: 60, width: 'auto', borderRadius: 4, border: '1px solid #E8E6E4', objectFit: 'cover' }}
+                                style={{ height: 60, width: 'auto', borderRadius: 0, border: '1px solid #E8E6E4', objectFit: 'cover' }}
                                 onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
                               />
                             </a>
@@ -1346,7 +1486,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
                             return (
                               <a key={j} href={link} target="_blank" rel="noreferrer" style={{
                                 display: 'inline-flex', alignItems: 'center', gap: 4,
-                                background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 4,
+                                background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0,
                                 color: '#0A7D3C', fontSize: 10, padding: '3px 8px',
                                 textDecoration: 'none', fontFamily: 'monospace',
                               }}>
@@ -1356,7 +1496,7 @@ function ClawOSUpdatesSection({ updates }: { updates: UpdatesData | null }) {
                           })}
                         </div>
                         {item.date_id && (
-                          <span style={{ color: '#939799', fontSize: 10, fontFamily: 'monospace' }}>
+                          <span style={{ color: '#5E6366', fontSize: 10, fontFamily: 'monospace' }}>
                             {item.date_id}
                           </span>
                         )}
@@ -1610,7 +1750,7 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
         <div style={{ textAlign: 'center', padding: '40px 0' }}>
           <div style={{ fontSize: 32, marginBottom: 12, color: '#0A7D3C' }}><Glyph name="check" size={32} /></div>
           <div style={{ color: '#0A7D3C', fontSize: 15, fontWeight: 600, marginBottom: 4 }}>All Clear</div>
-          <p style={{ color: '#939799', fontSize: 13 }}>No pending actions or decisions required right now.</p>
+          <p style={{ color: '#5E6366', fontSize: 13 }}>No pending actions or decisions required right now.</p>
         </div>
       </IntelCard>
     );
@@ -1649,7 +1789,7 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
             background: activeFilter === f.key ? `${f.color}12` : '#FFFFFF',
             border: `1px solid ${activeFilter === f.key ? `${f.color}44` : '#F1F4F5'}`,
             color: activeFilter === f.key ? f.color : '#939799',
-            padding: '8px 16px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
+            padding: '8px 16px', borderRadius: 0, fontSize: 12, cursor: 'pointer',
             fontWeight: activeFilter === f.key ? 700 : 400,
             display: 'flex', alignItems: 'center', gap: 8,
           }}>
@@ -1657,7 +1797,7 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
             {f.label}
             <span style={{
               background: `${f.color}18`, color: f.color,
-              padding: '1px 8px', borderRadius: 10, fontSize: 11, fontWeight: 700,
+              padding: '1px 8px', borderRadius: 0, fontSize: 11, fontWeight: 700,
             }}>{f.count}</span>
           </button>
         ))}
@@ -1676,7 +1816,7 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
             <div key={item.id} style={{
               background: '#FFFFFF',
               border: `1px solid ${item.actionType === 'action' ? 'rgba(192, 57, 43,0.2)' : '#F1F4F5'}`,
-              borderRadius: 10,
+              borderRadius: 0,
               overflow: 'hidden',
               transition: 'border-color 0.15s',
             }}>
@@ -1691,7 +1831,7 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
               >
                 {/* Source icon */}
                 <div style={{
-                  width: 36, height: 36, borderRadius: 8,
+                  width: 36, height: 36, borderRadius: 0,
                   background: `${item.sourceColor}15`,
                   border: `1px solid ${item.sourceColor}33`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -1714,13 +1854,13 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
                     <span style={{
                       background: 'rgba(192, 57, 43,0.1)', color: '#C0392B',
                       border: '1px solid rgba(192, 57, 43,0.3)',
-                      padding: '3px 8px', borderRadius: 4, fontSize: 10, fontWeight: 700,
+                      padding: '3px 8px', borderRadius: 0, fontSize: 10, fontWeight: 700,
                     }}>Urgent</span>
                   )}
                   <button onClick={(e) => { e.stopPropagation(); onAction?.(item); }} style={{
                     background: btnStyle.bg, color: btnStyle.text,
                     border: item.actionType === 'action' ? 'none' : `1px solid ${btnStyle.text}33`,
-                    padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700,
+                    padding: '6px 16px', borderRadius: 0, fontSize: 12, fontWeight: 700,
                     cursor: 'pointer', whiteSpace: 'nowrap',
                   }}>{item.actionLabel}</button>
                   <span style={{ color: '#5E6366', fontSize: 16, transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }}>▾</span>
@@ -1742,7 +1882,7 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
                   {/* Actionable steps */}
                   {item.details && item.details.length > 0 && (
                     <div style={{ marginBottom: 14 }}>
-                      <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8, fontWeight: 600 }}>
+                      <div style={{ color: '#5E6366', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8, fontWeight: 600 }}>
                         {item.actionType === 'action' ? 'REQUIRED ACTIONS' : item.actionType === 'review' ? 'KEY POINTS TO REVIEW' : 'SUMMARY'}
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -1750,13 +1890,13 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
                           <div key={i} style={{
                             display: 'flex', gap: 10, alignItems: 'flex-start',
                             background: '#FFFFFF', border: '1px solid #F7F8F9',
-                            borderRadius: 6, padding: '10px 14px',
+                            borderRadius: 0, padding: '10px 14px',
                           }}>
                             <span style={{
                               background: item.actionType === 'action' ? 'rgba(192, 57, 43,0.12)' : 'rgba(10, 125, 60,0.08)',
                               color: item.actionType === 'action' ? '#C0392B' : '#0A7D3C',
                               border: `1px solid ${item.actionType === 'action' ? 'rgba(192, 57, 43,0.25)' : 'rgba(10, 125, 60,0.2)'}`,
-                              borderRadius: 4, padding: '1px 7px', fontSize: 11, fontWeight: 700,
+                              borderRadius: 0, padding: '1px 7px', fontSize: 11, fontWeight: 700,
                               flexShrink: 0, minWidth: 22, textAlign: 'center',
                             }}>{i + 1}</span>
                             <span style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.5 }}>{action}</span>
@@ -1770,17 +1910,17 @@ function ActivityFeedSection({ feed, updates, goals, seo, geo, storedFeed, onAct
                   {(item.goalImpact || item.valuationAtStake) && (
                     <div style={{
                       display: 'flex', gap: 16, padding: '10px 14px',
-                      background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6,
+                      background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 0,
                     }}>
                       {item.goalImpact && (
                         <div>
-                          <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.05em' }}>GOAL IMPACT</div>
+                          <div style={{ color: '#5E6366', fontSize: 10, letterSpacing: '0.05em' }}>GOAL IMPACT</div>
                           <div style={{ color: '#0A7D3C', fontSize: 13, fontWeight: 600, marginTop: 2 }}>{item.goalImpact}</div>
                         </div>
                       )}
                       {item.valuationAtStake && (
                         <div>
-                          <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.05em' }}>VALUATION AT STAKE</div>
+                          <div style={{ color: '#5E6366', fontSize: 10, letterSpacing: '0.05em' }}>VALUATION AT STAKE</div>
                           <div style={{ color: '#8A6D3B', fontSize: 13, fontWeight: 600, marginTop: 2 }}>{item.valuationAtStake}</div>
                         </div>
                       )}
@@ -1967,7 +2107,7 @@ function HiringSection({ hiring }: { hiring: HiringData | null }) {
     return (
       <IntelCard>
         <IntelLabel>Team & Hiring</IntelLabel>
-        <p style={{ color: '#939799', fontSize: 13 }}>No hiring data available.</p>
+        <p style={{ color: '#5E6366', fontSize: 13 }}>No hiring data available.</p>
       </IntelCard>
     );
   }
@@ -1989,7 +2129,7 @@ function HiringSection({ hiring }: { hiring: HiringData | null }) {
               )}
               <div>
                 <div style={{ color: '#000000', fontSize: 13, fontWeight: 600 }}>{emp.name}</div>
-                <div style={{ color: '#939799', fontSize: 11 }}>{emp.title}</div>
+                <div style={{ color: '#5E6366', fontSize: 11 }}>{emp.title}</div>
               </div>
               {emp.link && (
                 <a href={emp.link} target="_blank" rel="noopener noreferrer" style={{ marginLeft: 'auto', color: '#0A7D3C', fontSize: 11 }}>LinkedIn</a>
@@ -2002,11 +2142,11 @@ function HiringSection({ hiring }: { hiring: HiringData | null }) {
       <IntelCard>
         <IntelLabel>Open Roles ({hiring.hiring_tasks?.length || 0})</IntelLabel>
         {!hiring.hiring_tasks?.length ? (
-          <p style={{ color: '#939799', fontSize: 13 }}>No open positions at this time.</p>
+          <p style={{ color: '#5E6366', fontSize: 13 }}>No open positions at this time.</p>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {hiring.hiring_tasks.map((task, i) => (
-              <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '10px 14px' }}>
+              <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 0, padding: '10px 14px' }}>
                 <div style={{ color: '#000000', fontSize: 13, fontWeight: 600, marginBottom: 4 }}>{task.title}</div>
                 {task.description && <p style={{ color: '#5E6366', fontSize: 12, margin: 0 }}>{task.description}</p>}
               </div>
@@ -2027,7 +2167,7 @@ function CompanyOverviewSection({ companyInfo, domain }: { companyInfo: Record<s
     return (
       <IntelCard>
         <IntelLabel>Company Overview</IntelLabel>
-        <p style={{ color: '#939799', fontSize: 13 }}>No company data available.</p>
+        <p style={{ color: '#5E6366', fontSize: 13 }}>No company data available.</p>
       </IntelCard>
     );
   }
@@ -2052,28 +2192,28 @@ function CompanyOverviewSection({ companyInfo, domain }: { companyInfo: Record<s
             <div style={{ color: '#000000', fontSize: 22, fontWeight: 800, marginBottom: 4 }}>{ci.name || domain}</div>
             {ci.tagline && <div style={{ color: '#0A7D3C', fontSize: 14, fontStyle: 'italic', marginBottom: 8 }}>&ldquo;{ci.tagline}&rdquo;</div>}
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 8 }}>
-              {ci.industry && <span style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '3px 10px', borderRadius: 20, fontSize: 11 }}>{ci.industry}</span>}
+              {ci.industry && <span style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '3px 10px', borderRadius: 0, fontSize: 11 }}>{ci.industry}</span>}
               {ci.location && <span style={{ color: '#5E6366', fontSize: 12 }}><Glyph name="pin" /> {ci.location}</span>}
               {ci.founded && <span style={{ color: '#5E6366', fontSize: 12 }}>Est. {ci.founded}</span>}
               {ci.team_size && <span style={{ color: '#5E6366', fontSize: 12 }}><Glyph name="people" /> {ci.team_size}</span>}
             </div>
           </div>
           {websiteUrl && (
-            <a href={websiteUrl} target="_blank" rel="noopener noreferrer" style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '6px 16px', borderRadius: 6, fontSize: 12, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+            <a href={websiteUrl} target="_blank" rel="noopener noreferrer" style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '6px 16px', borderRadius: 0, fontSize: 12, textDecoration: 'none', whiteSpace: 'nowrap' }}>
               Visit ↗
             </a>
           )}
         </div>
         {ci.description && <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.7, marginBottom: 16 }}>{ci.description}</p>}
         {ci.value_proposition && (
-          <div style={{ background: '#FFFFFF', borderLeft: '3px solid #0A7D3C', padding: '12px 16px', borderRadius: '0 6px 6px 0', marginBottom: 16 }}>
-            <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', marginBottom: 4 }}>VALUE PROPOSITION</div>
+          <div style={{ background: '#FFFFFF', borderLeft: '3px solid #0A7D3C', padding: '12px 16px', borderRadius: 0, marginBottom: 16 }}>
+            <div style={{ color: '#5E6366', fontSize: 10, letterSpacing: '0.1em', marginBottom: 4 }}>VALUE PROPOSITION</div>
             <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.6, margin: 0 }}>{ci.value_proposition}</p>
           </div>
         )}
         {ci.target_audience && (
           <div style={{ marginBottom: 16 }}>
-            <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', marginBottom: 6 }}>TARGET AUDIENCE</div>
+            <div style={{ color: '#5E6366', fontSize: 10, letterSpacing: '0.1em', marginBottom: 6 }}>TARGET AUDIENCE</div>
             <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5 }}>{ci.target_audience}</p>
           </div>
         )}
@@ -2085,9 +2225,9 @@ function CompanyOverviewSection({ companyInfo, domain }: { companyInfo: Record<s
           <IntelLabel>Products ({products.length})</IntelLabel>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 12 }}>
             {products.map((p: any, i: number) => (
-              <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 8, padding: 14 }}>
+              <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 0, padding: 14 }}>
                 <div style={{ color: '#000000', fontSize: 13, fontWeight: 600, marginBottom: 4 }}>{typeof p === 'string' ? p : (p.name || p.title || 'Product')}</div>
-                {p.category && <span style={{ background: 'rgba(255,255,255,0.04)', color: '#939799', padding: '2px 8px', borderRadius: 3, fontSize: 10 }}>{p.category}</span>}
+                {p.category && <span style={{ background: 'rgba(255,255,255,0.04)', color: '#5E6366', padding: '2px 8px', borderRadius: 0, fontSize: 10 }}>{p.category}</span>}
                 {p.description && <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.4, margin: '6px 0 0' }}>{String(p.description).slice(0, 100)}</p>}
                 {p.pricing && <div style={{ color: '#0A7D3C', fontSize: 11, marginTop: 6 }}>{typeof p.pricing === 'string' ? p.pricing : p.pricing.amount || ''}</div>}
               </div>
@@ -2102,7 +2242,7 @@ function CompanyOverviewSection({ companyInfo, domain }: { companyInfo: Record<s
           <IntelLabel>Tech Stack</IntelLabel>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             {techStack.map((t: string, i: number) => (
-              <span key={i} style={{ background: 'rgba(0, 214, 93,0.06)', border: '1px solid rgba(0, 214, 93,0.15)', color: '#0A7D3C', padding: '5px 14px', borderRadius: 20, fontSize: 12 }}>{t}</span>
+              <span key={i} style={{ background: 'rgba(0, 214, 93,0.06)', border: '1px solid rgba(0, 214, 93,0.15)', color: '#0A7D3C', padding: '5px 14px', borderRadius: 0, fontSize: 12 }}>{t}</span>
             ))}
           </div>
         </IntelCard>
@@ -2114,7 +2254,7 @@ function CompanyOverviewSection({ companyInfo, domain }: { companyInfo: Record<s
           <IntelLabel>Social Profiles</IntelLabel>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             {Object.entries(socialLinks).filter(([, v]) => v).map(([platform, url]) => (
-              <a key={platform} href={String(url)} target="_blank" rel="noopener noreferrer" style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#0A7D3C', padding: '6px 14px', borderRadius: 6, fontSize: 12, textDecoration: 'none', textTransform: 'capitalize' }}>
+              <a key={platform} href={String(url)} target="_blank" rel="noopener noreferrer" style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#0A7D3C', padding: '6px 14px', borderRadius: 0, fontSize: 12, textDecoration: 'none', textTransform: 'capitalize' }}>
                 {platform.replace(/_/g, ' ')} ↗
               </a>
             ))}
@@ -2131,46 +2271,43 @@ function MarketMetricsSection({ competitors, metrics }: { competitors: any; metr
   const polsia = competitors?.polsia as any;
   const market = polsia?.market_overview || {};
   const advantages = Array.isArray(polsia?.competitive_advantages) ? polsia.competitive_advantages : [];
+  const competitorList = Array.isArray(polsia?.competitors) ? polsia.competitors : [];
+  const hasMarketSize = !!(market.market_size || market.tam);
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
       {/* Market Overview */}
       <IntelCard>
-        <IntelLabel>Market Overview</IntelLabel>
-        {market.market_size || market.tam ? (
-          <div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
-              {[
-                { label: 'Market Size', value: market.market_size || market.tam || '--', color: '#0A7D3C' },
-                { label: 'CAGR', value: market.cagr || market.growth_rate || '--', color: '#0A7D3C' },
-              ].map(m => (
-                <div key={m.label} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '12px 14px', textAlign: 'center' }}>
-                  <div style={{ color: m.color, fontSize: 24, fontWeight: 800, marginBottom: 4 }}>{m.value}</div>
-                  <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em' }}>{m.label}</div>
-                </div>
-              ))}
-            </div>
-            {Array.isArray(market.trends) && market.trends.length > 0 && (
-              <div>
-                <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', marginBottom: 8 }}>MARKET TRENDS</div>
-                {market.trends.map((t: string, i: number) => (
-                  <div key={i} style={{ color: '#5E6366', fontSize: 12, padding: '4px 0', display: 'flex', gap: 6 }}>
-                    <span style={{ color: '#0A7D3C' }}>→</span><span>{t}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+        <IntelLabel>Market overview</IntelLabel>
+        {hasMarketSize ? (
+          <SpecRows
+            rows={[
+              ['Market size', market.market_size || market.tam, 'illustrative TAM'],
+              ['CAGR', market.cagr || market.growth_rate],
+              ['Tracked competitors', competitorList.length ? String(competitorList.length) : null],
+              ['Sources', Array.isArray(polsia?.sources) ? polsia.sources.join(', ') : null],
+            ] as Array<[string, React.ReactNode, string?]>}
+          />
         ) : (
-          <p style={{ color: '#939799', fontSize: 13 }}>No market data available.</p>
+          <>
+            <SpecRows
+              rows={[
+                ['Tracked competitors', competitorList.length ? String(competitorList.length) : null],
+                ['Sources', Array.isArray(polsia?.sources) ? polsia.sources.join(', ') : null],
+                ['Last analyzed', polsia?.analyzed_at ? String(polsia.analyzed_at).slice(0, 10) : null],
+              ] as Array<[string, React.ReactNode, string?]>}
+            />
+            <NoData
+              what="Market size and CAGR not sized yet"
+              why="The competitor research endpoint returned no market_overview values. No figure is shown rather than an estimated one."
+            />
+          </>
         )}
         {advantages.length > 0 && (
-          <div style={{ marginTop: 16, borderTop: '1px solid #F1F4F5', paddingTop: 12 }}>
-            <div style={{ color: '#0A7D3C', fontSize: 10, letterSpacing: '0.1em', marginBottom: 8 }}>COMPETITIVE ADVANTAGES</div>
+          <div style={{ marginTop: 20, borderTop: '1px solid #E8E6E4', paddingTop: 16 }}>
+            <div style={{ color: '#5E6366', fontSize: 13, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: 10 }}>Competitive advantages</div>
             {advantages.map((a: string, i: number) => (
-              <div key={i} style={{ color: '#5E6366', fontSize: 12, padding: '4px 0', display: 'flex', gap: 6 }}>
-                <span style={{ color: '#0A7D3C' }}><Glyph name="check" /></span><span>{a}</span>
-              </div>
+              <div key={i} style={{ color: '#5E6366', fontSize: '0.9375rem', padding: '7px 0', lineHeight: 1.6, borderTop: i === 0 ? 'none' : '1px solid #F1F4F5' }}>{a}</div>
             ))}
           </div>
         )}
@@ -2178,30 +2315,24 @@ function MarketMetricsSection({ competitors, metrics }: { competitors: any; metr
 
       {/* Metrics */}
       <IntelCard>
-        <IntelLabel>Key Metrics</IntelLabel>
+        <IntelLabel>Key metrics</IntelLabel>
         {metrics ? (
           <div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              {[
-                { label: 'Current Valuation', value: metrics.current_valuation ? `$${(Number(metrics.current_valuation) / 1e6).toFixed(1)}M` : '--', color: '#0A7D3C' },
-                { label: 'Target Valuation', value: metrics.target_valuation ? `$${(Number(metrics.target_valuation) / 1e6).toFixed(1)}M` : '--', color: '#0A7D3C' },
-                { label: 'ROI', value: metrics.roi || '--', color: '#8A6D3B' },
-                { label: 'Total Investment', value: metrics.total_investment || '--', color: '#000000' },
-              ].filter(m => m.value !== '--').map(m => (
-                <div key={m.label} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '10px 12px' }}>
-                  <div style={{ color: '#939799', fontSize: 10, marginBottom: 4 }}>{m.label}</div>
-                  <div style={{ color: m.color, fontWeight: 700, fontSize: 16 }}>{m.value}</div>
-                </div>
-              ))}
-            </div>
-            {metrics.burn && (
-              <div style={{ marginTop: 12, padding: '8px 12px', background: 'rgba(192, 57, 43,0.06)', border: '1px solid rgba(192, 57, 43,0.15)', borderRadius: 6 }}>
-                <span style={{ color: '#C0392B', fontSize: 12 }}><Glyph name="fire" /> Monthly Burn: {metrics.burn}</span>
-              </div>
-            )}
+            <SpecRows
+              rows={[
+                ['Current valuation', metrics.current_valuation ? `$${(Number(metrics.current_valuation) / 1e6).toFixed(1)}M` : null],
+                ['Target valuation', metrics.target_valuation ? `$${(Number(metrics.target_valuation) / 1e6).toFixed(1)}M` : null, 'scenario assumption, not realized value'],
+                ['ROI', metrics.roi || null],
+                ['Total investment', metrics.total_investment || null],
+                ['Monthly burn', metrics.burn || null],
+              ] as Array<[string, React.ReactNode, string?]>}
+            />
           </div>
         ) : (
-          <p style={{ color: '#939799', fontSize: 13 }}>No metrics data available.</p>
+          <NoData
+            what="No financial metrics recorded"
+            why="This venture has no metrics feed connected. Valuation and cost figures live in the Simulation tab, which models them rather than measuring them."
+          />
         )}
       </IntelCard>
     </div>
@@ -2270,7 +2401,7 @@ function MarkdownPopup({ url, title, onClose }: { url: string; title: string; on
       padding: 20,
     }} onClick={onClose}>
       <div style={{
-        background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 12,
+        background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0,
         width: '100%', maxWidth: 900, maxHeight: '90vh',
         display: 'flex', flexDirection: 'column', overflow: 'hidden',
       }} onClick={e => e.stopPropagation()}>
@@ -2286,11 +2417,11 @@ function MarkdownPopup({ url, title, onClose }: { url: string; title: string; on
           <div style={{ display: 'flex', gap: 8 }}>
             <a href={url} target="_blank" rel="noopener noreferrer" style={{
               background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)',
-              color: '#0A7D3C', padding: '5px 14px', borderRadius: 6, fontSize: 11, textDecoration: 'none',
+              color: '#0A7D3C', padding: '5px 14px', borderRadius: 0, fontSize: 11, textDecoration: 'none',
             }}>Download ↓</a>
             <button onClick={onClose} style={{
               background: 'rgba(255,255,255,0.06)', border: '1px solid #E8E6E4',
-              color: '#5E6366', padding: '5px 12px', borderRadius: 6, fontSize: 14, cursor: 'pointer',
+              color: '#5E6366', padding: '5px 12px', borderRadius: 0, fontSize: 14, cursor: 'pointer',
             }}><Glyph name="cross" /></button>
           </div>
         </div>
@@ -2364,7 +2495,10 @@ function DocumentsSection({ documents }: { documents: any }) {
       <IntelCard>
         <IntelLabel>Documents ({docs.length})</IntelLabel>
         {docs.length === 0 ? (
-          <p style={{ color: '#939799', fontSize: 13 }}>No documents available.</p>
+          <NoData
+            what="No documents generated"
+            why="Decks, memos, and one-pagers appear here once generated for this venture."
+          />
         ) : (
           <div>
             {/* Workstream filter buttons */}
@@ -2374,7 +2508,7 @@ function DocumentsSection({ documents }: { documents: any }) {
                   background: filter === ws ? 'rgba(10, 125, 60,0.12)' : '#FFFFFF',
                   border: `1px solid ${filter === ws ? 'rgba(10, 125, 60,0.3)' : '#F1F4F5'}`,
                   color: filter === ws ? '#0A7D3C' : '#C8CBCC',
-                  padding: '5px 14px', borderRadius: 6, fontSize: 11, cursor: 'pointer',
+                  padding: '5px 14px', borderRadius: 0, fontSize: 11, cursor: 'pointer',
                   textTransform: 'capitalize', fontWeight: filter === ws ? 600 : 400,
                 }}>
                   {ws} {ws !== 'all' ? `(${docs.filter((d: any) => (d.workstream || d.category || 'Other') === ws).length})` : ''}
@@ -2394,23 +2528,23 @@ function DocumentsSection({ documents }: { documents: any }) {
                 };
                 return (
                   <a key={i} href={docUrl} target="_blank" rel="noopener noreferrer" onClick={handleClick} style={{
-                    background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 8, padding: '12px 14px',
+                    background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 0, padding: '12px 14px',
                     textDecoration: 'none', display: 'flex', gap: 10, alignItems: 'flex-start', transition: 'border-color 0.15s', cursor: 'pointer',
                   }}>
                     <span style={{ fontSize: 20, flexShrink: 0 }}><Glyph size={20} name={doc.type === 'md' ? 'edit' : doc.type === 'pdf' ? 'doc' : doc.type === 'spreadsheet' ? 'bars' : doc.source?.includes('notion') ? 'edit' : 'folder'} /></span>
                     <div style={{ overflow: 'hidden' }}>
                       <div style={{ color: '#000000', fontSize: 13, fontWeight: 600 }}>{docTitle}</div>
                       <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
-                        {doc.source && <span style={{ color: '#939799', fontSize: 10 }}>{doc.source}</span>}
+                        {doc.source && <span style={{ color: '#5E6366', fontSize: 10 }}>{doc.source}</span>}
                         {(doc.workstream || doc.category) && <span style={{ color: '#0A7D3C', fontSize: 10 }}>{doc.workstream || doc.category}</span>}
-                        {isMdFile(doc) && <span style={{ background: 'rgba(0, 214, 93,0.08)', color: '#0A7D3C', padding: '0 6px', borderRadius: 3, fontSize: 9, fontWeight: 600 }}>VIEW</span>}
+                        {isMdFile(doc) && <span style={{ background: 'rgba(0, 214, 93,0.08)', color: '#0A7D3C', padding: '0 6px', borderRadius: 0, fontSize: 9, fontWeight: 600 }}>VIEW</span>}
                       </div>
                     </div>
                   </a>
                 );
               })}
             </div>
-            {filtered.length > 20 && <p style={{ color: '#939799', fontSize: 12, marginTop: 12 }}>+ {filtered.length - 20} more documents</p>}
+            {filtered.length > 20 && <p style={{ color: '#5E6366', fontSize: 12, marginTop: 12 }}>+ {filtered.length - 20} more documents</p>}
           </div>
         )}
       </IntelCard>
@@ -2427,12 +2561,12 @@ function VideosSection({ videos }: { videos: any }) {
     <IntelCard>
       <IntelLabel>Videos ({videoList.length})</IntelLabel>
       {videoList.length === 0 ? (
-        <p style={{ color: '#939799', fontSize: 13 }}>No video data available.</p>
+        <p style={{ color: '#5E6366', fontSize: 13 }}>No video data available.</p>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12 }}>
           {videoList.map((v: any, i: number) => (
             <a key={i} href={v.url || v.link || '#'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-              <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 8, overflow: 'hidden' }}>
+              <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 0, overflow: 'hidden' }}>
                 {v.thumbnail ? (
                   <img src={v.thumbnail} alt={v.title || ''} style={{ width: '100%', height: 120, objectFit: 'cover' }} />
                 ) : (
@@ -2442,7 +2576,7 @@ function VideosSection({ videos }: { videos: any }) {
                 )}
                 <div style={{ padding: '10px 12px' }}>
                   <div style={{ color: '#000000', fontSize: 12, fontWeight: 600 }}>{v.title || v.name || 'Video'}</div>
-                  {v.duration && <div style={{ color: '#939799', fontSize: 10, marginTop: 4 }}>{v.duration}</div>}
+                  {v.duration && <div style={{ color: '#5E6366', fontSize: 10, marginTop: 4 }}>{v.duration}</div>}
                   {v.views && <div style={{ color: '#0A7D3C', fontSize: 10, marginTop: 2 }}>{v.views} views</div>}
                 </div>
               </div>
@@ -2480,6 +2614,19 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
   const topDomains = Array.isArray((seo as any)?.top_referring_domains) ? (seo as any).top_referring_domains : [];
 
   // Passed checks
+  // Lighthouse writes real audit ids into `passed` / `manual_checks`. Entries
+  // may be plain id strings OR objects ({id,title,...}), so normalize to a
+  // label string before rendering; a raw object hits `.replace is not a
+  // function` and takes the whole dashboard down.
+  const toLabel = (x: any): string => {
+    if (typeof x === 'string') return x;
+    if (x && typeof x === 'object') return String(x.title || x.id || x.label || x.audit || '');
+    return String(x ?? '');
+  };
+  const lighthousePassed: string[] = (Array.isArray((seo as any)?.passed) ? (seo as any).passed : [])
+    .map(toLabel).filter(Boolean);
+  const lighthouseManual: string[] = (Array.isArray((seo as any)?.manual_checks) ? (seo as any).manual_checks : [])
+    .map(toLabel).filter(Boolean);
   const passedChecks = [
     { label: 'Content Score', val: seo?.content_score, pass: Number(seo?.content_score || 0) >= 50 },
     { label: 'On-Page', val: seo?.on_page_score, pass: Number(seo?.on_page_score || 0) >= 50 },
@@ -2490,15 +2637,15 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
   return (
     <IntelCard>
       <IntelLabel>Analytics Overview</IntelLabel>
-      {/* Tab bar */}
+      {/* Tab bar. Selected state is neutral ink, not green (canon). */}
       <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid #E8E6E4', marginBottom: 20 }}>
         {tabs.map(t => (
           <button key={t.key} onClick={() => setTab(t.key)} style={{
             background: 'transparent', border: 'none',
-            borderBottom: tab === t.key ? '2px solid #0A7D3C' : '2px solid transparent',
-            color: tab === t.key ? '#0A7D3C' : '#C8CBCC',
-            padding: '8px 20px', fontSize: 13, fontWeight: tab === t.key ? 700 : 400,
-            cursor: 'pointer', transition: 'all 0.15s',
+            borderBottom: tab === t.key ? '2px solid #000000' : '2px solid transparent',
+            color: tab === t.key ? '#000000' : '#5E6366',
+            padding: '8px 20px', fontSize: 13, fontWeight: tab === t.key ? 500 : 400,
+            cursor: 'pointer', transition: 'color 0.2s cubic-bezier(.16,1,.3,1), border-color 0.2s cubic-bezier(.16,1,.3,1)',
           }}>{t.label}</button>
         ))}
       </div>
@@ -2506,32 +2653,57 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
       {/* Health tab */}
       {tab === 'health' && (
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
-            <div style={{ width: 64, height: 64, borderRadius: '50%', border: `3px solid ${seoScore >= 70 ? '#00D65D' : seoScore >= 40 ? '#8A6D3B' : '#C0392B'}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ fontSize: 22, fontWeight: 800, color: seoScore >= 70 ? '#0A7D3C' : seoScore >= 40 ? '#8A6D3B' : '#C0392B' }}>{seoScore}</span>
+          {/* Number-dominant score with an explicit denominator, reference
+              style. Green only at a genuinely healthy score. */}
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 6 }}>
+              <span style={{
+                fontSize: '3rem', fontWeight: 400, lineHeight: 1, letterSpacing: '-0.02em',
+                color: seoScore >= 70 ? '#0A7D3C' : '#000000',
+              }}>{seoScore}</span>
+              <span style={{ color: '#5E6366', fontSize: '0.9375rem' }}>/ 100</span>
             </div>
-            <div>
-              <div style={{ fontSize: 14, fontWeight: 600, color: '#000000' }}>Overall Score</div>
-              <div style={{ fontSize: 12, color: '#5E6366' }}>{seoScore >= 70 ? 'Good' : seoScore >= 40 ? 'Needs Work' : 'Critical Issues'}</div>
+            <div style={{ color: '#5E6366', fontSize: 13 }}>
+              Overall score · {seoScore >= 70 ? 'good' : seoScore >= 40 ? 'needs work' : 'critical issues'}
             </div>
           </div>
-          {[
-            { label: 'Content', val: seo?.content_score },
-            { label: 'On-Page', val: seo?.on_page_score },
-            { label: 'Mobile', val: seo?.mobile_score },
-            { label: 'Page Speed', val: seo?.page_speed },
-          ].filter(s => s.val && typeof s.val !== 'object').map((s, i) => (
-            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid #E8E6E4' }}>
-              <span style={{ color: '#5E6366', fontSize: 12 }}>{s.label}</span>
-              <span style={{ color: '#5E6366', fontSize: 12, fontWeight: 600 }}>{String(s.val)}</span>
+          <SpecRows
+            rows={[
+              ['Performance', seo?.performance_score != null ? String(seo.performance_score) : null],
+              ['Accessibility', seo?.accessibility_score != null ? String(seo.accessibility_score) : null],
+              ['Best practices', seo?.best_practices_score != null ? String(seo.best_practices_score) : null],
+              ['SEO', seo?.seo_score != null ? String(seo.seo_score) : null],
+              ['Content', seo?.content_score && typeof seo.content_score !== 'object' ? String(seo.content_score) : null],
+              ['On-page', seo?.on_page_score && typeof seo.on_page_score !== 'object' ? String(seo.on_page_score) : null],
+              ['Mobile', seo?.mobile_score && typeof seo.mobile_score !== 'object' ? String(seo.mobile_score) : null],
+              ['Page speed', seo?.page_speed && typeof seo.page_speed !== 'object' ? String(seo.page_speed) : null],
+            ] as Array<[string, React.ReactNode, string?]>}
+          />
+          {/* Core Web Vitals from the live Lighthouse audit */}
+          {seo?.lighthouse_metrics && typeof seo.lighthouse_metrics === 'object' && (
+            <div style={{ marginTop: 20, borderTop: '1px solid #E8E6E4', paddingTop: 16 }}>
+              <div style={{ color: '#5E6366', fontSize: 13, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: 10 }}>Core web vitals</div>
+              <SpecRows
+                rows={Object.entries(seo.lighthouse_metrics as Record<string, unknown>)
+                  .filter(([, v]) => v !== null && v !== undefined && typeof v !== 'object')
+                  .map(([k, v]) => [String(k).replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()), String(v)] as [string, React.ReactNode])}
+              />
             </div>
-          ))}
+          )}
+          {seo?.audit_source && (
+            <div style={{ color: '#5E6366', fontSize: 13, marginTop: 14, lineHeight: 1.5 }}>Source: {String(seo.audit_source)}</div>
+          )}
+          {issues.length === 0 && seoScore > 0 && (
+            <div style={{ marginTop: 16, borderTop: '1px solid #E8E6E4', paddingTop: 14 }}>
+              <div style={{ color: '#000000', fontSize: '0.9375rem' }}>No issues found</div>
+              <div style={{ color: '#5E6366', fontSize: 13, marginTop: 4 }}>The audit returned a clean bill on every automated check.</div>
+            </div>
+          )}
           {issues.length > 0 && (
             <div style={{ marginTop: 14 }}>
-              <div style={{ color: '#5E6366', fontSize: 11, textTransform: 'uppercase', marginBottom: 8 }}>Issues ({issues.length})</div>
+              <div style={{ color: '#5E6366', fontSize: 13, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: 8 }}>Issues ({issues.length})</div>
               {issues.slice(0, 6).map((issue: any, i: number) => (
-                <div key={i} style={{ fontSize: 12, color: '#5E6366', padding: '5px 0', borderBottom: '1px solid #FFFFFF', display: 'flex', gap: 6 }}>
-                  <span style={{ color: issue?.severity === 'critical' ? '#C0392B' : '#8A6D3B', flexShrink: 0 }}>●</span>
+                <div key={i} style={{ fontSize: '0.9375rem', color: '#5E6366', padding: '8px 0', borderTop: i === 0 ? 'none' : '1px solid #F1F4F5', lineHeight: 1.6 }}>
                   <span>{typeof issue === 'string' ? issue : String(issue?.issue || issue?.description || issue?.message || '')}</span>
                 </div>
               ))}
@@ -2544,34 +2716,34 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
       {tab === 'links' && (
         <div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 20 }}>
-            <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '12px 14px', textAlign: 'center' }}>
+            <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 0, padding: '12px 14px', textAlign: 'center' }}>
               <div style={{ color: '#000000', fontSize: 22, fontWeight: 800 }}>{da || '--'}</div>
-              <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.05em' }}>Domain Authority</div>
+              <div style={{ color: '#5E6366', fontSize: 10, letterSpacing: '0.05em' }}>Domain Authority</div>
             </div>
-            <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '12px 14px', textAlign: 'center' }}>
+            <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 0, padding: '12px 14px', textAlign: 'center' }}>
               <div style={{ color: '#000000', fontSize: 22, fontWeight: 800 }}>{referringDomains || '--'}</div>
-              <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.05em' }}>Referring Domains</div>
+              <div style={{ color: '#5E6366', fontSize: 10, letterSpacing: '0.05em' }}>Referring Domains</div>
             </div>
-            <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '12px 14px', textAlign: 'center' }}>
+            <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 0, padding: '12px 14px', textAlign: 'center' }}>
               <div style={{ color: '#0A7D3C', fontSize: 22, fontWeight: 800 }}>{linkVelocity ? `+${linkVelocity}` : '--'}</div>
-              <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.05em' }}>Links/Month</div>
+              <div style={{ color: '#5E6366', fontSize: 10, letterSpacing: '0.05em' }}>Links/Month</div>
             </div>
           </div>
           {topDomains.length > 0 ? (
             <div>
-              <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>Top Referring Domains</div>
+              <div style={{ color: '#5E6366', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>Top Referring Domains</div>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid #E8E6E4' }}>
-                    <th style={{ color: '#939799', padding: '6px 10px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase' }}>Domain</th>
-                    <th style={{ color: '#939799', padding: '6px 10px', textAlign: 'right', fontSize: 10, textTransform: 'uppercase' }}>Rating</th>
+                    <th style={{ color: '#5E6366', padding: '6px 10px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase' }}>Domain</th>
+                    <th style={{ color: '#5E6366', padding: '6px 10px', textAlign: 'right', fontSize: 10, textTransform: 'uppercase' }}>Rating</th>
                   </tr>
                 </thead>
                 <tbody>
                   {topDomains.slice(0, 8).map((d: any, i: number) => (
                     <tr key={i} style={{ borderBottom: '1px solid #FFFFFF' }}>
                       <td style={{ padding: '8px 10px', color: '#5E6366', display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <div style={{ width: 20, height: 20, borderRadius: 4, background: ['#22c55e','#8A6D3B','#F1F4F5','#E8E6E4','#8A6D3B'][i%5], display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, color: '#000000', fontWeight: 700 }}>
+                        <div style={{ width: 20, height: 20, borderRadius: 0, background: ['#22c55e','#8A6D3B','#F1F4F5','#E8E6E4','#8A6D3B'][i%5], display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, color: '#000000', fontWeight: 700 }}>
                           {(d.domain || d.name || '?').slice(0,2).toUpperCase()}
                         </div>
                         {d.domain || d.name}
@@ -2583,7 +2755,7 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
               </table>
             </div>
           ) : (
-            <p style={{ color: '#939799', fontSize: 13 }}>No backlink data available yet.</p>
+            <p style={{ color: '#5E6366', fontSize: 13 }}>No backlink data available yet.</p>
           )}
         </div>
       )}
@@ -2592,17 +2764,17 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
       {tab === 'ai-geo' && (
         <div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 20 }}>
-            <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '14px', textAlign: 'center' }}>
+            <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 0, padding: '14px', textAlign: 'center' }}>
               <div style={{ color: geoScore >= 50 ? '#0A7D3C' : '#C0392B', fontSize: 28, fontWeight: 800 }}>{geoScore}</div>
-              <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.05em' }}>GEO Score</div>
+              <div style={{ color: '#5E6366', fontSize: 10, letterSpacing: '0.05em' }}>GEO Score</div>
             </div>
-            <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '14px', textAlign: 'center' }}>
+            <div style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 0, padding: '14px', textAlign: 'center' }}>
               <div style={{ color: '#000000', fontSize: 18, fontWeight: 700 }}>{geoScore >= 60 ? 'High' : geoScore >= 30 ? 'Medium' : 'Low'}</div>
-              <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.05em' }}>Citation Potential</div>
+              <div style={{ color: '#5E6366', fontSize: 10, letterSpacing: '0.05em' }}>Citation Potential</div>
             </div>
           </div>
           {/* Overall Visibility grid */}
-          <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>Overall Visibility</div>
+          <div style={{ color: '#5E6366', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>Overall Visibility</div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 20 }}>
             {[
               { label: 'Visibility', value: geoScore || 0, color: geoScore >= 50 ? '#0A7D3C' : '#C0392B' },
@@ -2610,21 +2782,21 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
               { label: 'Avg Position', value: (geo as any)?.avg_position || '--', color: '#C0392B' },
               { label: 'Mentions', value: (geo as any)?.mentions || (geo as any)?.total_mentions || 0, color: '#000000' },
             ].map((m, i) => (
-              <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '10px 12px' }}>
+              <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 0, padding: '10px 12px' }}>
                 <div style={{ color: m.color, fontSize: 18, fontWeight: 700 }}>{m.value}</div>
-                <div style={{ color: '#939799', fontSize: 10 }}>{m.label}</div>
+                <div style={{ color: '#5E6366', fontSize: 10 }}>{m.label}</div>
               </div>
             ))}
           </div>
           {/* Platform status */}
           {platforms.length > 0 && (
             <div>
-              <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>Platform Status</div>
+              <div style={{ color: '#5E6366', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>Platform Status</div>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid #E8E6E4' }}>
-                    <th style={{ color: '#939799', padding: '6px 10px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase' }}>Platform</th>
-                    <th style={{ color: '#939799', padding: '6px 10px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase' }}>Status</th>
+                    <th style={{ color: '#5E6366', padding: '6px 10px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase' }}>Platform</th>
+                    <th style={{ color: '#5E6366', padding: '6px 10px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase' }}>Status</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -2652,26 +2824,62 @@ function AnalyticsOverviewSection({ seo, geo }: { seo: Record<string, unknown> |
       {/* Passed tab */}
       {tab === 'passed' && (
         <div>
-          {passedChecks.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {passedChecks.map((c, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6 }}>
-                  <span style={{ color: c.pass ? '#0A7D3C' : '#C0392B', fontSize: 16 }}><Glyph name={c.pass ? 'check' : 'cross'} /></span>
-                  <span style={{ color: '#5E6366', fontSize: 13, flex: 1 }}>{c.label}</span>
-                  <span style={{ color: c.pass ? '#0A7D3C' : '#C0392B', fontSize: 13, fontWeight: 600 }}>{String(c.val)}</span>
+          {/* Real Lighthouse passing audits when present, else the legacy
+              threshold checks. */}
+          {lighthousePassed.length > 0 && (
+            <div style={{ marginBottom: passedChecks.length > 0 ? 20 : 0 }}>
+              <div style={{ color: '#5E6366', fontSize: 13, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: 10 }}>
+                Passing audits ({lighthousePassed.length})
+              </div>
+              {lighthousePassed.map((c: string, i: number) => (
+                <div key={i} style={{
+                  display: 'flex', alignItems: 'center', gap: 10, padding: '10px 0',
+                  borderTop: i === 0 ? 'none' : '1px solid #F1F4F5',
+                }}>
+                  <span style={{ color: '#0A7D3C', flexShrink: 0 }}><Glyph name="check" /></span>
+                  <span style={{ color: '#5E6366', fontSize: '0.9375rem' }}>
+                    {c.replace(/-/g, ' ').replace(/\b\w/g, (ch) => ch.toUpperCase())}
+                  </span>
                 </div>
               ))}
             </div>
-          ) : (
-            <p style={{ color: '#939799', fontSize: 13 }}>No pass/fail data available.</p>
+          )}
+          {lighthouseManual.length > 0 && (
+            <div style={{ marginBottom: 20, borderTop: '1px solid #E8E6E4', paddingTop: 16 }}>
+              <div style={{ color: '#5E6366', fontSize: 13, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: 10 }}>
+                Needs manual check ({lighthouseManual.length})
+              </div>
+              {lighthouseManual.map((c: string, i: number) => (
+                <div key={i} style={{ color: '#5E6366', fontSize: '0.9375rem', padding: '8px 0', borderTop: i === 0 ? 'none' : '1px solid #F1F4F5' }}>
+                  {c.replace(/-/g, ' ').replace(/\b\w/g, (ch) => ch.toUpperCase())}
+                </div>
+              ))}
+            </div>
+          )}
+          {passedChecks.length > 0 ? (
+            <div>
+              {passedChecks.map((c, i) => (
+                <div key={i} style={{
+                  display: 'flex', alignItems: 'center', gap: 10, padding: '10px 0',
+                  borderTop: i === 0 ? 'none' : '1px solid #F1F4F5',
+                }}>
+                  <span style={{ color: c.pass ? '#0A7D3C' : '#5E6366', flexShrink: 0 }}><Glyph name={c.pass ? 'check' : 'cross'} /></span>
+                  <span style={{ color: '#5E6366', fontSize: '0.9375rem', flex: 1 }}>{c.label}</span>
+                  <span style={{ color: c.pass ? '#0A7D3C' : '#000000', fontSize: '0.9375rem' }}>{String(c.val)}</span>
+                </div>
+              ))}
+            </div>
+          ) : lighthousePassed.length === 0 && (
+            <NoData
+              what="No pass or fail checks recorded"
+              why="Run an audit against the live domain to populate individual checks."
+            />
           )}
           {recommendations.length > 0 && (
-            <div style={{ marginTop: 16 }}>
-              <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>Recommendations</div>
+            <div style={{ marginTop: 20, borderTop: '1px solid #E8E6E4', paddingTop: 16 }}>
+              <div style={{ color: '#5E6366', fontSize: 13, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: 10 }}>Recommendations</div>
               {recommendations.slice(0, 5).map((r, i) => (
-                <div key={i} style={{ fontSize: 12, color: '#5E6366', padding: '5px 0', display: 'flex', gap: 6 }}>
-                  <span style={{ color: '#0A7D3C', flexShrink: 0 }}>→</span><span>{r}</span>
-                </div>
+                <div key={i} style={{ fontSize: '0.9375rem', color: '#5E6366', padding: '8px 0', lineHeight: 1.6, borderTop: i === 0 ? 'none' : '1px solid #F1F4F5' }}>{r}</div>
               ))}
             </div>
           )}
@@ -2696,7 +2904,7 @@ function CompetitorChipsSection({ competitors, onAction }: { competitors: Intell
     return (
       <IntelCard>
         <IntelLabel>Competitors</IntelLabel>
-        <p style={{ color: '#939799', fontSize: 13 }}>No competitor data found.</p>
+        <p style={{ color: '#5E6366', fontSize: 13 }}>No competitor data found.</p>
       </IntelCard>
     );
   }
@@ -2714,11 +2922,11 @@ function CompetitorChipsSection({ competitors, onAction }: { competitors: Intell
             <div key={i}>
               <div onClick={() => setSelectedComp(isSelected ? null : i)} style={{
                 display: 'flex', alignItems: 'center', gap: 10,
-                background: isSelected ? '#FFFFFF' : '#FFFFFF', border: `1px solid ${isSelected ? '#0A7D3C33' : '#F1F4F5'}`, borderRadius: 8,
+                background: isSelected ? '#FFFFFF' : '#FFFFFF', border: `1px solid ${isSelected ? '#0A7D3C33' : '#F1F4F5'}`, borderRadius: 0,
                 padding: '10px 14px', cursor: 'pointer', transition: 'all 0.15s',
               }}>
                 <div style={{
-                  width: 28, height: 28, borderRadius: 6,
+                  width: 28, height: 28, borderRadius: 0,
                   background: chipColors[i % chipColors.length],
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: 10, fontWeight: 700, color: '#000000', flexShrink: 0,
@@ -2728,7 +2936,7 @@ function CompetitorChipsSection({ competitors, onAction }: { competitors: Intell
               </div>
               {/* Expanded competitor info */}
               {isSelected && (
-                <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderTop: 'none', borderRadius: '0 0 8px 8px', padding: '12px 14px', marginTop: -4 }}>
+                <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderTop: 'none', borderRadius: 0, padding: '12px 14px', marginTop: -4 }}>
                   <div style={{ color: '#000000', fontSize: 14, fontWeight: 700, marginBottom: 6 }}>{c.name || displayName}</div>
                   {c.description && <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5, margin: '0 0 8px' }}>{c.description}</p>}
                   {c.features && <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5, margin: '0 0 8px' }}>{c.features}</p>}
@@ -2750,11 +2958,11 @@ function CompetitorChipsSection({ competitors, onAction }: { competitors: Intell
                   )}
                   {c.funding && <div style={{ color: '#0A7D3C', fontSize: 11, marginBottom: 6 }}>{c.funding}</div>}
                   {c.pricing && <div style={{ color: '#5E6366', fontSize: 11, marginBottom: 6 }}>Pricing: {typeof c.pricing === 'string' ? c.pricing : c.pricing?.model || ''}</div>}
-                  {(c.similarity_score || c.similarity) > 0 && <span style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '2px 8px', borderRadius: 3, fontSize: 10, marginRight: 6 }}>{c.similarity_score || c.similarity}% similar</span>}
-                  {(c.threat_level || c.market_position) && <span style={{ background: 'rgba(138, 109, 59,0.08)', border: '1px solid rgba(138, 109, 59,0.2)', color: '#8A6D3B', padding: '2px 8px', borderRadius: 3, fontSize: 10 }}>{c.threat_level || c.market_position}</span>}
+                  {(c.similarity_score || c.similarity) > 0 && <span style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '2px 8px', borderRadius: 0, fontSize: 10, marginRight: 6 }}>{c.similarity_score || c.similarity}% similar</span>}
+                  {(c.threat_level || c.market_position) && <span style={{ background: 'rgba(138, 109, 59,0.08)', border: '1px solid rgba(138, 109, 59,0.2)', color: '#8A6D3B', padding: '2px 8px', borderRadius: 0, fontSize: 10 }}>{c.threat_level || c.market_position}</span>}
                   <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
-                    {domain && <a href={domain.startsWith('http') ? domain : `https://${domain}`} target="_blank" rel="noopener noreferrer" style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#0A7D3C', padding: '4px 12px', borderRadius: 6, fontSize: 11, textDecoration: 'none', cursor: 'pointer' }}>Visit ↗</a>}
-                    <button onClick={() => onAction?.({ actionLabel: 'Review', title: `Analyze competitor: ${c.name || displayName}`, description: `Deep dive into ${c.name || displayName}. Compare their product, pricing, positioning, and market share against ours. Identify opportunities to differentiate.`, source: 'Competitors', sourceIcon: '⚔️', sourceColor: '#8A6D3B', chatSection: 'competitors' })} style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#5E6366', padding: '4px 12px', borderRadius: 6, fontSize: 11, cursor: 'pointer' }}>Analyze</button>
+                    {domain && <a href={domain.startsWith('http') ? domain : `https://${domain}`} target="_blank" rel="noopener noreferrer" style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#0A7D3C', padding: '4px 12px', borderRadius: 0, fontSize: 11, textDecoration: 'none', cursor: 'pointer' }}>Visit ↗</a>}
+                    <button onClick={() => onAction?.({ actionLabel: 'Review', title: `Analyze competitor: ${c.name || displayName}`, description: `Deep dive into ${c.name || displayName}. Compare their product, pricing, positioning, and market share against ours. Identify opportunities to differentiate.`, source: 'Competitors', sourceIcon: '⚔️', sourceColor: '#8A6D3B', chatSection: 'competitors' })} style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', color: '#5E6366', padding: '4px 12px', borderRadius: 0, fontSize: 11, cursor: 'pointer' }}>Analyze</button>
                   </div>
                 </div>
               )}
@@ -2764,16 +2972,16 @@ function CompetitorChipsSection({ competitors, onAction }: { competitors: Intell
         {/* Add button */}
         <div onClick={() => onAction?.({ actionLabel: 'Post', title: 'Add a new competitor to track', description: 'Add a new competitor to the competitive landscape. Provide the company name or domain and I will research them.', source: 'Competitors', sourceIcon: '⚔️', sourceColor: '#8A6D3B', chatSection: 'competitors' })} style={{
           display: 'flex', alignItems: 'center', gap: 10,
-          background: '#FFFFFF', border: '1px dashed #E8E6E4', borderRadius: 8,
+          background: '#FFFFFF', border: '1px dashed #E8E6E4', borderRadius: 0,
           padding: '10px 14px', cursor: 'pointer', transition: 'all 0.15s',
         }}>
           <div style={{
-            width: 28, height: 28, borderRadius: 6,
+            width: 28, height: 28, borderRadius: 0,
             background: '#FFFFFF', border: '1px solid #E8E6E4',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 16, color: '#939799',
+            fontSize: 16, color: '#5E6366',
           }}>+</div>
-          <span style={{ color: '#939799', fontSize: 13 }}>Add</span>
+          <span style={{ color: '#5E6366', fontSize: 13 }}>Add</span>
         </div>
       </div>
     </IntelCard>
@@ -2792,7 +3000,7 @@ function AdsSection({ ads }: { ads: any }) {
     return (
       <IntelCard>
         <IntelLabel>Ads</IntelLabel>
-        <p style={{ color: '#939799', fontSize: 13 }}>No ads data available. Connect Meta/Google Ads to populate.</p>
+        <p style={{ color: '#5E6366', fontSize: 13 }}>No ads data available. Connect Meta/Google Ads to populate.</p>
       </IntelCard>
     );
   }
@@ -2804,14 +3012,14 @@ function AdsSection({ ads }: { ads: any }) {
       </div>
       <div style={{ marginBottom: 16 }}>
         <span style={{ color: '#000000', fontSize: 14, fontWeight: 700 }}>Spend Today: ${Number(spendToday).toFixed(2)}</span>
-        {dailyBudget > 0 && <span style={{ color: '#939799', fontSize: 13, marginLeft: 8 }}>(${Number(dailyBudget).toFixed(2)}/day budget)</span>}
+        {dailyBudget > 0 && <span style={{ color: '#5E6366', fontSize: 13, marginLeft: 8 }}>(${Number(dailyBudget).toFixed(2)}/day budget)</span>}
       </div>
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
           <thead>
             <tr style={{ borderBottom: '1px solid #E8E6E4' }}>
               {['Ad', 'Spend', 'Impr.', 'Clicks', 'CTR', 'CPC'].map(h => (
-                <th key={h} style={{ color: '#939799', padding: '6px 10px', textAlign: h === 'Ad' ? 'left' : 'right', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{h}</th>
+                <th key={h} style={{ color: '#5E6366', padding: '6px 10px', textAlign: h === 'Ad' ? 'left' : 'right', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{h}</th>
               ))}
             </tr>
           </thead>
@@ -2819,8 +3027,8 @@ function AdsSection({ ads }: { ads: any }) {
             {adsList.slice(0, 8).map((ad: any, i: number) => (
               <tr key={i} style={{ borderBottom: '1px solid #FFFFFF' }}>
                 <td style={{ padding: '8px 10px' }}>
-                  <div style={{ width: 32, height: 32, borderRadius: 4, background: '#F1F4F5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {ad.thumbnail ? <img src={ad.thumbnail} style={{ width: 32, height: 32, borderRadius: 4, objectFit: 'cover' }} /> : <span style={{ fontSize: 14, color: '#939799' }}><Glyph name="camera" size={14} /></span>}
+                  <div style={{ width: 32, height: 32, borderRadius: 0, background: '#F1F4F5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {ad.thumbnail ? <img src={ad.thumbnail} style={{ width: 32, height: 32, borderRadius: 0, objectFit: 'cover' }} /> : <span style={{ fontSize: 14, color: '#5E6366' }}><Glyph name="camera" size={14} /></span>}
                   </div>
                 </td>
                 <td style={{ padding: '8px 10px', color: '#5E6366', textAlign: 'right' }}>${Number(ad.spend || 0).toFixed(2)}</td>
@@ -2833,7 +3041,7 @@ function AdsSection({ ads }: { ads: any }) {
           </tbody>
         </table>
       </div>
-      <div style={{ marginTop: 12, color: '#939799', fontSize: 12 }}>+ {adsCreated} ads created in the past 24h</div>
+      <div style={{ marginTop: 12, color: '#5E6366', fontSize: 12 }}>+ {adsCreated} ads created in the past 24h</div>
     </IntelCard>
   );
 }
@@ -2940,7 +3148,7 @@ function AICMOFeedSection({ feed, seo, geo, goals, storedCmo, onAction, companyI
             }}>
               <Glyph name={s.icon} size={16} />
               <span style={{ color: '#000000', fontSize: 14, fontWeight: 600, flex: 1 }}>{s.label}</span>
-              <span style={{ color: '#939799', fontSize: 11, whiteSpace: 'nowrap', flexShrink: 0 }}>
+              <span style={{ color: '#5E6366', fontSize: 11, whiteSpace: 'nowrap', flexShrink: 0 }}>
                 {s.count > 0 ? (s.key === 'seo' ? `Found ${s.count} issues` : s.key === 'reddit' ? `Found ${s.count} mentions` : s.key === 'hn' ? `${s.count} posts` : s.key === 'x' ? `Generated ${s.count} idea${s.count !== 1 ? 's' : ''}` : `Generated ${s.count} topic${s.count !== 1 ? 's' : ''}`) : 'None yet'}
               </span>
               <span style={{ color: '#5E6366', fontSize: 14, transform: expanded[s.key] ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }}>▾</span>
@@ -2952,27 +3160,27 @@ function AICMOFeedSection({ feed, seo, geo, goals, storedCmo, onAction, companyI
                 {/* Reddit */}
                 {/* Hacker News */}
                 {s.key === 'hn' && (hnLoading ? (
-                  <p style={{ color: '#939799', fontSize: 12 }}>Searching Hacker News...</p>
+                  <p style={{ color: '#5E6366', fontSize: 12 }}>Searching Hacker News...</p>
                 ) : hnItems.length > 0 ? hnItems.map((h, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: i < hnItems.length - 1 ? '1px solid #FFFFFF' : 'none' }}>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ color: '#2B3033', fontSize: 13, fontWeight: 500 }}>{h.title}</div>
                       <div style={{ display: 'flex', gap: 10, marginTop: 4, alignItems: 'center' }}>
-                        <span style={{ background: 'rgba(138, 109, 59,0.12)', border: '1px solid rgba(138, 109, 59,0.3)', color: '#8A6D3B', padding: '1px 8px', borderRadius: 10, fontSize: 10, fontWeight: 600 }}>HN</span>
-                        <span style={{ color: '#939799', fontSize: 11 }}>▲ {h.points}</span>
-                        <span style={{ color: '#939799', fontSize: 11 }}><Glyph name="chat" /> {h.comments}</span>
+                        <span style={{ background: 'rgba(138, 109, 59,0.12)', border: '1px solid rgba(138, 109, 59,0.3)', color: '#8A6D3B', padding: '1px 8px', borderRadius: 0, fontSize: 10, fontWeight: 600 }}>HN</span>
+                        <span style={{ color: '#5E6366', fontSize: 11 }}>▲ {h.points}</span>
+                        <span style={{ color: '#5E6366', fontSize: 11 }}><Glyph name="chat" /> {h.comments}</span>
                       </div>
                     </div>
                     <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
                       <a href={h.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                        <button style={{ background: '#FFFFFF', color: '#000000', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>Read</button>
+                        <button style={{ background: '#FFFFFF', color: '#000000', border: 'none', padding: '6px 16px', borderRadius: 0, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>Read</button>
                       </a>
                       <a href={`https://news.ycombinator.com/item?id=${h.objectID}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                        <button onClick={(e) => { e.preventDefault(); onAction?.({ actionLabel: 'Post', title: h.title, source: 'Hacker News', sourceIcon: '🟧', sourceColor: '#8A6D3B', chatSection: 'hn', url: h.url }); }} style={{ background: '#F1F4F5', color: '#8A6D3B', border: '1px solid #8A6D3B33', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>Post</button>
+                        <button onClick={(e) => { e.preventDefault(); onAction?.({ actionLabel: 'Post', title: h.title, source: 'Hacker News', sourceIcon: '🟧', sourceColor: '#8A6D3B', chatSection: 'hn', url: h.url }); }} style={{ background: '#F1F4F5', color: '#8A6D3B', border: '1px solid #8A6D3B33', padding: '6px 16px', borderRadius: 0, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>Post</button>
                       </a>
                     </div>
                   </div>
-                )) : <p style={{ color: '#939799', fontSize: 12 }}>No relevant Hacker News posts found.</p>)}
+                )) : <p style={{ color: '#5E6366', fontSize: 12 }}>No relevant Hacker News posts found.</p>)}
 
                 {/* Reddit */}
                 {s.key === 'reddit' && (redditOpportunities.length > 0 ? redditOpportunities.map((r: any, i: number) => (
@@ -2980,14 +3188,14 @@ function AICMOFeedSection({ feed, seo, geo, goals, storedCmo, onAction, companyI
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ color: '#2B3033', fontSize: 13, fontWeight: 500, lineHeight: 1.5 }}>{r.title}</div>
                       <div style={{ display: 'flex', gap: 10, marginTop: 4, alignItems: 'center' }}>
-                        <span style={{ background: 'rgba(255,69,0,0.12)', border: '1px solid rgba(255,69,0,0.3)', color: '#8A6D3B', padding: '1px 8px', borderRadius: 10, fontSize: 10, fontWeight: 600 }}>{r.subreddit}</span>
-                        <span style={{ color: '#939799', fontSize: 11 }}>▲ {r.upvotes}</span>
-                        <span style={{ color: '#939799', fontSize: 11 }}><Glyph name="chat" /> {r.comments}</span>
+                        <span style={{ background: 'rgba(255,69,0,0.12)', border: '1px solid rgba(255,69,0,0.3)', color: '#8A6D3B', padding: '1px 8px', borderRadius: 0, fontSize: 10, fontWeight: 600 }}>{r.subreddit}</span>
+                        <span style={{ color: '#5E6366', fontSize: 11 }}>▲ {r.upvotes}</span>
+                        <span style={{ color: '#5E6366', fontSize: 11 }}><Glyph name="chat" /> {r.comments}</span>
                       </div>
                     </div>
-                    <button onClick={() => onAction?.({ actionLabel: 'Post', title: r.title, source: 'Reddit', sourceIcon: '🟠', sourceColor: '#8A6D3B', chatSection: 'reddit', subreddit: r.subreddit, upvotes: r.upvotes, comments: r.comments })} style={{ background: '#FFFFFF', color: '#000000', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>Post</button>
+                    <button onClick={() => onAction?.({ actionLabel: 'Post', title: r.title, source: 'Reddit', sourceIcon: '🟠', sourceColor: '#8A6D3B', chatSection: 'reddit', subreddit: r.subreddit, upvotes: r.upvotes, comments: r.comments })} style={{ background: '#FFFFFF', color: '#000000', border: 'none', padding: '6px 16px', borderRadius: 0, fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>Post</button>
                   </div>
-                )) : <p style={{ color: '#939799', fontSize: 12 }}>No Reddit opportunities detected yet.</p>)}
+                )) : <p style={{ color: '#5E6366', fontSize: 12 }}>No Reddit opportunities detected yet.</p>)}
 
                 {/* SEO + GEO */}
                 {s.key === 'seo' && (allRecs.length > 0 ? allRecs.map((r, i) => (
@@ -2998,13 +3206,13 @@ function AICMOFeedSection({ feed, seo, geo, goals, storedCmo, onAction, companyI
                         background: r.severity === 'Critical' ? 'rgba(192, 57, 43,0.1)' : 'rgba(138, 109, 59,0.1)',
                         border: `1px solid ${r.severity === 'Critical' ? 'rgba(192, 57, 43,0.3)' : 'rgba(138, 109, 59,0.3)'}`,
                         color: r.severity === 'Critical' ? '#C0392B' : '#8A6D3B',
-                        padding: '1px 8px', borderRadius: 4, fontSize: 10, fontWeight: 700,
+                        padding: '1px 8px', borderRadius: 0, fontSize: 10, fontWeight: 700,
                       }}>{r.severity}</span>
-                      <span style={{ color: '#939799', fontSize: 11 }}>{r.category}</span>
-                      <button onClick={() => onAction?.({ actionLabel: 'Fix', title: r.title, description: r.title, source: 'SEO/GEO', sourceIcon: '🔧', sourceColor: '#8A6D3B', chatSection: 'seo', category: r.category, severity: r.severity })} style={{ background: '#FFFFFF', color: '#000000', border: 'none', padding: '4px 14px', borderRadius: 6, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>Fix</button>
+                      <span style={{ color: '#5E6366', fontSize: 11 }}>{r.category}</span>
+                      <button onClick={() => onAction?.({ actionLabel: 'Fix', title: r.title, description: r.title, source: 'SEO/GEO', sourceIcon: '🔧', sourceColor: '#8A6D3B', chatSection: 'seo', category: r.category, severity: r.severity })} style={{ background: '#FFFFFF', color: '#000000', border: 'none', padding: '4px 14px', borderRadius: 0, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>Fix</button>
                     </div>
                   </div>
-                )) : <p style={{ color: '#939799', fontSize: 12 }}>No SEO/GEO issues to fix.</p>)}
+                )) : <p style={{ color: '#5E6366', fontSize: 12 }}>No SEO/GEO issues to fix.</p>)}
 
                 {/* X Ideas */}
                 {s.key === 'x' && (xIdeas.length > 0 ? xIdeas.map((x, i) => (
@@ -3012,20 +3220,20 @@ function AICMOFeedSection({ feed, seo, geo, goals, storedCmo, onAction, companyI
                     <div style={{ flex: 1 }}>
                       <div style={{ color: '#2B3033', fontSize: 13 }}>{x.text}</div>
                     </div>
-                    <button onClick={() => onAction?.({ actionLabel: 'Post', text: x.text, source: 'X', sourceIcon: '𝕏', sourceColor: '#FFFFFF', chatSection: 'x' })} style={{ background: '#FFFFFF', color: '#000000', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>Post</button>
+                    <button onClick={() => onAction?.({ actionLabel: 'Post', text: x.text, source: 'X', sourceIcon: '𝕏', sourceColor: '#FFFFFF', chatSection: 'x' })} style={{ background: '#FFFFFF', color: '#000000', border: 'none', padding: '6px 16px', borderRadius: 0, fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>Post</button>
                   </div>
-                )) : <p style={{ color: '#939799', fontSize: 12 }}>No tweet ideas generated yet.</p>)}
+                )) : <p style={{ color: '#5E6366', fontSize: 12 }}>No tweet ideas generated yet.</p>)}
 
                 {/* Articles */}
                 {s.key === 'articles' && (articles.length > 0 ? articles.map((a, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: i < articles.length - 1 ? '1px solid #FFFFFF' : 'none' }}>
                     <div style={{ flex: 1 }}>
                       <div style={{ color: '#2B3033', fontSize: 13 }}>{a.title}</div>
-                      <span style={{ color: '#939799', fontSize: 11 }}>{a.topic}</span>
+                      <span style={{ color: '#5E6366', fontSize: 11 }}>{a.topic}</span>
                     </div>
-                    <button onClick={() => onAction?.({ actionLabel: 'Write', title: a.title, topic: a.topic, source: 'Articles', sourceIcon: '✏️', sourceColor: '#5E6366', chatSection: 'articles' })} style={{ background: '#FFFFFF', color: '#000000', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>Write</button>
+                    <button onClick={() => onAction?.({ actionLabel: 'Write', title: a.title, topic: a.topic, source: 'Articles', sourceIcon: '✏️', sourceColor: '#5E6366', chatSection: 'articles' })} style={{ background: '#FFFFFF', color: '#000000', border: 'none', padding: '6px 16px', borderRadius: 0, fontSize: 12, fontWeight: 700, cursor: 'pointer', flexShrink: 0 }}>Write</button>
                   </div>
-                )) : <p style={{ color: '#939799', fontSize: 12 }}>No article topics generated yet.</p>)}
+                )) : <p style={{ color: '#5E6366', fontSize: 12 }}>No article topics generated yet.</p>)}
               </div>
             )}
           </div>
@@ -3085,29 +3293,29 @@ function EmailsDraftedSection({ brandDna, companyInfo, onAction }: { brandDna: a
       <IntelLabel>Emails Drafted ({emails.length})</IntelLabel>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {emails.map((e, i) => (
-          <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 8, padding: '14px 16px' }}>
+          <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 0, padding: '14px 16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <Glyph name="mail" size={14} />
                 <span style={{ color: '#000000', fontSize: 13, fontWeight: 600 }}>{e.subject}</span>
               </div>
               <div style={{ display: 'flex', gap: 6 }}>
-                <span style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600 }}>{e.type}</span>
+                <span style={{ background: 'rgba(10, 125, 60,0.08)', border: '1px solid rgba(10, 125, 60,0.2)', color: '#0A7D3C', padding: '2px 8px', borderRadius: 0, fontSize: 10, fontWeight: 600 }}>{e.type}</span>
                 <span style={{
                   background: e.status === 'ready' ? 'rgba(0, 214, 93,0.08)' : 'rgba(138, 109, 59,0.08)',
                   border: `1px solid ${e.status === 'ready' ? 'rgba(0, 214, 93,0.2)' : 'rgba(138, 109, 59,0.2)'}`,
                   color: e.status === 'ready' ? '#0A7D3C' : '#8A6D3B',
-                  padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600,
+                  padding: '2px 8px', borderRadius: 0, fontSize: 10, fontWeight: 600,
                 }}>{e.status === 'ready' ? 'Ready' : 'Draft'}</span>
               </div>
             </div>
-            <div style={{ color: '#939799', fontSize: 11, marginBottom: 6 }}>To: {e.to}</div>
+            <div style={{ color: '#5E6366', fontSize: 11, marginBottom: 6 }}>To: {e.to}</div>
             <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5, margin: 0 }}>{e.preview}</p>
             <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
-              <button onClick={() => onAction?.({ actionLabel: e.status === 'ready' ? 'Send' : 'Edit', subject: e.subject, to: e.to, description: e.preview, source: 'Email', sourceIcon: '✉️', sourceColor: '#0A7D3C', chatSection: 'email' })} style={{ background: e.status === 'ready' ? '#FFFFFF' : '#F1F4F5', color: e.status === 'ready' ? '#000000' : '#C8CBCC', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+              <button onClick={() => onAction?.({ actionLabel: e.status === 'ready' ? 'Send' : 'Edit', subject: e.subject, to: e.to, description: e.preview, source: 'Email', sourceIcon: '✉️', sourceColor: '#0A7D3C', chatSection: 'email' })} style={{ background: e.status === 'ready' ? '#FFFFFF' : '#F1F4F5', color: e.status === 'ready' ? '#000000' : '#C8CBCC', border: 'none', padding: '6px 16px', borderRadius: 0, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
                 {e.status === 'ready' ? 'Send' : 'Edit'}
               </button>
-              <button onClick={() => onAction?.({ actionLabel: 'Review', subject: e.subject, to: e.to, description: e.preview, source: 'Email', sourceIcon: '✉️', sourceColor: '#0A7D3C', chatSection: 'email' })} style={{ background: '#FFFFFF', color: '#939799', border: '1px solid #E8E6E4', padding: '6px 16px', borderRadius: 6, fontSize: 12, cursor: 'pointer' }}>Preview</button>
+              <button onClick={() => onAction?.({ actionLabel: 'Review', subject: e.subject, to: e.to, description: e.preview, source: 'Email', sourceIcon: '✉️', sourceColor: '#0A7D3C', chatSection: 'email' })} style={{ background: '#FFFFFF', color: '#5E6366', border: '1px solid #E8E6E4', padding: '6px 16px', borderRadius: 0, fontSize: 12, cursor: 'pointer' }}>Preview</button>
             </div>
           </div>
         ))}
@@ -3164,29 +3372,29 @@ function LinkedInDraftedSection({ brandDna, companyInfo, goals, onAction }: { br
       <IntelLabel>LinkedIn Posts Drafted ({posts.length})</IntelLabel>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {posts.map((p, i) => (
-          <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 8, padding: '14px 16px' }}>
+          <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 0, padding: '14px 16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <div style={{ width: 24, height: 24, borderRadius: 4, background: '#0A7D3C', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: '#000000', fontWeight: 700 }}>in</div>
+                <div style={{ width: 24, height: 24, borderRadius: 0, background: '#0A7D3C', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: '#000000', fontWeight: 700 }}>in</div>
                 <span style={{ color: '#5E6366', fontSize: 12, fontWeight: 600 }}>{p.author}</span>
                 <span style={{ color: '#5E6366', fontSize: 11 }}>· {p.engagement}</span>
               </div>
               <div style={{ display: 'flex', gap: 6 }}>
-                <span style={{ background: 'rgba(0,119,181,0.1)', border: '1px solid rgba(0,119,181,0.2)', color: '#0A7D3C', padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600 }}>{p.type}</span>
+                <span style={{ background: 'rgba(0,119,181,0.1)', border: '1px solid rgba(0,119,181,0.2)', color: '#0A7D3C', padding: '2px 8px', borderRadius: 0, fontSize: 10, fontWeight: 600 }}>{p.type}</span>
                 <span style={{
                   background: p.status === 'ready' ? 'rgba(0, 214, 93,0.08)' : 'rgba(138, 109, 59,0.08)',
                   border: `1px solid ${p.status === 'ready' ? 'rgba(0, 214, 93,0.2)' : 'rgba(138, 109, 59,0.2)'}`,
                   color: p.status === 'ready' ? '#0A7D3C' : '#8A6D3B',
-                  padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600,
+                  padding: '2px 8px', borderRadius: 0, fontSize: 10, fontWeight: 600,
                 }}>{p.status === 'ready' ? 'Ready' : 'Draft'}</span>
               </div>
             </div>
             <p style={{ color: '#2B3033', fontSize: 13, lineHeight: 1.6, margin: 0, whiteSpace: 'pre-wrap' }}>{p.content}</p>
             <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
-              <button onClick={() => onAction?.({ actionLabel: p.status === 'ready' ? 'Publish' : 'Edit', content: p.content, author: p.author, description: p.content, source: 'LinkedIn', sourceIcon: 'in', sourceColor: '#0A7D3C', chatSection: 'linkedin' })} style={{ background: p.status === 'ready' ? '#0A7D3C' : '#F1F4F5', color: '#000000', border: 'none', padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+              <button onClick={() => onAction?.({ actionLabel: p.status === 'ready' ? 'Publish' : 'Edit', content: p.content, author: p.author, description: p.content, source: 'LinkedIn', sourceIcon: 'in', sourceColor: '#0A7D3C', chatSection: 'linkedin' })} style={{ background: p.status === 'ready' ? '#0A7D3C' : '#F1F4F5', color: '#000000', border: 'none', padding: '6px 16px', borderRadius: 0, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
                 {p.status === 'ready' ? 'Publish' : 'Edit'}
               </button>
-              <button onClick={() => onAction?.({ actionLabel: 'Post', content: p.content, author: p.author, description: p.content, source: 'LinkedIn', sourceIcon: 'in', sourceColor: '#0A7D3C', chatSection: 'linkedin', title: 'Schedule LinkedIn Post' })} style={{ background: '#FFFFFF', color: '#939799', border: '1px solid #E8E6E4', padding: '6px 16px', borderRadius: 6, fontSize: 12, cursor: 'pointer' }}>Schedule</button>
+              <button onClick={() => onAction?.({ actionLabel: 'Post', content: p.content, author: p.author, description: p.content, source: 'LinkedIn', sourceIcon: 'in', sourceColor: '#0A7D3C', chatSection: 'linkedin', title: 'Schedule LinkedIn Post' })} style={{ background: '#FFFFFF', color: '#5E6366', border: '1px solid #E8E6E4', padding: '6px 16px', borderRadius: 0, fontSize: 12, cursor: 'pointer' }}>Schedule</button>
             </div>
           </div>
         ))}
@@ -3208,7 +3416,7 @@ function AdsFromDBSection({ ads, onAction }: { ads: any; onAction?: (item: any) 
     return (
       <IntelCard>
         <IntelLabel>Ads</IntelLabel>
-        <p style={{ color: '#939799', fontSize: 13 }}>No ads data. Connect ad accounts or generate HeyGen avatar ads.</p>
+        <p style={{ color: '#5E6366', fontSize: 13 }}>No ads data. Connect ad accounts or generate HeyGen avatar ads.</p>
       </IntelCard>
     );
   }
@@ -3223,7 +3431,7 @@ function AdsFromDBSection({ ads, onAction }: { ads: any; onAction?: (item: any) 
       {/* Spend summary */}
       <div style={{ marginBottom: 16 }}>
         <span style={{ color: '#000000', fontSize: 14, fontWeight: 700 }}>Spend Today: ${Number(spendToday).toFixed(2)}</span>
-        {dailyBudget > 0 && <span style={{ color: '#939799', fontSize: 13, marginLeft: 8 }}>(${Number(dailyBudget).toFixed(2)}/day budget)</span>}
+        {dailyBudget > 0 && <span style={{ color: '#5E6366', fontSize: 13, marginLeft: 8 }}>(${Number(dailyBudget).toFixed(2)}/day budget)</span>}
       </div>
 
       {/* Table */}
@@ -3232,7 +3440,7 @@ function AdsFromDBSection({ ads, onAction }: { ads: any; onAction?: (item: any) 
           <thead>
             <tr style={{ borderBottom: '1px solid #E8E6E4' }}>
               {['Ad', 'Spend', 'Impr.', 'Clicks', 'CTR', 'CPC'].map(h => (
-                <th key={h} style={{ color: '#939799', padding: '8px 12px', textAlign: h === 'Ad' ? 'left' : 'right', fontSize: 11, fontWeight: 600 }}>{h}</th>
+                <th key={h} style={{ color: '#5E6366', padding: '8px 12px', textAlign: h === 'Ad' ? 'left' : 'right', fontSize: 11, fontWeight: 600 }}>{h}</th>
               ))}
             </tr>
           </thead>
@@ -3241,7 +3449,7 @@ function AdsFromDBSection({ ads, onAction }: { ads: any; onAction?: (item: any) 
               <>
                 <tr key={i} onClick={() => setExpandedAd(expandedAd === i ? null : i)} style={{ borderBottom: '1px solid #FFFFFF', cursor: 'pointer', background: expandedAd === i ? '#FFFFFF' : 'transparent' }}>
                   <td style={{ padding: '10px 12px' }}>
-                    <div style={{ width: 44, height: 44, borderRadius: 6, overflow: 'hidden', background: '#F1F4F5' }}>
+                    <div style={{ width: 44, height: 44, borderRadius: 0, overflow: 'hidden', background: '#F1F4F5' }}>
                       {ad.preview_image_url ? (
                         <img src={ad.preview_image_url} alt={ad.avatar_name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                       ) : (
@@ -3258,7 +3466,7 @@ function AdsFromDBSection({ ads, onAction }: { ads: any; onAction?: (item: any) 
                 {expandedAd === i && (
                   <tr key={`${i}-script`}>
                     <td colSpan={6} style={{ padding: '0 12px 14px 12px', background: '#FFFFFF' }}>
-                      <div style={{ padding: '12px 16px', background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8 }}>
+                      <div style={{ padding: '12px 16px', background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0 }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                           <div>
                             <span style={{ color: '#000000', fontSize: 13, fontWeight: 600 }}>{ad.avatar_name}</span>
@@ -3266,11 +3474,11 @@ function AdsFromDBSection({ ads, onAction }: { ads: any; onAction?: (item: any) 
                               background: ad.status === 'active' ? 'rgba(0, 214, 93,0.08)' : 'rgba(138, 109, 59,0.08)',
                               border: `1px solid ${ad.status === 'active' ? 'rgba(0, 214, 93,0.2)' : 'rgba(138, 109, 59,0.2)'}`,
                               color: ad.status === 'active' ? '#0A7D3C' : '#8A6D3B',
-                              padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600, marginLeft: 8,
+                              padding: '2px 8px', borderRadius: 0, fontSize: 10, fontWeight: 600, marginLeft: 8,
                             }}>{ad.status || 'draft'}</span>
                           </div>
                         </div>
-                        <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>AD SCRIPT</div>
+                        <div style={{ color: '#5E6366', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>AD SCRIPT</div>
                         <p style={{ color: '#2B3033', fontSize: 13, lineHeight: 1.6, margin: 0, fontStyle: 'italic' }}>"{ad.script}"</p>
                       </div>
                     </td>
@@ -3281,7 +3489,7 @@ function AdsFromDBSection({ ads, onAction }: { ads: any; onAction?: (item: any) 
           </tbody>
         </table>
       </div>
-      <div style={{ marginTop: 12, color: '#939799', fontSize: 12 }}>+ {adsCreated} ads created in the past 24h</div>
+      <div style={{ marginTop: 12, color: '#5E6366', fontSize: 12 }}>+ {adsCreated} ads created in the past 24h</div>
     </IntelCard>
   );
 }
@@ -3318,16 +3526,16 @@ function HeyGenAdsSection({ companyInfo, ads }: { companyInfo: any; ads: any }) 
       {spendToday > 0 && (
         <div style={{ marginBottom: 16 }}>
           <span style={{ color: '#000000', fontSize: 14, fontWeight: 700 }}>Spend Today: ${Number(spendToday).toFixed(2)}</span>
-          {dailyBudget > 0 && <span style={{ color: '#939799', fontSize: 13, marginLeft: 8 }}>(${Number(dailyBudget).toFixed(2)}/day budget)</span>}
+          {dailyBudget > 0 && <span style={{ color: '#5E6366', fontSize: 13, marginLeft: 8 }}>(${Number(dailyBudget).toFixed(2)}/day budget)</span>}
         </div>
       )}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {avatarAds.map((ad: any, i: number) => (
-          <div key={i} style={{ background: '#FFFFFF', border: `1px solid ${ad.status === 'top performer' ? 'rgba(0, 214, 93,0.2)' : '#F7F8F9'}`, borderRadius: 8, padding: '14px 16px' }}>
+          <div key={i} style={{ background: '#FFFFFF', border: `1px solid ${ad.status === 'top performer' ? 'rgba(0, 214, 93,0.2)' : '#F7F8F9'}`, borderRadius: 0, padding: '14px 16px' }}>
             <div style={{ display: 'flex', gap: 14, marginBottom: 10 }}>
               {/* Avatar thumbnail */}
               <div style={{
-                width: 56, height: 56, borderRadius: 8, background: '#F1F4F5',
+                width: 56, height: 56, borderRadius: 0, background: '#F1F4F5',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 flexShrink: 0, overflow: 'hidden',
               }}>
@@ -3341,7 +3549,7 @@ function HeyGenAdsSection({ companyInfo, ads }: { companyInfo: any; ads: any }) 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
                   <span style={{ color: '#000000', fontSize: 13, fontWeight: 600 }}>{ad.avatar}</span>
                   {ad.status === 'top performer' && (
-                    <span style={{ background: 'rgba(0, 214, 93,0.1)', border: '1px solid rgba(0, 214, 93,0.2)', color: '#0A7D3C', padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600 }}><Glyph name="star" /> Top Performer</span>
+                    <span style={{ background: 'rgba(0, 214, 93,0.1)', border: '1px solid rgba(0, 214, 93,0.2)', color: '#0A7D3C', padding: '2px 8px', borderRadius: 0, fontSize: 10, fontWeight: 600 }}><Glyph name="star" /> Top Performer</span>
                   )}
                 </div>
                 <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.4, margin: 0 }}>"{ad.script}"</p>
@@ -3358,14 +3566,14 @@ function HeyGenAdsSection({ companyInfo, ads }: { companyInfo: any; ads: any }) 
               ].map((m, j) => (
                 <div key={j} style={{ textAlign: 'center' }}>
                   <div style={{ color: m.color, fontSize: 14, fontWeight: 700 }}>{m.value}</div>
-                  <div style={{ color: '#939799', fontSize: 9, letterSpacing: '0.05em', textTransform: 'uppercase' }}>{m.label}</div>
+                  <div style={{ color: '#5E6366', fontSize: 9, letterSpacing: '0.05em', textTransform: 'uppercase' }}>{m.label}</div>
                 </div>
               ))}
             </div>
           </div>
         ))}
       </div>
-      <div style={{ marginTop: 12, color: '#939799', fontSize: 12 }}>+ {avatarAds.length} avatar variations tested in the past 24h</div>
+      <div style={{ marginTop: 12, color: '#5E6366', fontSize: 12 }}>+ {avatarAds.length} avatar variations tested in the past 24h</div>
     </IntelCard>
   );
 }
@@ -3478,7 +3686,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
       <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
         {/* Company Overview - FREE (always visible) */}
         <section id="intel-overview">
-          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Company Overview</div>
+          <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Company Overview</div>
           <CompanyOverviewSection companyInfo={data.companyInfo} domain={data.domain} />
         </section>
 
@@ -3486,7 +3694,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
 
         {/* Brand DNA */}
         <section id="intel-brand">
-          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Brand DNA</div>
+          <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Brand DNA</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={120} label="Unlock Brand DNA">
             <BrandDNASection data={data.brandDna} />
           </LockedSection>
@@ -3496,7 +3704,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
 
         {/* Market & Metrics */}
         <section id="intel-market">
-          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Market & Metrics</div>
+          <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Market & Metrics</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={120} label="Unlock Market Data">
             <MarketMetricsSection competitors={data.competitors} metrics={data.metrics} />
           </LockedSection>
@@ -3506,7 +3714,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
 
         {/* Analytics Overview (Tabbed) */}
         <section id="intel-analytics">
-          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Analytics Overview</div>
+          <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Analytics Overview</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={120} label="Unlock Analytics">
             <AnalyticsOverviewSection seo={data.seoData} geo={data.geoData} />
           </LockedSection>
@@ -3516,7 +3724,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
 
         {/* Competitors Chips */}
         <section id="intel-competitors">
-          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Competitors</div>
+          <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Competitors</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={140} label="Unlock Competitor Intel">
             <CompetitorChipsSection competitors={data.competitors} onAction={openChat} />
           </LockedSection>
@@ -3526,7 +3734,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
 
         {/* Patents & Grants */}
         <section id="intel-ip">
-          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Patents & Grants</div>
+          <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Patents & Grants</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock IP Intelligence">
             <PatentsGrantsSection patents={data.patents} grants={data.grants} />
           </LockedSection>
@@ -3536,7 +3744,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
 
         {/* Documents */}
         <section id="intel-docs">
-          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Documents</div>
+          <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Documents</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock Documents">
             <DocumentsSection documents={data.documents} />
           </LockedSection>
@@ -3546,7 +3754,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
 
         {/* Social */}
         <section id="intel-social">
-          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Social Analytics</div>
+          <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Social Analytics</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={100} label="Unlock Social">
             <SocialSection social={data.social} />
           </LockedSection>
@@ -3556,7 +3764,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
 
         {/* Emails */}
         <section id="intel-emails">
-          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Emails Drafted</div>
+          <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Emails Drafted</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock Email Drafts">
             <EmailsDraftedSection brandDna={data.brandDna} companyInfo={data.companyInfo} onAction={openChat} />
           </LockedSection>
@@ -3566,7 +3774,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
 
         {/* LinkedIn */}
         <section id="intel-linkedin">
-          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>LinkedIn Posts</div>
+          <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>LinkedIn Posts</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={100} label="Unlock LinkedIn">
             <LinkedInDraftedSection brandDna={data.brandDna} companyInfo={data.companyInfo} goals={data.goals} onAction={openChat} />
           </LockedSection>
@@ -3576,7 +3784,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
 
         {/* Ads */}
         <section id="intel-ads">
-          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Ads</div>
+          <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Ads</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock Ads">
             <AdsFromDBSection ads={adsData} onAction={openChat} />
           </LockedSection>
@@ -3586,7 +3794,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
 
         {/* Goals */}
         <section id="intel-goals">
-          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Goals Overview</div>
+          <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Goals Overview</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={100} label="Unlock Goals">
             <GoalsSection goals={data.goals} />
           </LockedSection>
@@ -3596,7 +3804,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
 
         {/* Investors */}
         <section id="intel-investors">
-          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Investor Pipeline</div>
+          <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Investor Pipeline</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock Investors">
             <InvestorSection investors={data.investors} />
           </LockedSection>
@@ -3606,7 +3814,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
 
         {/* AI CMO Feed */}
         <section id="intel-cmo">
-          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>AI CMO Feed</div>
+          <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>AI CMO Feed</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={100} label="Unlock AI CMO">
             <AICMOFeedSection feed={data.feed} seo={data.seoData} geo={data.geoData} goals={data.goals} storedCmo={feedData?.cmo_feed} onAction={openChat} companyInfo={data.companyInfo} brandDna={data.brandDna} storedHn={hnData?.items} storedReddit={redditData?.items} />
           </LockedSection>
@@ -3616,7 +3824,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
 
         {/* Activity Feed */}
         <section id="intel-feed">
-          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Activity Feed</div>
+          <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Activity Feed</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={100} label="Unlock Activity Feed">
             <ActivityFeedSection feed={data.feed} updates={data.updates} goals={data.goals} seo={data.seoData} geo={data.geoData} storedFeed={feedData?.feed_items} onAction={openChat} />
           </LockedSection>
@@ -3626,7 +3834,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
 
         {/* ClawOS Updates */}
         <section id="intel-updates">
-          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>ClawOS Updates</div>
+          <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>ClawOS Updates</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock Updates">
             <ClawOSUpdatesSection updates={data.updates} />
           </LockedSection>
@@ -3636,7 +3844,7 @@ export default function IntelligenceDashboard({ ventureId }: { ventureId: string
 
         {/* Hiring */}
         <section id="intel-hiring">
-          <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Team & Hiring</div>
+          <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 16 }}>Team & Hiring</div>
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={80} label="Unlock Hiring">
             <HiringSection hiring={data.hiring} />
           </LockedSection>

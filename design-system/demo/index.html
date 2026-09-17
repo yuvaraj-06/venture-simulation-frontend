@@ -1,0 +1,664 @@
+<!doctype html>
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SHARE VENTURES DESIGN SYSTEM — LIVING REFERENCE (visual source of truth)
+     Every pattern here is specified in ../AGENT.md and the docs beside it.
+     This is a deliberately framework-free build so the design language never
+     depends on a stack. PRODUCTION SITES ARE BUILT IN NEXT.JS — use the kit
+     in ../nextjs/ (same classes, same tokens, same data-scene contract).
+     If the system changes, this file changes with it.
+     ═══════════════════════════════════════════════════════════════════════ -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Share Ventures — Design System Reference</title>
+<meta name="description" content="Living reference for the Share Ventures design system: tokens, typography, components, motion, and 3D.">
+<link rel="icon" href="../assets/logos/SV_Symbol_Black.svg">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<style>
+
+  /* ── Base ────────────────────────────────────────────────────────────── */
+  *,*::before,*::after { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  @media (prefers-reduced-motion:reduce){ html { scroll-behavior:auto; } }
+  body {
+    margin:0; background:var(--sv-surface); color:var(--sv-ink);
+    font:400 var(--sv-text-body)/var(--sv-leading-body) var(--sv-font-sans);
+    -webkit-font-smoothing:antialiased;
+  }
+  section { background:var(--sv-surface); color:var(--sv-ink); }
+  img,svg,canvas { display:block; max-width:100%; }
+  a { color:inherit; }
+  :focus-visible { outline:2px solid var(--sv-green); outline-offset:2px; }
+  ::selection { background:var(--sv-green); color:var(--sv-black); }
+
+  .sv-container { max-width:var(--sv-container); margin-inline:auto; padding-inline:var(--sv-gutter); }
+
+  h1,h2,h3,h4,p { margin:0; }
+  .sv-display { font-size:var(--sv-text-display); font-weight:400; line-height:var(--sv-leading-display); letter-spacing:var(--sv-tracking-display); text-wrap:balance; }
+  .sv-h1 { font-size:var(--sv-text-h1); font-weight:500; line-height:var(--sv-leading-heading); letter-spacing:var(--sv-tracking-heading); text-wrap:balance; }
+  .sv-h2 { font-size:var(--sv-text-h2); font-weight:500; line-height:var(--sv-leading-heading); letter-spacing:var(--sv-tracking-heading); text-wrap:balance; }
+  .sv-h3 { font-size:var(--sv-text-h3); font-weight:500; line-height:1.15; letter-spacing:var(--sv-tracking-heading); }
+  .sv-h4 { font-size:var(--sv-text-h4); font-weight:400; line-height:1.3; }
+  .sv-intro { font-size:var(--sv-text-intro); line-height:var(--sv-leading-intro); }
+  .sv-small { font-size:var(--sv-text-small); line-height:1.5; }
+  .sv-caption { font-size:var(--sv-text-caption); font-weight:300; line-height:1.45; }
+  .sv-secondary { color:var(--sv-ink-secondary); }
+  .sv-measure { max-width:70ch; }
+
+  /* ── Navigation ──────────────────────────────────────────────────────── */
+  .sv-nav {
+    position:fixed; inset:0 0 auto 0; z-index:var(--sv-z-nav);
+    display:flex; align-items:center; gap:var(--sv-space-8);
+    height:88px; padding-inline:var(--sv-gutter);
+    color:var(--sv-white);
+    background:transparent; border-bottom:1px solid transparent;
+    transition:background var(--sv-dur-base) var(--sv-ease-out), border-color var(--sv-dur-base) var(--sv-ease-out), color var(--sv-dur-base) var(--sv-ease-out);
+  }
+  .sv-nav.is-solid { background:var(--sv-home-bg); color:var(--sv-black); border-color:var(--sv-gray-light); }
+  .sv-nav__brand { display:flex; align-items:center; text-decoration:none; color:inherit; }
+
+  /* ── Wordmark (foundations.md §2): S symbol + bold "share" + light descriptor,
+     currentColor so it follows the surface ink — black or white only ── */
+  .sv-wordmark { display:inline-flex; align-items:center; gap:.5em;
+    font-size:var(--sv-wordmark-size, 1.3125rem); line-height:1; letter-spacing:-0.01em; white-space:nowrap; }
+  .sv-wordmark__symbol { height:1.6em; width:auto; flex:none; fill:currentColor; stroke:none; }
+  .sv-wordmark__share { font-weight:700; }
+  .sv-wordmark__product { font-weight:300; }
+  .sv-wordmark__tm { font-size:.4em; vertical-align:.9em; letter-spacing:0; margin-left:.08em; }
+  .sv-nav__links { display:flex; flex:1; justify-content:space-between; align-items:center;
+    margin-left:clamp(3rem, 9vw, 9rem); }
+  .sv-nav__links a { position:relative; font-size:var(--sv-text-small); font-weight:500; line-height:1.25; text-decoration:none; padding-bottom:6px; }
+  .sv-nav__links a::after { content:""; position:absolute; left:0; bottom:0; width:100%; height:1px; background:currentColor;
+    transform:scaleX(0); transform-origin:left; transition:transform var(--sv-dur-fast) var(--sv-ease-out); }
+  .sv-nav__links a:hover::after { transform:scaleX(1); }
+  .sv-nav__menu-btn { display:none; }
+  @media (max-width:900px){
+    .sv-nav { height:64px; }
+    .sv-nav__links { display:none; }
+    .sv-nav .sv-wordmark { font-size:1.125rem; }
+    .sv-nav__menu-btn { display:inline-flex; align-items:center; gap:10px; margin-left:auto;
+      background:none; border:0; padding:8px 0; color:inherit; cursor:pointer;
+      font:500 var(--sv-text-small)/1 var(--sv-font-sans); }
+  }
+
+/* ── Mobile overlay menu ─────────────────────────────────────────────── */
+  .sv-menu { position:fixed; inset:0; z-index:var(--sv-z-overlay); background:var(--sv-black); color:var(--sv-white);
+    clip-path:inset(0 0 100% 0); visibility:hidden;
+    transition:clip-path var(--sv-dur-base) var(--sv-ease-inout), visibility 0s var(--sv-dur-base);
+    display:flex; flex-direction:column; padding:var(--sv-gutter); }
+  .sv-menu.is-open { clip-path:inset(0); visibility:visible; transition-delay:0s; }
+  .sv-menu__close { align-self:flex-end; background:none; border:0; color:inherit; cursor:pointer; padding:12px;
+    font:500 var(--sv-text-small)/1 var(--sv-font-sans); display:inline-flex; align-items:center; gap:10px; }
+  .sv-menu__links { display:flex; flex-direction:column; gap:var(--sv-space-6); margin:auto 0; }
+  .sv-menu__links a { font-size:var(--sv-text-h1); font-weight:500; line-height:1.1; text-decoration:none;
+    opacity:0; transform:translateY(24px);
+    transition:opacity var(--sv-dur-slow) var(--sv-ease-out), transform var(--sv-dur-slow) var(--sv-ease-out);
+    transition-delay:calc(100ms + var(--i,0) * var(--sv-stagger)); }
+  .sv-menu.is-open .sv-menu__links a { opacity:1; transform:none; }
+  .sv-menu__links a:hover { text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:8px; }
+
+  /* ── Buttons & links ─────────────────────────────────────────────────── */
+  .sv-btn {
+    display:inline-flex; align-items:center; justify-content:center; gap:12px;
+    height:48px; padding:0 24px; border:1px solid transparent; border-radius:var(--sv-radius);
+    font:500 1rem/1 var(--sv-font-sans); text-decoration:none; cursor:pointer;
+    background:var(--sv-green); color:var(--sv-black);
+    transition:background var(--sv-dur-fast) var(--sv-ease-out), color var(--sv-dur-fast) var(--sv-ease-out), border-color var(--sv-dur-fast) var(--sv-ease-out);
+  }
+  .sv-btn--primary:hover { background:transparent; border-color:var(--sv-green); color:var(--sv-ink); }
+  .sv-btn--ink { background:var(--sv-ink); color:var(--sv-surface); }
+  .sv-btn--ink:hover { background:transparent; border-color:var(--sv-ink); color:var(--sv-ink); }
+  .sv-link { color:inherit; text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:4px; transition:text-decoration-color var(--sv-dur-fast) var(--sv-ease-out); }
+  .sv-link:hover { text-decoration-color:var(--sv-green); }
+  .sv-link-arrow { display:inline-flex; align-items:center; gap:12px; font-weight:500; text-decoration:none; }
+  .sv-link-arrow svg { transition:transform var(--sv-dur-fast) var(--sv-ease-out); }
+  .sv-link-arrow:hover svg { transform:translateX(6px); }
+
+  /* ── Hero ────────────────────────────────────────────────────────────── */
+  .sv-hero { position:relative; min-height:100svh; display:flex; align-items:flex-end; overflow:hidden; }
+  .sv-hero__media { position:absolute; inset:0; }
+
+  /* ── Persistent teaching object ───────────────────────────────────────── */
+  .sv-scene { position:fixed; inset:0; z-index:50; pointer-events:none;
+    opacity:0; transition:opacity var(--sv-dur-cine) var(--sv-ease-out); }
+  .sv-scene.is-ready { opacity:1; }
+  .sv-scene canvas { width:100%; height:100%; }
+
+  /* ── Current-section readout ─────────────────────────────────────────── */
+  .sv-hud { position:fixed; left:var(--sv-gutter); bottom:18px; z-index:60; pointer-events:none;
+    color:var(--sv-white); font:300 0.75rem/1 var(--sv-font-sans);
+    letter-spacing:var(--sv-tracking-caps); text-transform:uppercase;
+    transition:color var(--sv-dur-base) var(--sv-ease-out); }
+  .sv-hud.on-light { color:var(--sv-black); }
+  .sv-hud__label { white-space:nowrap; }
+  .sv-hero__fallback { position:absolute; right:-8%; top:50%; width:min(62vh,60vw); transform:translateY(-50%); }
+  .sv-hero__fallback path { fill:none; stroke:var(--sv-gray-dark); stroke-width:2; }
+  .sv-hero__content { position:relative; z-index:2; width:100%; padding-block:var(--sv-space-24) var(--sv-space-16); }
+  .sv-hero__line { display:block; overflow:hidden; }
+  .sv-hero__line > span { display:block; transform:translateY(110%); opacity:0; filter:blur(6px);
+    animation:sv-rise var(--sv-dur-cine) var(--sv-ease-out) forwards;
+    animation-delay:calc(150ms + var(--i,0) * var(--sv-stagger)); }
+  @keyframes sv-rise { to { transform:none; opacity:1; filter:none; } }
+  .sv-hero__share { color:var(--sv-ink); font-weight:500; }
+  .sv-hero__word { color:var(--sv-ink-secondary); }
+  .sv-word-cycle { position:relative; display:inline-block; overflow:hidden; vertical-align:bottom; color:var(--sv-ink-secondary); }
+  .sv-word-cycle span { display:block; transition:transform var(--sv-dur-slow) var(--sv-ease-out), opacity var(--sv-dur-slow) var(--sv-ease-out); }
+  .sv-word-cycle .is-exit { position:absolute; inset:0; transform:translateY(-100%); opacity:0; }
+  .sv-word-cycle .is-enter-from { transform:translateY(100%); opacity:0; transition:none; }
+  .sv-hero__meta { display:flex; align-items:flex-end; justify-content:space-between; gap:var(--sv-space-16); margin-top:var(--sv-space-12); flex-wrap:wrap; }
+  .sv-hero__actions { display:flex; gap:var(--sv-space-4); align-items:center; flex-wrap:wrap; }
+  .sv-hero__late { opacity:0; transform:translateY(24px); animation:sv-fade-up var(--sv-dur-slow) var(--sv-ease-out) 900ms forwards; }
+  @keyframes sv-fade-up { to { opacity:1; transform:none; } }
+  .sv-hero__panel {
+    max-width:360px; padding:var(--sv-space-8);
+    background:rgba(0,0,0,.35); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+    border:1px solid var(--sv-gray-dark);
+  }
+  .sv-hero__panel p { font-size:var(--sv-text-small); color:var(--sv-gray-light); }
+  @media (max-width:900px){ .sv-hero__panel { display:none; } }
+
+  /* ── Editorial split ─────────────────────────────────────────────────── */
+  .sv-section { padding-block:var(--sv-space-32); }
+  .sv-scene-chapter { min-height:100vh; min-height:100svh; }
+  .sv-split { display:grid; grid-template-columns:var(--sv-rail) 1fr; gap:var(--sv-space-16); }
+  @media (max-width:900px){ .sv-split { grid-template-columns:1fr; gap:var(--sv-space-8); } }
+  .sv-label { font-size:var(--sv-text-small); font-weight:700; line-height:1.4; }
+  .sv-rail-copy { font-size:var(--sv-text-small); color:var(--sv-ink-secondary); margin-top:var(--sv-space-3); max-width:26ch; }
+  .sv-stack > * + * { margin-top:var(--sv-space-6); }
+
+  /* ── Specimen rows ───────────────────────────────────────────────────── */
+  .sv-spec { border-top:1px solid var(--sv-hairline); padding-block:var(--sv-space-6); display:grid; grid-template-columns:200px 1fr; gap:var(--sv-space-6); align-items:baseline; }
+  .sv-spec:last-child { border-bottom:1px solid var(--sv-hairline); }
+  .sv-spec .sv-caption { color:var(--sv-ink-secondary); font-weight:400; }
+  @media (max-width:900px){ .sv-spec { grid-template-columns:1fr; gap:var(--sv-space-2); } }
+
+  /* ── Color grid ──────────────────────────────────────────────────────── */
+  .sv-swatches { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:var(--sv-space-4); }
+  .sv-swatch { border:1px solid var(--sv-hairline); background:var(--sv-surface-raised); }
+  .sv-swatch__chip { height:96px; }
+  .sv-swatch__meta { padding:var(--sv-space-3) var(--sv-space-4); display:flex; justify-content:space-between; gap:8px; }
+  .sv-swatch__meta span { font-size:var(--sv-text-caption); font-weight:400; }
+  .sv-swatch__meta span:last-child { color:var(--sv-ink-secondary); }
+
+  /* ── Stats (dark) ────────────────────────────────────────────────────── */
+  .sv-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:var(--sv-space-16); margin-top:var(--sv-space-16); }
+  .sv-stat { display:flex; align-items:flex-end; gap:var(--sv-space-4); border-top:1px solid var(--sv-hairline); padding-top:var(--sv-space-6); }
+  .sv-stat__value { font-size:var(--sv-text-stat); font-weight:400; line-height:1; letter-spacing:-0.02em; font-variant-numeric:tabular-nums; }
+  .sv-stat__label { font-size:var(--sv-text-small); color:var(--sv-ink-secondary); line-height:1.35; padding-bottom:.6em; }
+
+  /* ── Media tiles (supergraphic placeholders) ─────────────────────────── */
+  .sv-tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:var(--sv-space-4); margin-top:var(--sv-space-12); }
+  .sv-tile { text-decoration:none; display:block; }
+  .sv-tile__media { aspect-ratio:3/2; overflow:hidden; position:relative; background:var(--sv-gray-xdark); }
+  .sv-tile__media img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transform:scale(1); transition:transform var(--sv-dur-slow) var(--sv-ease-out); }
+  .sv-tile:hover .sv-tile__media img { transform:scale(1.03); }
+  .sv-tile__media::after { content:""; position:absolute; inset:0; background:linear-gradient(to top, rgb(0 0 0 / .45), transparent 60%); }
+  .sv-tile__title { position:absolute; left:var(--sv-space-6); bottom:var(--sv-space-6); z-index:1; color:var(--sv-white); font-size:var(--sv-text-h3); font-weight:500; line-height:1.1; }
+  .sv-tile:hover .sv-tile__title { text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:4px; }
+  .sv-tile__meta { margin-top:var(--sv-space-3); font-size:var(--sv-text-small); color:var(--sv-ink-secondary); }
+
+  /* ── Photostyle library ──────────────────────────────────────────────── */
+  .sv-photos { display:grid; grid-template-columns:repeat(2,1fr); gap:var(--sv-space-4); }
+  @media (max-width:600px){ .sv-photos { grid-template-columns:1fr; } }
+  .sv-photo { margin:0; }
+  .sv-photo img { aspect-ratio:3/2; width:100%; object-fit:cover; background:var(--sv-gray-xdark); }
+  .sv-photo figcaption { margin-top:var(--sv-space-3); font-size:var(--sv-text-small); line-height:1.45; }
+  .sv-photo figcaption strong { font-weight:700; }
+  .sv-photo figcaption span { display:block; color:var(--sv-ink-secondary); }
+
+  /* ── Image band (Activating Share) ────────────────────────────────────── */
+  .sv-band { position:relative; min-height:72vh; display:flex; align-items:center; overflow:hidden; background:var(--sv-black); }
+  .sv-band > img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .sv-band__scrim { position:absolute; inset:0; background:linear-gradient(to top, rgb(0 0 0 / .4), transparent 55%),
+                    linear-gradient(to right, rgb(0 0 0 / .35), transparent 60%); }
+  .sv-band__content { position:relative; z-index:1; width:100%; color:var(--sv-white); }
+  .sv-band .sv-hero__share { color:var(--sv-white); }
+  .sv-band .sv-hero__word { color:var(--sv-gray-light); }
+
+  /* ── Forms ───────────────────────────────────────────────────────────── */
+  .sv-field { display:block; max-width:480px; }
+  .sv-field span { display:block; font-size:var(--sv-text-small); font-weight:500; margin-bottom:var(--sv-space-2); }
+  .sv-input {
+    width:100%; height:48px; padding:0 16px; border-radius:var(--sv-radius);
+    border:1px solid var(--sv-hairline); background:var(--sv-surface-raised);
+    font:400 1rem/1 var(--sv-font-sans); color:var(--sv-ink);
+    transition:border-color var(--sv-dur-fast) var(--sv-ease-out);
+  }
+  .sv-input::placeholder { color:var(--sv-gray-dark); }
+  .sv-input:focus { border-color:var(--sv-ink); outline-offset:0; }
+  .sv-form-row { display:flex; max-width:480px; }
+  .sv-form-row .sv-input { border-right:0; }
+
+  /* ── Scroll reveal ───────────────────────────────────────────────────── */
+  [data-reveal] { opacity:0; transform:translateY(var(--sv-reveal-distance));
+    transition:opacity var(--sv-dur-slow) var(--sv-ease-out), transform var(--sv-dur-slow) var(--sv-ease-out);
+    transition-delay:calc(min(var(--i,0),5) * var(--sv-stagger)); }
+  [data-reveal].is-in { opacity:1; transform:none; }
+  @media (prefers-reduced-motion:reduce){ [data-reveal] { opacity:1; transform:none; } }
+
+  /* ── CTA + footer ────────────────────────────────────────────────────── */
+  .sv-cta { text-align:left; }
+  .sv-footer { padding-block:var(--sv-space-24) var(--sv-space-16); position:relative; overflow:hidden; background:var(--sv-surface); }
+  .sv-footer::before { content:""; position:absolute; inset:0; z-index:62; background:inherit; pointer-events:none; }
+  .sv-footer__grid { display:grid; grid-template-columns:1fr auto auto; gap:var(--sv-space-24); position:relative; z-index:1; }
+  @media (max-width:900px){ .sv-footer__grid { grid-template-columns:1fr; gap:var(--sv-space-8); } }
+  .sv-footer__col { display:flex; flex-direction:column; gap:var(--sv-space-3); }
+  .sv-footer__col a { font-size:var(--sv-text-small); font-weight:500; line-height:1.3; text-decoration:none; }
+  .sv-footer__col a:hover { opacity:.6; }
+  .sv-footer__legal { margin-top:var(--sv-space-16); padding-top:var(--sv-space-6); border-top:1px solid var(--sv-hairline);
+    display:flex; justify-content:space-between; gap:var(--sv-space-6); flex-wrap:wrap;
+    font-size:var(--sv-text-caption); font-weight:300; color:var(--sv-gray-light); position:relative; z-index:1; }
+  /* <use> clones live in a shadow tree — style via inherited fill/stroke
+     on the svg itself; a path selector cannot reach them. */
+  .sv-footer__super { position:absolute; right:-6%; bottom:-30%; z-index:63; width:420px; opacity:.9;
+    fill:none; stroke:var(--sv-gray-xdark); stroke-width:3px; }
+  /* Reading content clears the scene; footer content also clears the section readout. */
+  .sv-hero__content,
+  .sv-section > .sv-container,
+  .sv-band__content { position:relative; z-index:55; }
+  .sv-footer__grid,
+  .sv-footer__legal { position:relative; z-index:65; }
+</style>
+</head>
+<body>
+
+<!-- ═══ Navigation ═══ -->
+<header class="sv-nav" id="nav">
+  <a class="sv-nav__brand" href="#top" aria-label="Share Ventures home">
+    <span class="sv-wordmark">
+      <svg class="sv-wordmark__symbol" viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-outline"/></svg>
+      <span class="sv-wordmark__text"><b class="sv-wordmark__share">share</b> <span class="sv-wordmark__product">ventures<span class="sv-wordmark__tm">™</span></span></span>
+    </span>
+  </a>
+  <nav class="sv-nav__links" aria-label="Primary">
+    <a href="#type">Type<br>system</a>
+    <a href="#color">Color<br>system</a>
+    <a href="#photostyle">Photostyle<br>library</a>
+    <a href="#components">Components<br>&amp; forms</a>
+    <a href="#motion">Motion<br>&amp; media</a>
+    <a href="#connect">Connect<br>with us</a>
+  </nav>
+  <button class="sv-nav__menu-btn" id="menu-btn" aria-expanded="false" aria-controls="menu">Menu
+    <svg width="22" height="10" viewBox="0 0 22 10" fill="none" aria-hidden="true"><path d="M0 1h22M0 9h22" stroke="currentColor" stroke-width="1.5"/></svg>
+  </button>
+</header>
+
+<!-- ═══ Mobile overlay menu ═══ -->
+<div class="sv-menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
+  <button class="sv-menu__close" id="menu-close">Close
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.5"/></svg>
+  </button>
+  <nav class="sv-menu__links" aria-label="Menu">
+    <a href="#type" style="--i:0">Type system</a>
+    <a href="#color" style="--i:1">Color system</a>
+    <a href="#photostyle" style="--i:2">Photostyle library</a>
+    <a href="#components" style="--i:3">Components &amp; forms</a>
+    <a href="#motion" style="--i:4">Motion &amp; media</a>
+    <a href="#connect" style="--i:5">Connect with us</a>
+  </nav>
+</div>
+
+<!-- ═══ Persistent teaching object: the S changes only when it explains a rule ═══ -->
+<div class="sv-scene" id="scene" aria-hidden="true"></div>
+
+<!-- ═══ Hero: 3D S + Share ___ headline ═══ -->
+<section class="sv-hero sv-dark" id="top" data-scene='{"x":0.36,"y":-0.31,"s":0.68,"o":1,"tone":0,"split":0}' data-scene-label="Overview · complete mark">
+  <div class="sv-hero__media" id="hero-fallback-wrap" aria-hidden="true">
+    <!-- Outline-S supergraphic fallback; shown when WebGL is unavailable -->
+    <svg class="sv-hero__fallback" id="scene-fallback" viewBox="0 0 1080 1080" aria-hidden="true">
+      <path d="M414.15,448.29l414.15,239.11v62.53l-288.3,166.45-414.15-239.11v102.25c0,26.56,14.29,51.32,37.29,64.6l339.56,196.04c11.5,6.64,24.4,9.96,37.29,9.96s25.8-3.32,37.3-9.96l353.28-203.97c14.54-8.4,23.57-24.04,23.57-40.83v-180.62l-414.15-239.11-125.85,72.66Z"/>
+      <path d="M916.86,322.84l-339.56-196.04c-23.01-13.28-51.59-13.29-74.59,0l-345.4,199.41c-19.41,11.21-31.46,32.09-31.46,54.5v171.51l414.15,239.11,125.85-72.66-414.15-239.11v-62.53l288.3-166.45,414.15,239.11v-102.25c0-26.56-14.29-51.32-37.29-64.6Z"/>
+    </svg>
+  </div>
+  <div class="sv-hero__content sv-container">
+    <h1 class="sv-display">
+      <span class="sv-hero__line"><span style="--i:0" class="sv-hero__share">Share</span></span>
+      <span class="sv-hero__line"><span style="--i:1"><span class="sv-word-cycle" id="word-cycle"><span>Potential</span></span></span></span>
+    </h1>
+    <div class="sv-hero__meta">
+      <div class="sv-hero__late">
+        <p class="sv-intro sv-measure" style="max-width:34ch; color:var(--sv-gray-light);">A replicable design language for every Share Ventures surface — type, color, components, motion, and 3D.</p>
+        <div class="sv-hero__actions" style="margin-top:var(--sv-space-8);">
+          <a class="sv-btn sv-btn--ink" href="#type">Explore the system</a>
+          <a class="sv-link" href="#motion">See motion patterns</a>
+        </div>
+      </div>
+      <aside class="sv-hero__panel sv-hero__late" aria-label="About this reference">
+        <h2 class="sv-label" style="color:var(--sv-white);">Living reference</h2>
+        <p style="margin-top:var(--sv-space-3);">Every element on this page is built from <code style="font-family:inherit;">tokens/tokens.css</code> and the specs in AGENT.md. The production S has four jobs here: complete mark, flat glyph, metal sample, and two-part assembly. It disappears when a section has nothing useful for it to show.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Typography ═══ -->
+<section class="sv-section" id="type" data-scene='{"x":0.43,"y":0.29,"s":0.2,"o":0.9,"tone":0.55,"ry":0,"rx":0,"split":0}' data-scene-label="Type system · flat glyph">
+  <div class="sv-container sv-split">
+    <aside>
+      <h2 class="sv-label">4.0 — Typography</h2>
+      <p class="sv-rail-copy">Aeonik Pro, CoType Foundry. Arial is the sanctioned fallback. Heavier weights for short large text; Regular carries body and XL display.</p>
+    </aside>
+    <div>
+      <div class="sv-spec" data-reveal style="--i:0"><span class="sv-caption">Display · Regular 400</span><p class="sv-display">Share Progress</p></div>
+      <div class="sv-spec" data-reveal style="--i:1"><span class="sv-caption">H1 · Medium 500</span><p class="sv-h1">Human potential</p></div>
+      <div class="sv-spec" data-reveal style="--i:2"><span class="sv-caption">H2 · Medium 500</span><p class="sv-h2">Built from curiosity</p></div>
+      <div class="sv-spec" data-reveal style="--i:3"><span class="sv-caption">Intro · Regular 400</span><p class="sv-intro sv-measure">We build innovative companies at the intersection of artificial intelligence and human performance.</p></div>
+      <div class="sv-spec" data-reveal style="--i:4"><span class="sv-caption">Body · Regular 400</span><p class="sv-measure">Some things don’t need to be perfect, but when it comes to the work, ordinary isn’t enough. Body copy sets in Regular at 18px over 1.6, ragged right, never longer than 75 characters per line.</p></div>
+      <div class="sv-spec" data-reveal style="--i:5"><span class="sv-caption">Caption · Light 300</span><p class="sv-caption">Technical copy and captions set in Light, never below 13px.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Color ═══ -->
+<section class="sv-section" id="color" style="padding-top:0;" data-scene='{"x":0.43,"y":0.29,"s":0.2,"o":0.9,"tone":1,"ry":0.2,"rx":0.18,"split":0}' data-scene-label="Color system · metal sample">
+  <div class="sv-container sv-split">
+    <aside>
+      <h2 class="sv-label">3.0 — Color</h2>
+      <p class="sv-rail-copy">Black, white, and gray quiet the UI. Full-colour photography provides the energy; green marks the single primary action.</p>
+    </aside>
+    <div class="sv-swatches" data-reveal>
+      <div class="sv-swatch"><div class="sv-swatch__chip" style="background:#000;"></div><div class="sv-swatch__meta"><span>Black</span><span>#000000</span></div></div>
+      <div class="sv-swatch"><div class="sv-swatch__chip" style="background:#fff;"></div><div class="sv-swatch__meta"><span>White</span><span>#FFFFFF</span></div></div>
+      <div class="sv-swatch"><div class="sv-swatch__chip" style="background:#f1f4f5;"></div><div class="sv-swatch__meta"><span>Home bg</span><span>#F1F4F5</span></div></div>
+      <div class="sv-swatch"><div class="sv-swatch__chip" style="background:#e8e6e4;"></div><div class="sv-swatch__meta"><span>Off white</span><span>#E8E6E4</span></div></div>
+      <div class="sv-swatch"><div class="sv-swatch__chip" style="background:#c8cbcc;"></div><div class="sv-swatch__meta"><span>Light gray</span><span>#C8CBCC</span></div></div>
+      <div class="sv-swatch"><div class="sv-swatch__chip" style="background:#939799;"></div><div class="sv-swatch__meta"><span>Mid gray</span><span>#939799</span></div></div>
+      <div class="sv-swatch"><div class="sv-swatch__chip" style="background:#5e6366;"></div><div class="sv-swatch__meta"><span>Dark gray</span><span>#5E6366</span></div></div>
+      <div class="sv-swatch"><div class="sv-swatch__chip" style="background:#2b3033;"></div><div class="sv-swatch__meta"><span>X-dark gray</span><span>#2B3033</span></div></div>
+      <div class="sv-swatch"><div class="sv-swatch__chip" style="background:#00d65d;"></div><div class="sv-swatch__meta"><span>CTA green</span><span>#00D65D</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Photostyle — image library ═══
+     IMAGE LIBRARY: swap any URL below (Unsplash or licensed stock).
+     Keep the grade: cool/neutral, uncluttered, cinematic, no clichés.
+     Each figure names its category from the brand book (§5 Photostyle).
+     Spare verified Unsplash IDs on the same grade — swap freely:
+       1451187580459-43490279c0fa  Earth at night (in the band below)
+       1446776653964-20c1d3a81b06  North America at night from orbit
+       1446776811953-b23d57bd21aa  satellite over Earth
+       1541185933-ef5d8ed016c2     rocket through clouds (alt launch)
+       1451188502541-13943edb6acb  Mars crater aerial
+       1518770660439-4636190af475  blue circuit macro
+       1532187863486-abf9dbad1b69  lab pipetting (blue gloves) -->
+<section class="sv-section" id="photostyle" style="padding-top:0;" data-scene='{"x":0.43,"y":0.2,"s":0.16,"o":0,"tone":1,"split":0}' data-scene-label="Photostyle · image leads">
+  <div class="sv-container sv-split">
+    <aside>
+      <h2 class="sv-label">5.0 — Photostyle</h2>
+      <p class="sv-rail-copy">The brand book's four photostyle categories (§5), one working example each. Swap any URL in this grid — captions state what each slot needs so replacements stay on-grade: futuristic, cinematic, restrained color.</p>
+    </aside>
+    <div class="sv-photos" data-reveal>
+      <figure class="sv-photo">
+        <img src="../assets/images/photostyle/human.png" alt="Bionic hand lit in blue" loading="lazy">
+        <figcaption><strong>Human</strong><span>People meeting technology — bionics, headsets, silhouettes, dramatic light; never office stock</span></figcaption>
+      </figure>
+      <figure class="sv-photo">
+        <img src="../assets/images/photostyle/aspirational.png" alt="Heavy rocket lifting off at dusk" loading="lazy">
+        <figcaption><strong>Aspirational</strong><span>Achievement at the frontier — launches, orbit, summit moments; wonder and excitement</span></figcaption>
+      </figure>
+      <figure class="sv-photo">
+        <img src="../assets/images/photostyle/forward-looking.png" alt="White humanoid robot in profile" loading="lazy">
+        <figcaption><strong>Forward-looking</strong><span>What is not yet imagined — robotics, AI, concept hardware, planetary scenes</span></figcaption>
+      </figure>
+      <figure class="sv-photo">
+        <img src="../assets/images/photostyle/quality.png" alt="Dark circuit blueprint etched in light" loading="lazy">
+        <figcaption><strong>Quality</strong><span>Precision — engineering macro, cleanrooms, machined detail; clean and uncluttered</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Stats (dark) ═══ -->
+<section class="sv-section sv-dark" data-scene='{"x":0,"y":0,"s":0.3,"o":0,"tone":0,"split":0}' data-scene-label="Data · proof leads">
+  <div class="sv-container">
+    <div class="sv-split">
+      <aside>
+        <h2 class="sv-label">Data</h2>
+        <p class="sv-rail-copy">Oversized Regular numerals, small labels at the baseline. Count up once on reveal. Specimen values from the brand book’s type samples.</p>
+      </aside>
+      <div>
+        <h3 class="sv-h2" data-reveal>The numbers carry the proof</h3>
+        <div class="sv-stats">
+          <div class="sv-stat" data-reveal style="--i:1"><span class="sv-stat__value" data-count="213">0</span><span class="sv-stat__label">New<br>companies</span></div>
+          <div class="sv-stat" data-reveal style="--i:2"><span class="sv-stat__value" data-count="17" data-suffix="m">0m</span><span class="sv-stat__label">Raised</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Image band — Activating Share ═══ -->
+<section class="sv-band" aria-label="Share Innovation" data-scene='{"x":0,"y":-0.1,"s":0.5,"o":0,"tone":0}' data-scene-label="Image band">
+  <img src="../assets/images/share-innovation-band.png" alt="Rocket lifting off at blue hour" loading="lazy">
+  <div class="sv-band__scrim"></div>
+  <div class="sv-band__content sv-container" data-reveal>
+    <h2 class="sv-display"><span class="sv-hero__share">Share</span><br><span class="sv-hero__word">Innovation</span></h2>
+    <p style="margin-top:var(--sv-space-6);"><a class="sv-link" href="#components">The image band — the signature text-on-image treatment</a></p>
+  </div>
+</section>
+
+<!-- ═══ Components ═══ -->
+<section class="sv-section sv-scene-chapter" id="components" data-scene='{"x":-0.32,"y":0.26,"s":0.28,"o":0.9,"tone":0.65,"ry":0.28,"rx":0.18,"split":1}' data-scene-label="Components · two parts">
+  <div class="sv-container sv-split">
+    <aside>
+      <h2 class="sv-label">6.0 — Components</h2>
+      <p class="sv-rail-copy">Rectangular, sharp, 48px controls. The S separates into its two production paths here: useful parts remain distinct before they lock into one system.</p>
+    </aside>
+    <div class="sv-stack">
+      <div data-reveal style="display:flex; gap:var(--sv-space-4); flex-wrap:wrap; align-items:center;">
+        <button class="sv-btn sv-btn--ink" type="button">Ink button — default</button>
+        <button class="sv-btn sv-btn--primary" type="button">Primary green — one per page</button>
+        <a class="sv-link" href="#components">Text link</a>
+        <a class="sv-link-arrow" href="#components">Arrow link
+          <svg width="32" height="12" viewBox="0 0 32 12" fill="none" aria-hidden="true"><path d="M0 6h30M25 1l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+        </a>
+      </div>
+      <label class="sv-field" data-reveal style="--i:1">
+        <span>Full name</span>
+        <input class="sv-input" type="text" placeholder="Ada Lovelace" autocomplete="name">
+      </label>
+      <div data-reveal style="--i:2">
+        <span class="sv-label" style="display:block; margin-bottom:var(--sv-space-2);">Newsletter row</span>
+        <form class="sv-form-row" action="#" onsubmit="return false">
+          <input class="sv-input" type="email" placeholder="you@company.com" aria-label="Email address" autocomplete="email">
+          <button class="sv-btn sv-btn--ink" type="submit" style="flex:none;">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Motion & media tiles ═══ -->
+<section class="sv-section sv-scene-chapter" id="motion" style="padding-top:0;" data-scene='{"x":-0.32,"y":0.26,"s":0.28,"o":0.9,"tone":0.65,"ry":0.28,"rx":0.18,"split":0}' data-scene-label="Motion · parts interlock">
+  <div class="sv-container sv-split">
+    <aside>
+      <h2 class="sv-label">Motion</h2>
+      <p class="sv-rail-copy">As this section enters, the two production paths lock back into the S. Scroll supplies the cause; damping lets the parts settle; the object then holds.</p>
+    </aside>
+    <div>
+      <h3 class="sv-h2" data-reveal>Parts become a system</h3>
+      <div class="sv-tiles">
+        <a class="sv-tile" href="#motion" data-reveal style="--i:1">
+          <div class="sv-tile__media"><img src="../assets/images/photostyle/quality.png" alt="" loading="lazy">
+            <span class="sv-tile__title">Share<br>Craft</span></div>
+          <span class="sv-tile__meta">Hover zoom · scale 1.03 · 600ms ease-out</span>
+        </a>
+        <a class="sv-tile" href="#motion" data-reveal style="--i:2">
+          <div class="sv-tile__media"><img src="../assets/images/photostyle/forward-looking.png" alt="" loading="lazy">
+            <span class="sv-tile__title">Share<br>Precision</span></div>
+          <span class="sv-tile__meta">Titles overlay the image on a soft scrim</span>
+        </a>
+        <a class="sv-tile" href="#motion" data-reveal style="--i:3">
+          <div class="sv-tile__media"><img src="../assets/images/photostyle/human.png" alt="" loading="lazy">
+            <span class="sv-tile__title">Share<br>Discovery</span></div>
+          <span class="sv-tile__meta">Staggered reveal · 80ms steps, capped at five</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section class="sv-section sv-dark sv-cta" id="connect" data-scene='{"x":0.3,"y":0,"s":0.8,"o":1,"tone":0,"ry":-0.4,"split":0}' data-scene-label="Connect · complete mark">
+  <div class="sv-container">
+    <h2 class="sv-display" data-reveal><span class="sv-hero__share">Share</span> <span class="sv-hero__word">what’s next</span></h2>
+    <div data-reveal style="--i:1; margin-top:var(--sv-space-8); display:flex; gap:var(--sv-space-6); align-items:center; flex-wrap:wrap;">
+      <a class="sv-btn sv-btn--primary" href="mailto:hello@share.vc">Connect with us</a>
+      <a class="sv-link-arrow" href="#top">Back to top
+        <svg width="32" height="12" viewBox="0 0 32 12" fill="none" aria-hidden="true"><path d="M0 6h30M25 1l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Footer ═══ -->
+<footer class="sv-footer sv-dark" data-scene='{"x":0.3,"y":0.15,"s":0.5,"o":0,"tone":0}' data-scene-label="Share Ventures">
+  <svg class="sv-footer__super" viewBox="0 0 1080 1080" aria-hidden="true"><use href="#s-outline"/></svg>
+  <div class="sv-container">
+    <div class="sv-footer__grid">
+      <a class="sv-nav__brand" href="#top" style="align-self:start;" aria-label="Share Ventures home">
+        <span class="sv-wordmark" style="--sv-wordmark-size:1.5rem;">
+          <svg class="sv-wordmark__symbol" viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-outline"/></svg>
+          <span class="sv-wordmark__text"><b class="sv-wordmark__share">share</b> <span class="sv-wordmark__product">ventures<span class="sv-wordmark__tm">™</span></span></span>
+        </span>
+      </a>
+      <nav class="sv-footer__col" aria-label="System">
+        <a href="#type">Type<br>system</a>
+        <a href="#color">Color<br>system</a>
+      </nav>
+      <nav class="sv-footer__col" aria-label="Reference">
+        <a href="#components">Components<br>&amp; forms</a>
+        <a href="#motion">Motion<br>&amp; media</a>
+      </nav>
+    </div>
+    <div class="sv-footer__legal">
+      <span>© 2026 Share Ventures™ — Design system reference 3.0.0 · 2026-08-27</span>
+      <span>Set in Aeonik Pro by CoType Foundry</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ Current section (decorative duplicate of the visible heading) ═══ -->
+<div class="sv-hud" id="hud" aria-hidden="true">
+  <span class="sv-hud__label" id="hud-label">Overview</span>
+</div>
+
+<!-- Shared outline-S symbol -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><g id="s-outline">
+  <path d="M414.15,448.29l414.15,239.11v62.53l-288.3,166.45-414.15-239.11v102.25c0,26.56,14.29,51.32,37.29,64.6l339.56,196.04c11.5,6.64,24.4,9.96,37.29,9.96s25.8-3.32,37.3-9.96l353.28-203.97c14.54-8.4,23.57-24.04,23.57-40.83v-180.62l-414.15-239.11-125.85,72.66Z"/>
+  <path d="M916.86,322.84l-339.56-196.04c-23.01-13.28-51.59-13.29-74.59,0l-345.4,199.41c-19.41,11.21-31.46,32.09-31.46,54.5v171.51l414.15,239.11,125.85-72.66-414.15-239.11v-62.53l288.3-166.45,414.15,239.11v-102.25c0-26.56-14.29-51.32-37.29-64.6Z"/>
+</g></defs></svg>
+
+<script>
+/* ── Nav state ─────────────────────────────────────────────────────────── */
+const nav = document.getElementById('nav');
+const hero = document.querySelector('.sv-hero');
+const onScroll = () => nav.classList.toggle('is-solid', scrollY > hero.offsetHeight - nav.offsetHeight);
+addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+/* ── Scene sections, HUD readout, #s=N deep links ──────────────────────── */
+const sceneSections = [...document.querySelectorAll('[data-scene]')].map(el => ({
+  el, cfg: JSON.parse(el.dataset.scene), label: el.dataset.sceneLabel || ''
+}));
+const hud = document.getElementById('hud');
+const hudLabel = document.getElementById('hud-label');
+let sceneTops = [];
+const measureScene = () => { sceneTops = sceneSections.map(s => s.el.offsetTop); };
+addEventListener('resize', measureScene, { passive: true });
+addEventListener('load', () => { measureScene(); setTimeout(measureScene, 1200); });
+measureScene();
+
+const sceneIndexAt = (ref) => {
+  let i = 0;
+  while (i < sceneTops.length - 1 && ref >= sceneTops[i + 1]) i++;
+  return i;
+};
+let hudActive = -1;
+const updateHud = () => {
+  const ref = scrollY + innerHeight * 0.35;
+  const i = sceneIndexAt(ref);
+  if (i !== hudActive) {
+    hudActive = i;
+    hudLabel.textContent = sceneSections[i].label;
+    hud.classList.toggle('on-light', sceneSections[i].cfg.tone > 0.5);
+  }
+};
+addEventListener('scroll', updateHud, { passive: true });
+updateHud();
+
+/* Deep link: #s=N jumps to section N (deck-style).
+   Re-align after load + late measure — images/fonts can shift layout. */
+const dl = location.hash.match(/^#s=(\d+)$/);
+if (dl) {
+  const align = () => { const t = sceneSections[+dl[1] - 1]; if (t) t.el.scrollIntoView({ behavior: 'instant' }); };
+  setTimeout(align, 50);
+  addEventListener('load', () => { align(); setTimeout(() => { measureScene(); align(); }, 1300); });
+}
+
+/* ── Mobile overlay menu ───────────────────────────────────────────────── */
+const menu = document.getElementById('menu');
+const menuBtn = document.getElementById('menu-btn');
+const menuClose = document.getElementById('menu-close');
+const setMenu = (open) => {
+  menu.classList.toggle('is-open', open);
+  menuBtn.setAttribute('aria-expanded', String(open));
+  document.documentElement.style.overflow = open ? 'hidden' : '';
+  (open ? menuClose : menuBtn).focus();
+};
+menuBtn.addEventListener('click', () => setMenu(true));
+menuClose.addEventListener('click', () => setMenu(false));
+menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+addEventListener('keydown', e => { if (e.key === 'Escape' && menu.classList.contains('is-open')) setMenu(false); });
+
+/* ── Scroll reveal (once) ──────────────────────────────────────────────── */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  e.target.classList.add('is-in'); io.unobserve(e.target);
+}), { threshold: 0.2, rootMargin: '0px 0px -10% 0px' });
+document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ── Stat count-up (once, ease-out-expo) ───────────────────────────────── */
+const nf = new Intl.NumberFormat('en-US');
+const statIO = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return; statIO.unobserve(e.target);
+  const el = e.target, target = +el.dataset.count, suffix = el.dataset.suffix || '';
+  if (reduced) { el.textContent = nf.format(target) + suffix; return; }
+  const t0 = performance.now(), dur = 600;
+  (function tick(t) {
+    const p = Math.min((t - t0) / dur, 1);
+    el.textContent = nf.format(Math.round(target * (1 - Math.pow(2, -10 * p)))) + suffix;
+    if (p < 1) requestAnimationFrame(tick); else el.textContent = nf.format(target) + suffix;
+  })(t0);
+}), { threshold: 0.5 });
+document.querySelectorAll('[data-count]').forEach(el => statIO.observe(el));
+
+/* ── "Share ___" word cycle ────────────────────────────────────────────── */
+const WORDS = ['Potential', 'Progress', 'Innovation', 'Vision'];
+const cycle = document.getElementById('word-cycle');
+let wi = 0, paused = false;
+cycle.closest('h1').addEventListener('mouseenter', () => paused = true);
+cycle.closest('h1').addEventListener('mouseleave', () => paused = false);
+if (!reduced) setInterval(() => {
+  if (paused || document.hidden) return;
+  if (cycle.children.length > 1) return;      /* previous swap still settling */
+  const old = cycle.firstElementChild;
+  old.classList.add('is-exit');
+  const next = document.createElement('span');
+  next.textContent = WORDS[wi = (wi + 1) % WORDS.length];
+  next.className = 'is-enter-from';
+  cycle.appendChild(next);
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    next.classList.remove('is-enter-from');
+    setTimeout(() => old.remove(), 650);
+  }));
+}, 3000);
+</script>
+
+<!-- 3D reference intentionally omitted: the static S fallback is self-contained. -->
+<noscript><style>.sv-scene,.sv-hud{display:none}.sv-hero__line>span,.sv-hero__late{animation:none;opacity:1;transform:none;filter:none}[data-reveal]{opacity:1;transform:none}</style></noscript>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!doctype html>
+<!-- ═══════════════════════════════════════════════════════════════════════
+     WORDMARK EXPLORATIONS — decision sheet, NOT a system reference.
+     Compare case and weight treatments for the composed wordmark
+     (S logomark + "share" + descriptor) across dark and light surfaces,
+     for the firm mark (Share Ventures) and a product mark (shareOS).
+     Delete this file once a direction is locked into foundations.md §2.
+     ═══════════════════════════════════════════════════════════════════════ -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wordmark explorations — Share Ventures</title>
+<link rel="icon" href="../assets/logos/SV_Symbol_Black.svg">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<style>
+
+  *,*::before,*::after { box-sizing:border-box; }
+  body { margin:0; background:var(--sv-home-bg); color:var(--sv-black);
+    font:400 var(--sv-text-body)/1.6 var(--sv-font-sans); -webkit-font-smoothing:antialiased; }
+  .sheet { max-width:72rem; margin-inline:auto; padding:64px clamp(1.25rem,4vw,4rem) 128px; }
+  h1 { font-size:var(--sv-text-h1); font-weight:500; line-height:1.1; letter-spacing:-0.01em; margin:0 0 12px; }
+  .lede { color:var(--sv-gray-dark); max-width:60ch; margin:0 0 64px; }
+  h2 { font-size:var(--sv-text-h4); font-weight:500; margin:64px 0 8px; }
+  .note { font-size:var(--sv-text-caption); color:var(--sv-gray-dark); margin:0 0 24px; }
+
+  .row { margin-bottom:40px; }
+  .cap { font-size:var(--sv-text-caption); font-weight:500; letter-spacing:.02em;
+    color:var(--sv-gray-dark); margin-bottom:10px; display:flex; gap:12px; align-items:baseline; }
+  .cap .tag { font-weight:400; text-transform:none; letter-spacing:0; color:var(--sv-gray-mid); }
+  .panels { display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--sv-gray-light); }
+  @media (max-width:800px){ .panels { grid-template-columns:1fr; } }
+  .panel { padding:36px 40px; display:flex; flex-direction:column; gap:24px; }
+  .panel.dark  { background:var(--sv-black); color:var(--sv-white); }
+  .panel.light { background:var(--sv-white); color:var(--sv-black); }
+
+  /* wordmark — same anatomy as .sv-wordmark; weights parameterized per row */
+  .wm { display:inline-flex; align-items:center; gap:.5em;
+    font-size:1.5rem; line-height:1; letter-spacing:-0.01em; white-space:nowrap; }
+  .wm svg { height:1.6em; width:auto; flex:none; fill:currentColor; }
+  .wm .s { font-weight:var(--ws,700); }
+  .wm .p { font-weight:var(--wp,300); }
+  .wm .tm { font-size:.4em; vertical-align:.9em; letter-spacing:0; margin-left:.08em; }
+</style>
+</head>
+<body>
+<main class="sheet">
+  <h1>Wordmark explorations</h1>
+  <p class="lede">Every option keeps the S logomark and the two-weight text treatment. Each row shows the firm
+  mark and a product mark on both surfaces. The system currently ships <strong>row 2 at Bold&nbsp;700 /
+  Light&nbsp;300</strong>. Pick one; it gets locked into <code>foundations.md&nbsp;§2</code> and the implementations.</p>
+
+  <h2>1 · Case</h2>
+  <p class="note">Weights fixed at Bold 700 / Light 300 — only capitalization and spacing change.</p>
+
+  <div class="row">
+    <div class="cap">A — Share Ventures · Share OS <span class="tag">sentence case, spaced</span></div>
+    <div class="panels">
+      <div class="panel dark">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">Share</b> <span class="p">Ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">Share</b> <span class="p">OS</span></span></span>
+      </div>
+      <div class="panel light">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">Share</b> <span class="p">Ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">Share</b> <span class="p">OS</span></span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="cap">B — share Ventures · share OS <span class="tag">lowercase "share" — current</span></div>
+    <div class="panels">
+      <div class="panel dark">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b> <span class="p">Ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b> <span class="p">OS</span></span></span>
+      </div>
+      <div class="panel light">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b> <span class="p">Ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b> <span class="p">OS</span></span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="cap">C — share ventures · share os <span class="tag">all lowercase</span></div>
+    <div class="panels">
+      <div class="panel dark">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b> <span class="p">ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b> <span class="p">os</span></span></span>
+      </div>
+      <div class="panel light">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b> <span class="p">ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b> <span class="p">os</span></span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="cap">D — ShareVentures · ShareOS <span class="tag">joined, capitals</span></div>
+    <div class="panels">
+      <div class="panel dark">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">Share</b><span class="p">Ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">Share</b><span class="p">OS</span></span></span>
+      </div>
+      <div class="panel light">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">Share</b><span class="p">Ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">Share</b><span class="p">OS</span></span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="cap">E — shareVentures · shareOS <span class="tag">joined, lowercase "share"</span></div>
+    <div class="panels">
+      <div class="panel dark">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b><span class="p">Ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b><span class="p">OS</span></span></span>
+      </div>
+      <div class="panel light">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b><span class="p">Ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b><span class="p">OS</span></span></span>
+      </div>
+    </div>
+  </div>
+
+  <h2>2 · Weight pairing</h2>
+  <p class="note">Case fixed to the current try (lowercase "share", spaced firm mark, joined product mark) — only the weights change.</p>
+
+  <div class="row" style="--ws:700; --wp:100;">
+    <div class="cap">F — Bold 700 / Thin 100</div>
+    <div class="panels">
+      <div class="panel dark">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b> <span class="p">Ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b><span class="p">OS</span></span></span>
+      </div>
+      <div class="panel light">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b> <span class="p">Ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b><span class="p">OS</span></span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="--ws:700; --wp:300;">
+    <div class="cap">G — Bold 700 / Light 300 <span class="tag">current</span></div>
+    <div class="panels">
+      <div class="panel dark">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b> <span class="p">Ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b><span class="p">OS</span></span></span>
+      </div>
+      <div class="panel light">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b> <span class="p">Ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b><span class="p">OS</span></span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="--ws:600; --wp:300;">
+    <div class="cap">H — Semibold 600 / Light 300</div>
+    <div class="panels">
+      <div class="panel dark">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b> <span class="p">Ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b><span class="p">OS</span></span></span>
+      </div>
+      <div class="panel light">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b> <span class="p">Ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b><span class="p">OS</span></span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="--ws:900; --wp:300;">
+    <div class="cap">I — Black 900 / Light 300</div>
+    <div class="panels">
+      <div class="panel dark">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b> <span class="p">Ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b><span class="p">OS</span></span></span>
+      </div>
+      <div class="panel light">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b> <span class="p">Ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b><span class="p">OS</span></span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="--ws:700; --wp:400;">
+    <div class="cap">J — Bold 700 / Regular 400</div>
+    <div class="panels">
+      <div class="panel dark">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b> <span class="p">Ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b><span class="p">OS</span></span></span>
+      </div>
+      <div class="panel light">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b> <span class="p">Ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b><span class="p">OS</span></span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="--ws:500; --wp:300;">
+    <div class="cap">K — Medium 500 / Light 300</div>
+    <div class="panels">
+      <div class="panel dark">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b> <span class="p">Ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b><span class="p">OS</span></span></span>
+      </div>
+      <div class="panel light">
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b> <span class="p">Ventures<span class="tm">™</span></span></span></span>
+        <span class="wm"><svg viewBox="125.85 116.8 828.3 933.4" aria-hidden="true"><use href="#s-mark"/></svg><span><b class="s">share</b><span class="p">OS</span></span></span>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><g id="s-mark">
+  <path d="M414.15,448.29l414.15,239.11v62.53l-288.3,166.45-414.15-239.11v102.25c0,26.56,14.29,51.32,37.29,64.6l339.56,196.04c11.5,6.64,24.4,9.96,37.29,9.96s25.8-3.32,37.3-9.96l353.28-203.97c14.54-8.4,23.57-24.04,23.57-40.83v-180.62l-414.15-239.11-125.85,72.66Z"/>
+  <path d="M916.86,322.84l-339.56-196.04c-23.01-13.28-51.59-13.29-74.59,0l-345.4,199.41c-19.41,11.21-31.46,32.09-31.46,54.5v171.51l414.15,239.11,125.85-72.66-414.15-239.11v-62.53l288.3-166.45,414.15,239.11v-102.25c0-26.56-14.29-51.32-37.29-64.6Z"/>
+</g></defs></svg>
+</body>
+</html>

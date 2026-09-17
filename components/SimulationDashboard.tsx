@@ -18,10 +18,10 @@ class ErrorBoundaryIntel extends React.Component<{children: React.ReactNode}, {h
       return (
         <div style={{ padding: 40, color: '#C0392B', background: '#FFFFFF', minHeight: '50vh' }}>
           <h2 style={{ fontSize: 20, marginBottom: 12 }}>Intelligence Dashboard Error</h2>
-          <pre style={{ background: '#FFFFFF', padding: 16, borderRadius: 8, overflow: 'auto', fontSize: 13, color: '#8A6D3B' }}>
+          <pre style={{ background: '#FFFFFF', padding: 16, borderRadius: 0, overflow: 'auto', fontSize: 13, color: '#8A6D3B' }}>
             {this.state.error?.message}
           </pre>
-          <pre style={{ background: '#FFFFFF', padding: 16, borderRadius: 8, overflow: 'auto', fontSize: 11, color: '#5E6366', marginTop: 8, maxHeight: 200 }}>
+          <pre style={{ background: '#FFFFFF', padding: 16, borderRadius: 0, overflow: 'auto', fontSize: 11, color: '#5E6366', marginTop: 8, maxHeight: 200 }}>
             {this.state.error?.stack}
           </pre>
         </div>
@@ -65,7 +65,7 @@ function StatusBadge({ status }: { status: string }) {
   return (
     <span style={{
       background: style.bg, color: style.color, border: `1px solid ${style.border}`,
-      padding: '2px 8px', borderRadius: 3, fontSize: 11, fontWeight: 700, letterSpacing: '0.05em',
+      padding: '2px 8px', borderRadius: 0, fontSize: 11, fontWeight: 700, letterSpacing: '0.05em',
       display: 'inline-block', whiteSpace: 'nowrap'
     }}>{s}</span>
   );
@@ -87,20 +87,28 @@ function SectionHeader({ id, label, children }: { id: string; label: string; chi
 }
 
 function MetricCard({ label, value, sub, color = '#000000' }: { label: string; value: string; sub?: string; color?: string }) {
-  const c = color === '#FFFFFF' ? '#000000' : color;
+  // Canon (design-consistency rule 7): green marks LIVE / healthy values only,
+  // and must be gated on the DISPLAYED string, not the raw number. A value that
+  // formats to "$0" / "0" / "0%" is not healthy, so it renders neutral ink.
+  // Static goalposts (targets) are never green either, they are not live.
+  const shown = String(value ?? '');
+  const numeric = parseFloat(shown.replace(/[^0-9.-]/g, ''));
+  const isZeroish = Number.isFinite(numeric) ? numeric === 0 : false;
+  const wantsGreen = color === '#0A7D3C' || color === '#00D65D';
+  const c = wantsGreen ? (isZeroish ? '#000000' : '#0A7D3C') : (color === '#FFFFFF' ? '#000000' : color);
   return (
-    <div className="sim-metric-card" style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 12, padding: '22px 24px' }}>
-      <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12, fontWeight: 600 }}>{label}</div>
-      <div className="sim-metric-value" style={{ color: c, fontSize: 32, fontWeight: 600, lineHeight: 1.0, marginBottom: 5, letterSpacing: '-0.03em' }}>{value}</div>
-      {sub && <div style={{ color: '#939799', fontSize: 12, fontWeight: 500 }}>{sub}</div>}
+    <div className="sim-metric-card" style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: '22px 24px' }}>
+      <div style={{ color: '#5E6366', fontSize: 13, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: 12, fontWeight: 500 }}>{label}</div>
+      <div className="sim-metric-value" style={{ color: c, fontSize: 40, fontWeight: 400, lineHeight: 1, marginBottom: 6, letterSpacing: '-0.02em' }}>{value}</div>
+      {sub && <div style={{ color: '#5E6366', fontSize: 13, fontWeight: 400 }}>{sub}</div>}
     </div>
   );
 }
 
 function ProgressBar({ pct, color }: { pct: number; color: string }) {
   return (
-    <div style={{ height: 4, background: '#F1F4F5', borderRadius: 2, overflow: 'hidden' }}>
-      <div style={{ height: '100%', width: `${pct}%`, background: color, borderRadius: 2, transition: 'width 1s ease' }} />
+    <div style={{ height: 4, background: '#F1F4F5', borderRadius: 0, overflow: 'hidden' }}>
+      <div style={{ height: '100%', width: `${pct}%`, background: color, borderRadius: 0, transition: 'width 1s ease' }} />
     </div>
   );
 }
@@ -207,36 +215,40 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
                   scrollTo(`stage-${stage.stage_name.toLowerCase()}`);
                 }}
                 style={{
-                  background: isActive ? `${color}14` : 'transparent',
-                  color: isActive ? color : '#939799',
+                  // Canon: a SELECTED nav state is a UI affordance, not a live
+                  // state, so it renders in neutral ink. Green is reserved for
+                  // data that is genuinely live/active/healthy.
+                  background: isActive ? '#FFFFFF' : 'transparent',
+                  color: isActive ? '#000000' : '#5E6366',
                   border: 'none',
-                  borderBottom: isActive ? `2px solid ${color}` : '2px solid transparent',
+                  borderBottom: isActive ? '2px solid #000000' : '2px solid transparent',
                   padding: '0 20px',
-                  fontSize: 13, fontWeight: isActive ? 700 : 400,
+                  fontSize: 13, fontWeight: isActive ? 500 : 400,
                   cursor: 'pointer',
-                  transition: 'all 0.15s',
+                  transition: 'color 0.2s cubic-bezier(.16,1,.3,1), border-color 0.2s cubic-bezier(.16,1,.3,1)',
                   whiteSpace: 'nowrap',
                   display: 'flex', alignItems: 'center', gap: 6,
                   height: '100%',
                 }}
               >
-                <span style={{ fontSize: 10, opacity: 0.6 }}>{idx + 1}</span>
+                <span style={{ fontSize: 10, color: '#5E6366' }}>{idx + 1}</span>
                 {stage.stage_name}
               </button>
             );
           })}
-          {/* Intelligence tab */}
+          {/* Agents tab */}
           <button
             onClick={() => { setActiveTab('intelligence'); setActiveSidebarItem('intel-brand'); }}
             style={{
-              background: activeTab === 'intelligence' ? 'rgba(0, 214, 93,0.08)' : 'transparent',
-              color: activeTab === 'intelligence' ? '#0A7D3C' : '#C8CBCC',
+              // Neutral ink for the same reason as the stage tabs above
+              background: activeTab === 'intelligence' ? '#FFFFFF' : 'transparent',
+              color: activeTab === 'intelligence' ? '#000000' : '#5E6366',
               border: 'none',
-              borderBottom: activeTab === 'intelligence' ? '2px solid #00D65D' : '2px solid transparent',
+              borderBottom: activeTab === 'intelligence' ? '2px solid #000000' : '2px solid transparent',
               padding: '0 24px',
-              fontSize: 13, fontWeight: activeTab === 'intelligence' ? 700 : 400,
+              fontSize: 13, fontWeight: activeTab === 'intelligence' ? 500 : 400,
               cursor: 'pointer',
-              transition: 'all 0.15s',
+              transition: 'color 0.2s cubic-bezier(.16,1,.3,1), border-color 0.2s cubic-bezier(.16,1,.3,1)',
               whiteSpace: 'nowrap',
               display: 'flex', alignItems: 'center', gap: 6,
               height: '100%',
@@ -251,12 +263,13 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
 
         {/* Right info */}
         <div className="sim-nav-right" style={{ padding: '0 24px', borderLeft: '1px solid #E8E6E4', height: 56, display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ color: '#939799', fontSize: 12 }}>{meta.vertical}</span>
-          <span style={{ color: '#2B3033' }}>|</span>
+          <span style={{ color: '#5E6366', fontSize: 12 }}>{meta.vertical}</span>
+          <span style={{ color: '#C8CBCC' }}>|</span>
           <span style={{
-            background: `${stageColor}18`, color: stageColor,
-            border: `1px solid ${stageColor}44`,
-            padding: '3px 8px', borderRadius: 4, fontSize: 11, fontWeight: 700
+            // Informational label, not a live metric: neutral per canon
+            background: '#F1F4F5', color: '#2B3033',
+            border: '1px solid #E8E6E4',
+            padding: '3px 8px', borderRadius: 0, fontSize: 11, fontWeight: 500, letterSpacing: '0.04em'
           }}>SIM {meta.version || 'V1'}</span>
         </div>
       </nav>
@@ -277,9 +290,6 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
           {sidebarSections.map((s) => {
             const isStage = s.id.startsWith('stage-');
             const isIntel = s.id.startsWith('intel-');
-            const stageName = isStage ? s.id.replace('stage-', '') : '';
-            const baseColor = isIntel ? '#00D65D' : '#0A7D3C';
-            const color = isStage ? STAGE_COLORS[stageName.charAt(0).toUpperCase() + stageName.slice(1)] || '#0A7D3C' : baseColor;
             const isActive = activeSidebarItem === s.id;
 
             return (
@@ -288,16 +298,18 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
                 onClick={() => scrollTo(s.id)}
                 style={{
                   width: '100%', textAlign: 'left',
-                  background: isActive ? `${color}0a` : 'transparent',
-                  color: isActive ? color : '#939799',
-                  border: 'none', borderRight: isActive ? `2px solid ${color}` : '2px solid transparent',
+                  // Selected nav is neutral ink, never green (canon)
+                  background: isActive ? '#F1F4F5' : 'transparent',
+                  color: isActive ? '#000000' : '#5E6366',
+                  border: 'none', borderRight: isActive ? '2px solid #000000' : '2px solid transparent',
                   padding: isStage ? '6px 16px 6px 24px' : '7px 16px',
-                  fontSize: 12, fontWeight: isActive ? 600 : 400,
-                  cursor: 'pointer', transition: 'all 0.15s',
+                  fontSize: 12, fontWeight: isActive ? 500 : 400,
+                  cursor: 'pointer',
+                  transition: 'color 0.2s cubic-bezier(.16,1,.3,1), background 0.2s cubic-bezier(.16,1,.3,1)',
                   display: 'block',
                 }}
               >
-                {isStage && <span style={{ color: '#2B3033', marginRight: 6 }}>→</span>}
+                {isStage && <span style={{ color: '#5E6366', marginRight: 6 }}>&rarr;</span>}
                 {isIntel && <span style={{ color: '#5E6366', marginRight: 6 }}><Glyph name="bolt" /></span>}
                 {s.label}
               </button>
@@ -311,13 +323,18 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
           {activeTab === 'intelligence' && (
             <div>
               <div style={{ marginBottom: 32 }}>
-                <h1 style={{ fontSize: 36, fontWeight: 600, letterSpacing: '-0.02em', marginBottom: 8, textTransform: 'lowercase', lineHeight: 1.05 }}>
-                  agents &amp; analytics
-                  <span style={{ color: '#939799', fontSize: 16, fontWeight: 400, marginLeft: 16 }}>
-                    {meta.venture_name}
-                  </span>
+                {/* Sentence case per canon; the venture name sits on its own
+                    line instead of being jammed in as a quiet suffix. */}
+                <h1 style={{
+                  fontSize: 'clamp(2.5rem,5vw,3.5rem)', fontWeight: 500,
+                  letterSpacing: '-0.01em', lineHeight: 1.1, marginBottom: 16,
+                }}>
+                  Agents &amp; analytics
                 </h1>
-                <p style={{ color: '#5E6366', fontSize: 14, maxWidth: 600 }}>
+                <p style={{ color: '#5E6366', fontSize: '1.5rem', fontWeight: 400, maxWidth: '38ch', lineHeight: 1.4, marginBottom: 12 }}>
+                  {meta.venture_name}
+                </p>
+                <p style={{ color: '#5E6366', fontSize: '1.125rem', maxWidth: '70ch', lineHeight: 1.6 }}>
                   Live intelligence: brand DNA, SEO, competitive landscape, social analytics, investor pipeline, and activity feed.
                 </p>
               </div>
@@ -329,7 +346,7 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
                 <div style={{ color: '#5E6366', fontSize: 13 }}>
                   {meta.venture_name} · Agents · ShareOS
                 </div>
-                <Link href="/" style={{ color: '#939799', fontSize: 13, textDecoration: 'none' }}>← All Simulations</Link>
+                <Link href="/" style={{ color: '#5E6366', fontSize: 13, textDecoration: 'none' }}>← All Simulations</Link>
               </div>
             </div>
           )}
@@ -339,23 +356,37 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
 
           {/* EXECUTIVE SUMMARY */}
           <SectionHeader id="exec-summary" label="Executive Summary">
-            <div style={{ marginBottom: 8 }}>
-              <h1 style={{ fontSize: 44, fontWeight: 600, letterSpacing: '-0.02em', marginBottom: 8, lineHeight: 1.05 }}>
+            <div style={{ marginBottom: 32 }}>
+              {/* Canon display type: clamp(2.5rem,5vw,3.5rem), weight 500,
+                  lh 1.1, ls -0.01em, sentence case, no kicker above it. */}
+              <h1 style={{
+                fontSize: 'clamp(2.5rem,5vw,3.5rem)', fontWeight: 500,
+                letterSpacing: '-0.01em', lineHeight: 1.1, marginBottom: 16,
+              }}>
                 {meta.venture_name}
-                <span style={{ color: '#939799', fontSize: 18, fontWeight: 400, marginLeft: 16 }}>
-                  Simulation Report
-                </span>
               </h1>
-              <p style={{ color: '#5E6366', fontSize: 16, maxWidth: 700, lineHeight: 1.6 }}>
-                {meta.subdomain && `${meta.subdomain} · `}{meta.tam_formatted} TAM · {meta.vertical} Vertical
+              <p style={{ color: '#5E6366', fontSize: '1.5rem', fontWeight: 400, maxWidth: '38ch', lineHeight: 1.4, marginBottom: 20 }}>
+                Simulation report
               </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 0, borderTop: '1px solid #C8CBCC' }}>
+                {[
+                  ['Vertical', meta.vertical],
+                  ['Subdomain', meta.subdomain],
+                  ['TAM', meta.tam_formatted],
+                ].filter(([, v]) => !!v).map(([k, v]) => (
+                  <div key={k as string} style={{ padding: '14px 32px 14px 0', marginRight: 32, borderRight: 'none' }}>
+                    <div style={{ color: '#5E6366', fontSize: 13, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: 6 }}>{k}</div>
+                    <div style={{ color: '#000000', fontSize: '1.125rem', fontWeight: 400 }}>{v}</div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="sim-grid-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 32 }}>
               <MetricCard label="Current Valuation" value={fmt(summary.current_valuation)} color="#0A7D3C" />
               <MetricCard label="Target Valuation" value={fmt(summary.target_valuation)} color="#000000" />
               <MetricCard label="Total Goals" value={summary.total_goals?.toString()} sub={`${summary.goals_achieved} active`} color="#FFFFFF" />
-              <MetricCard label="Avg Agent Work" value={summary.avg_agent_work_share} color="#00D65D" />
+              <MetricCard label="Avg Agent Work" value={summary.avg_agent_work_share} color="#0A7D3C" />
             </div>
 
             <div className="sim-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 32 }}>
@@ -365,15 +396,15 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
             </div>
 
             {/* Key takeaways */}
-            <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 24 }}>
-              <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>Key Takeaways</div>
+            <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: 24 }}>
+              <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>Key Takeaways</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                 {summary.key_takeaways?.map((t: string, i: number) => (
                   <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
                     <span style={{
                       background: 'rgba(10, 125, 60,0.1)', color: '#0A7D3C',
                       border: '1px solid rgba(10, 125, 60,0.2)',
-                      borderRadius: 4, padding: '2px 8px', fontSize: 11, fontWeight: 700,
+                      borderRadius: 0, padding: '2px 8px', fontSize: 11, fontWeight: 700,
                       minWidth: 24, textAlign: 'center', flexShrink: 0
                     }}>{i + 1}</span>
                     <p style={{ color: '#5E6366', fontSize: 14, lineHeight: 1.6, margin: 0 }}>{t}</p>
@@ -393,24 +424,24 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
             <div className="sim-grid-2" style={{ display: 'grid', gridTemplateColumns: detectionSignals.length > 0 ? '1fr 1fr' : '1fr', gap: 24, marginBottom: 32 }}>
               <div>
                 {hasSignalScore && (
-                <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 24, marginBottom: 16 }}>
+                <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: 24, marginBottom: 16 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                    <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Signal Strength</div>
+                    <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Signal Strength</div>
                     <span style={{
                       background: 'rgba(0, 214, 93,0.1)', color: '#0A7D3C',
                       border: '1px solid rgba(0, 214, 93,0.2)',
-                      padding: '4px 10px', borderRadius: 4, fontSize: 12, fontWeight: 700
+                      padding: '4px 10px', borderRadius: 0, fontSize: 12, fontWeight: 700
                     }}>THRESHOLD EXCEEDED</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 12 }}>
                     <span style={{ fontSize: 48, fontWeight: 800, color: '#0A7D3C' }}>
                       {(Number(sig.signal_strength_score) * 100).toFixed(0)}
                     </span>
-                    <span style={{ color: '#939799', fontSize: 18 }}>/ 100</span>
+                    <span style={{ color: '#5E6366', fontSize: 18 }}>/ 100</span>
                   </div>
                   <ProgressBar pct={Number(sig.signal_strength_score) * 100} color="#0A7D3C" />
                   {(hasThreshold || sig.action_triggered) && (
-                    <div style={{ color: '#939799', fontSize: 12, marginTop: 8 }}>
+                    <div style={{ color: '#5E6366', fontSize: 12, marginTop: 8 }}>
                       {[hasThreshold ? `Threshold: ${(Number(sig.threshold) * 100).toFixed(0)}` : null, sig.action_triggered].filter(Boolean).join(' · ')}
                     </div>
                   )}
@@ -418,13 +449,13 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
                 )}
 
                 {(marketContext.length > 0 || signalNarrative.length > 0) && (
-                <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 24 }}>
+                <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: 24 }}>
                   {marketContext.length > 0 && (<>
-                  <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>Market Context</div>
+                  <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>Market Context</div>
                   <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', columnGap: 20, rowGap: 12, marginBottom: signalNarrative.length > 0 ? 20 : 0, alignItems: 'start' }}>
                     {marketContext.map(([label, value, accent]) => (
                       <React.Fragment key={label}>
-                        <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', paddingTop: 2 }}>{label}</div>
+                        <div style={{ color: '#5E6366', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', paddingTop: 2 }}>{label}</div>
                         <div style={{ color: accent ? '#0A7D3C' : '#000000', fontSize: 14, fontWeight: accent ? 700 : 600, lineHeight: 1.5, overflowWrap: 'anywhere' }}>{value}</div>
                       </React.Fragment>
                     ))}
@@ -432,7 +463,7 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
                   </>)}
                   {signalNarrative.map(([label, value], i) => (
                     <div key={label} style={{ borderLeft: '3px solid #0A7D3C', paddingLeft: 12, marginTop: i === 0 ? 0 : 16 }}>
-                      <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>{label}</div>
+                      <div style={{ color: '#5E6366', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>{label}</div>
                       <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.6, margin: 0 }}>{value}</p>
                     </div>
                   ))}
@@ -441,14 +472,14 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
               </div>
 
               {detectionSignals.length > 0 && (
-              <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 24 }}>
-                <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>
+              <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: 24 }}>
+                <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>
                   Detection Signals ({detectionSignals.length})
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {detectionSignals.map((s: any, i: number) => (
                     <div key={i} style={{
-                      background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 6,
+                      background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0,
                       padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center'
                     }}>
                       <span style={{ color: '#5E6366', fontSize: 13 }}>{s.signal}</span>
@@ -472,7 +503,7 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
             <h2 style={{ fontSize: 28, fontWeight: 700, marginBottom: 20 }}>Founding Team</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
               {teamArr.map((member, i) => (
-                <div key={i} style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 24 }}>
+                <div key={i} style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: 24 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: (member.description || '').trim() ? 12 : 0 }}>
                     <div style={{
                       width: 44, height: 44, borderRadius: '50%',
@@ -482,7 +513,7 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
                     }}>{(member.name || '?')[0]}</div>
                     <div>
                       <div style={{ color: '#000000', fontSize: 15, fontWeight: 700 }}>{member.name}</div>
-                      <div style={{ color: '#939799', fontSize: 12 }}>{member.role}</div>
+                      <div style={{ color: '#5E6366', fontSize: 12 }}>{member.role}</div>
                     </div>
                   </div>
                   {(member.description || '').trim() && (
@@ -493,13 +524,13 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
                     {member.expertise_tags.map((tag: string, j: number) => (
                       <span key={j} style={{
                         background: '#FFFFFF', border: '1px solid #E8E6E4',
-                        color: '#5E6366', padding: '2px 8px', borderRadius: 3, fontSize: 11
+                        color: '#5E6366', padding: '2px 8px', borderRadius: 0, fontSize: 11
                       }}>{tag}</span>
                     ))}
                   </div>
                   )}
                   {member.hourly_rate && (
-                    <div style={{ marginTop: 12, color: '#939799', fontSize: 12 }}>
+                    <div style={{ marginTop: 12, color: '#5E6366', fontSize: 12 }}>
                       ${member.hourly_rate}/hr
                     </div>
                   )}
@@ -519,19 +550,19 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
             {products?.length > 0 ? (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 }}>
                 {(products || []).map((p, i) => (
-                  <div key={i} style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 24 }}>
+                  <div key={i} style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: 24 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
                       <div>
                         <div style={{ color: '#000000', fontSize: 18, fontWeight: 700 }}>{p.name}</div>
                         {(p.category || (p as any).stage) && (
-                          <div style={{ color: '#939799', fontSize: 12 }}>{p.category || (p as any).stage}</div>
+                          <div style={{ color: '#5E6366', fontSize: 12 }}>{p.category || (p as any).stage}</div>
                         )}
                       </div>
                       {p.evidence_score && (
                         <span style={{
                           background: 'rgba(10, 125, 60,0.1)', color: '#0A7D3C',
                           border: '1px solid rgba(10, 125, 60,0.2)',
-                          padding: '3px 8px', borderRadius: 3, fontSize: 11, fontWeight: 700
+                          padding: '3px 8px', borderRadius: 0, fontSize: 11, fontWeight: 700
                         }}>{p.evidence_score}</span>
                       )}
                     </div>
@@ -541,11 +572,11 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
                     )}
                     {(p as any).target_user && (
                       <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', columnGap: 12, marginBottom: 10 }}>
-                        <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', paddingTop: 2 }}>Target</div>
+                        <div style={{ color: '#5E6366', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', paddingTop: 2 }}>Target</div>
                         <div style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5 }}>{(p as any).target_user}</div>
                       </div>
                     )}
-                    {p.mechanism && <p style={{ color: '#939799', fontSize: 12, lineHeight: 1.5, marginBottom: 10 }}>{p.mechanism}</p>}
+                    {p.mechanism && <p style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5, marginBottom: 10 }}>{p.mechanism}</p>}
                     {p.key_differentiator && (
                       <div style={{ borderLeft: '3px solid #0A7D3C', paddingLeft: 10 }}>
                         <p style={{ color: '#5E6366', fontSize: 12, margin: 0 }}>{p.key_differentiator}</p>
@@ -558,7 +589,7 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
                 ))}
               </div>
             ) : (
-              <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 24, color: '#939799' }}>
+              <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: 24, color: '#5E6366' }}>
                 Products defined in roadmap. Detail pending product validation stage.
               </div>
             )}
@@ -580,16 +611,16 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
             <h2 style={{ fontSize: 28, fontWeight: 700, marginBottom: 24 }}>Simulation Analysis</h2>
 
             {/* Human vs Agent trajectory */}
-            <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 24, marginBottom: 24 }}>
-              <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 20 }}>
+            <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: 24, marginBottom: 24 }}>
+              <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 20 }}>
                 Human vs Agent Work Split by Stage
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: `repeat(${(analysis?.human_pct_trajectory || [])?.length || 1}, 1fr)`, gap: 8 }}>
                 {(analysis?.human_pct_trajectory || [])?.map((row, i) => (
                   <div key={i} style={{ textAlign: 'center' }}>
                     <div style={{ marginBottom: 8 }}>
-                      <div style={{ fontSize: 11, color: '#939799', marginBottom: 6 }}>{row.stage}</div>
-                      <div style={{ position: 'relative', height: 80, background: '#FFFFFF', borderRadius: 4, overflow: 'hidden' }}>
+                      <div style={{ fontSize: 11, color: '#5E6366', marginBottom: 6 }}>{row.stage}</div>
+                      <div style={{ position: 'relative', height: 80, background: '#FFFFFF', borderRadius: 0, overflow: 'hidden' }}>
                         <div style={{
                           position: 'absolute', bottom: 0, left: 0, right: 0,
                           height: `${row.agent_pct}%`,
@@ -603,7 +634,7 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
                         }}>{row.agent_pct}%</div>
                       </div>
                     </div>
-                    <div style={{ fontSize: 10, color: '#939799' }}>
+                    <div style={{ fontSize: 10, color: '#5E6366' }}>
                       <span style={{ color: '#0A7D3C' }}>A: {row.agent_cost}</span>
                       <br />
                       <span style={{ color: '#5E6366' }}>H: {row.human_cost}</span>
@@ -615,13 +646,13 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
 
             {/* Agent value creation */}
             {(analysis?.agent_value_creation || [])?.length > 0 && (
-              <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 24, marginBottom: 24 }}>
-                <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>
+              <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: 24, marginBottom: 24 }}>
+                <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>
                   Agent Value Creation
                 </div>
                 <div className="sim-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                   {(analysis?.agent_value_creation || []).map((v, i) => (
-                    <div key={i} style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 6, padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div key={i} style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span style={{ color: '#5E6366', fontSize: 13 }}>{v.value_driver}</span>
                       <span style={{ color: '#0A7D3C', fontWeight: 700, fontSize: 14, marginLeft: 16 }}>{v.amount}</span>
                     </div>
@@ -633,11 +664,11 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
             {/* ShareOS vs Traditional */}
             {analysis.shareos_vs_traditional && (
               <div className="sim-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
-                <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 24 }}>
+                <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: 24 }}>
                   <div style={{ color: '#C0392B', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 12 }}>Traditional Approach</div>
                   <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.7, margin: 0 }}>{analysis.shareos_vs_traditional.traditional}</p>
                 </div>
-                <div style={{ background: '#FFFFFF', border: '1px solid rgba(10, 125, 60,0.2)', borderRadius: 8, padding: 24 }}>
+                <div style={{ background: '#FFFFFF', border: '1px solid rgba(10, 125, 60,0.2)', borderRadius: 0, padding: 24 }}>
                   <div style={{ color: '#0A7D3C', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 12 }}>ShareOS Approach</div>
                   <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.7, margin: 0 }}>{analysis.shareos_vs_traditional.shareos}</p>
                 </div>
@@ -646,8 +677,8 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
 
             {/* Proofs */}
             {(analysis?.proofs || [])?.length > 0 && (
-              <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 24 }}>
-                <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 20 }}>
+              <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: 24 }}>
+                <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 20 }}>
                   ShareOS Proofs
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -656,7 +687,7 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
                       <span style={{
                         background: 'rgba(10, 125, 60,0.1)', color: '#0A7D3C',
                         border: '1px solid rgba(10, 125, 60,0.2)',
-                        borderRadius: 4, padding: '4px 10px', fontSize: 11, fontWeight: 700,
+                        borderRadius: 0, padding: '4px 10px', fontSize: 11, fontWeight: 700,
                         flexShrink: 0
                       }}>Proof {p.proof_number}</span>
                       <div>
@@ -671,8 +702,8 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
 
             {/* Master stage summary table */}
             {(analysis?.master_stage_summary || []) && (analysis?.master_stage_summary || []).length > 0 && (
-              <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 24, marginTop: 24 }}>
-                <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>
+              <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 0, padding: 24, marginTop: 24 }}>
+                <div style={{ color: '#5E6366', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>
                   Master Stage Summary
                 </div>
                 <div style={{ overflowX: 'auto' }}>
@@ -680,7 +711,7 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
                     <thead>
                       <tr>
                         {['Stage', 'Duration', 'Goals', 'Agent Cost', 'Human Time', 'Human Cost', 'Total Cost', 'Agent IWA'].map((h) => (
-                          <th key={h} style={{ color: '#939799', padding: '8px 12px', textAlign: 'left', borderBottom: '1px solid #E8E6E4', fontWeight: 600, letterSpacing: '0.05em', fontSize: 11, textTransform: 'uppercase' }}>{h}</th>
+                          <th key={h} style={{ color: '#5E6366', padding: '8px 12px', textAlign: 'left', borderBottom: '1px solid #E8E6E4', fontWeight: 600, letterSpacing: '0.05em', fontSize: 11, textTransform: 'uppercase' }}>{h}</th>
                         ))}
                       </tr>
                     </thead>
@@ -710,7 +741,7 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
             <div style={{ color: '#5E6366', fontSize: 13 }}>
               {meta.venture_name} · {meta.vertical} · ShareOS Simulation {meta.version}
             </div>
-            <Link href="/" style={{ color: '#939799', fontSize: 13, textDecoration: 'none' }}>← All Simulations</Link>
+            <Link href="/" style={{ color: '#5E6366', fontSize: 13, textDecoration: 'none' }}>← All Simulations</Link>
           </div>
           </>)}
         </main>
@@ -727,7 +758,7 @@ function StageSection({ stage, isActive }: { stage: Stage; isActive: boolean }) 
     <SectionHeader id={`stage-${stage.stage_name.toLowerCase()}`} label={`Stage ${stage.stage_number}: ${stage.stage_name}`}>
       <div style={{
         border: `1px solid ${isActive ? color + '44' : '#F1F4F5'}`,
-        borderRadius: 12, overflow: 'hidden',
+        borderRadius: 0, overflow: 'hidden',
         background: isActive ? `${color}06` : '#FFFFFF',
         marginBottom: 40,
       }}>
@@ -740,12 +771,12 @@ function StageSection({ stage, isActive }: { stage: Stage; isActive: boolean }) 
             <span style={{
               background: `${color}18`, color: color,
               border: `1px solid ${color}44`,
-              padding: '4px 12px', borderRadius: 4, fontSize: 12, fontWeight: 700
+              padding: '4px 12px', borderRadius: 0, fontSize: 12, fontWeight: 700
             }}>{stage.stage_name}</span>
             <span style={{ color: '#000000', fontSize: 18, fontWeight: 700 }}>{stage.headline}</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-            <span style={{ color: '#939799', fontSize: 13 }}>{stage.duration}</span>
+            <span style={{ color: '#5E6366', fontSize: 13 }}>{stage.duration}</span>
             <span style={{ color: '#0A7D3C', fontSize: 13, fontWeight: 600 }}>{stage.goals_count} goals</span>
             <span style={{ color: color, fontSize: 18 }}>{expanded ? '↑' : '↓'}</span>
           </div>
@@ -764,8 +795,8 @@ function StageSection({ stage, isActive }: { stage: Stage; isActive: boolean }) 
                 { label: 'Agent Work', value: `${stage.agent_work_pct?.toFixed(0)}%`, color: '#0A7D3C' },
                 { label: 'Human Time', value: stage.human_time || 'n/a', color: '#5E6366' },
               ].map((m) => (
-                <div key={m.label} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 6, padding: '12px 14px' }}>
-                  <div style={{ color: '#939799', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }}>{m.label}</div>
+                <div key={m.label} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 0, padding: '12px 14px' }}>
+                  <div style={{ color: '#5E6366', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }}>{m.label}</div>
                   <div style={{ color: m.color, fontSize: 18, fontWeight: 700 }}>{m.value}</div>
                 </div>
               ))}
@@ -774,15 +805,15 @@ function StageSection({ stage, isActive }: { stage: Stage; isActive: boolean }) 
             {/* Workstream weights */}
             {stage.workstream_weights?.length > 0 && (
               <div style={{ marginBottom: 24 }}>
-                <div style={{ color: '#939799', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 12 }}>
+                <div style={{ color: '#5E6366', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 12 }}>
                   Workstream Weights / Stage {stage.stage_name}
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                   {(stage.workstream_weights || []).map((w, i) => (
                     <div key={i} style={{ display: 'grid', gridTemplateColumns: '200px 1fr 80px', gap: 12, alignItems: 'center' }}>
                       <span style={{ color: '#5E6366', fontSize: 12 }}>{w.workstream}</span>
-                      <div style={{ height: 4, background: '#FFFFFF', borderRadius: 2, overflow: 'hidden' }}>
-                        <div style={{ height: '100%', width: `${w.weight_pct}%`, background: color, borderRadius: 2 }} />
+                      <div style={{ height: 4, background: '#FFFFFF', borderRadius: 0, overflow: 'hidden' }}>
+                        <div style={{ height: '100%', width: `${w.weight_pct}%`, background: color, borderRadius: 0 }} />
                       </div>
                       <span style={{ color: color, fontSize: 12, fontWeight: 700, textAlign: 'right' }}>
                         {w.weight_pct}% · {fmt(w.valuation_allocation)}
@@ -796,26 +827,26 @@ function StageSection({ stage, isActive }: { stage: Stage; isActive: boolean }) 
             {/* Workstreams goals */}
             {stage.workstreams?.length > 0 && (
               <div style={{ marginBottom: 24 }}>
-                <div style={{ color: '#939799', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 16 }}>
+                <div style={{ color: '#5E6366', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 16 }}>
                   Workstreams & Goals
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                   {(stage.workstreams || []).map((ws, i) => (
-                    <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 8, overflow: 'hidden' }}>
+                    <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 0, overflow: 'hidden' }}>
                       <div style={{ padding: '12px 16px', borderBottom: '1px solid #FFFFFF', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div>
                           <span style={{ color: color, fontWeight: 600, fontSize: 13 }}>{ws.workstream_name}</span>
-                          <span style={{ color: '#939799', fontSize: 12, marginLeft: 8 }}>{ws.headline}</span>
+                          <span style={{ color: '#5E6366', fontSize: 12, marginLeft: 8 }}>{ws.headline}</span>
                         </div>
                         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
                           {ws.key_metric_label && (
-                            <span style={{ color: '#939799', fontSize: 11 }}>
+                            <span style={{ color: '#5E6366', fontSize: 11 }}>
                               {ws.key_metric_label}: <span style={{ color: '#0A7D3C', fontWeight: 600 }}>{ws.key_metric_value}</span>
                               <span style={{ color: '#5E6366' }}> / {ws.key_metric_target}</span>
                             </span>
                           )}
                           {ws.valuation > 0 && (
-                            <span style={{ color: '#939799', fontSize: 11 }}>{fmt(ws.valuation)}</span>
+                            <span style={{ color: '#5E6366', fontSize: 11 }}>{fmt(ws.valuation)}</span>
                           )}
                         </div>
                       </div>
@@ -825,7 +856,7 @@ function StageSection({ stage, isActive }: { stage: Stage; isActive: boolean }) 
                             <thead>
                               <tr>
                                 {['Goal', 'Target', 'Result', 'Status', 'Val. Target', 'Score'].map((h) => (
-                                  <th key={h} style={{ color: '#939799', padding: '4px 8px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600, borderBottom: '1px solid #FFFFFF' }}>{h}</th>
+                                  <th key={h} style={{ color: '#5E6366', padding: '4px 8px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600, borderBottom: '1px solid #FFFFFF' }}>{h}</th>
                                 ))}
                               </tr>
                             </thead>
@@ -833,16 +864,16 @@ function StageSection({ stage, isActive }: { stage: Stage; isActive: boolean }) 
                               {(ws.goals || []).map((g, j) => (
                                 <tr key={j} style={{ borderBottom: '1px solid #FFFFFF' }}>
                                   <td style={{ padding: '8px', color: '#5E6366', maxWidth: 280 }}>
-                                    <div style={{ fontSize: 11, color: '#939799', marginBottom: 2 }}>{g.id}</div>
+                                    <div style={{ fontSize: 11, color: '#5E6366', marginBottom: 2 }}>{g.id}</div>
                                     {g.name}
                                   </td>
-                                  <td style={{ padding: '8px', color: '#939799', whiteSpace: 'nowrap' }}>{g.target}</td>
+                                  <td style={{ padding: '8px', color: '#5E6366', whiteSpace: 'nowrap' }}>{g.target}</td>
                                   <td style={{ padding: '8px', color: '#5E6366', whiteSpace: 'nowrap' }}>{g.result}</td>
                                   <td style={{ padding: '8px' }}><StatusBadge status={g.status} /></td>
                                   <td style={{ padding: '8px', color: '#0A7D3C', fontWeight: 600 }}>{fmt(g.target_valuation)}</td>
                                   <td style={{ padding: '8px' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                                      <div style={{ width: 40, height: 3, background: '#FFFFFF', borderRadius: 2, overflow: 'hidden' }}>
+                                      <div style={{ width: 40, height: 3, background: '#FFFFFF', borderRadius: 0, overflow: 'hidden' }}>
                                         <div style={{ height: '100%', width: `${g.performance_score}%`, background: g.performance_score >= 80 ? '#00D65D' : g.performance_score >= 50 ? '#8A6D3B' : '#C0392B' }} />
                                       </div>
                                       <span style={{ color: '#5E6366', fontSize: 11 }}>{g.performance_score}</span>
@@ -863,24 +894,24 @@ function StageSection({ stage, isActive }: { stage: Stage; isActive: boolean }) 
             {/* Agent iterations */}
             {stage.agent_iterations?.length > 0 && (
               <div style={{ marginBottom: 24 }}>
-                <div style={{ color: '#939799', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 16 }}>
+                <div style={{ color: '#5E6366', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 16 }}>
                   Agent Self-Corrections ({(stage.agent_iterations || []).length})
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {(stage.agent_iterations || []).map((iter, i) => (
-                    <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 8, padding: '14px 16px' }}>
+                    <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 0, padding: '14px 16px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
                         <div>
-                          <span style={{ color: '#939799', fontSize: 10, marginRight: 8 }}>#{iter.iteration_number}</span>
+                          <span style={{ color: '#5E6366', fontSize: 10, marginRight: 8 }}>#{iter.iteration_number}</span>
                           <span style={{ color: color, fontWeight: 600, fontSize: 13 }}>{iter.agent_name}</span>
-                          <span style={{ color: '#939799', fontSize: 11, marginLeft: 8 }}>{iter.agent_role}</span>
+                          <span style={{ color: '#5E6366', fontSize: 11, marginLeft: 8 }}>{iter.agent_role}</span>
                         </div>
                         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                           {iter.human_required
-                            ? <span style={{ background: 'rgba(138, 109, 59,0.1)', color: '#8A6D3B', border: '1px solid rgba(138, 109, 59,0.3)', padding: '2px 8px', borderRadius: 3, fontSize: 10, fontWeight: 700 }}>HUMAN REQUIRED</span>
-                            : <span style={{ background: 'rgba(0, 214, 93,0.1)', color: '#0A7D3C', border: '1px solid rgba(0, 214, 93,0.3)', padding: '2px 8px', borderRadius: 3, fontSize: 10, fontWeight: 700 }}>AUTO-FIXED</span>
+                            ? <span style={{ background: 'rgba(138, 109, 59,0.1)', color: '#8A6D3B', border: '1px solid rgba(138, 109, 59,0.3)', padding: '2px 8px', borderRadius: 0, fontSize: 10, fontWeight: 700 }}>HUMAN REQUIRED</span>
+                            : <span style={{ background: 'rgba(0, 214, 93,0.1)', color: '#0A7D3C', border: '1px solid rgba(0, 214, 93,0.3)', padding: '2px 8px', borderRadius: 0, fontSize: 10, fontWeight: 700 }}>AUTO-FIXED</span>
                           }
-                          <span style={{ color: '#939799', fontSize: 11 }}>At risk: {iter.valuation_at_risk}</span>
+                          <span style={{ color: '#5E6366', fontSize: 11 }}>At risk: {iter.valuation_at_risk}</span>
                         </div>
                       </div>
                       <p style={{ color: '#777', fontSize: 12, lineHeight: 1.5, marginBottom: 8 }}>
@@ -891,7 +922,7 @@ function StageSection({ stage, isActive }: { stage: Stage; isActive: boolean }) 
                       </p>
                       <div style={{ display: 'flex', gap: 16, fontSize: 11 }}>
                         <span style={{ color: '#C0392B' }}>Before: {iter.before_state}</span>
-                        <span style={{ color: '#939799' }}>→</span>
+                        <span style={{ color: '#5E6366' }}>→</span>
                         <span style={{ color: '#0A7D3C' }}>After: {iter.after_state}</span>
                       </div>
                     </div>
@@ -903,14 +934,14 @@ function StageSection({ stage, isActive }: { stage: Stage; isActive: boolean }) 
             {/* Human touchpoints */}
             {stage.human_touchpoints?.length > 0 && (
               <div style={{ marginBottom: 24 }}>
-                <div style={{ color: '#939799', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 16 }}>
+                <div style={{ color: '#5E6366', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 16 }}>
                   Human Touchpoints
                 </div>
                 {(stage.human_touchpoints || []).map((tp, i) => (
-                  <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 8, padding: '14px 16px', marginBottom: 8 }}>
+                  <div key={i} style={{ background: '#FFFFFF', border: '1px solid #F7F8F9', borderRadius: 0, padding: '14px 16px', marginBottom: 8 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
                       <span style={{ color: '#000000', fontWeight: 600, fontSize: 13 }}>#{tp.touchpoint_number} / {tp.person}</span>
-                      <div style={{ display: 'flex', gap: 12, color: '#939799', fontSize: 12 }}>
+                      <div style={{ display: 'flex', gap: 12, color: '#5E6366', fontSize: 12 }}>
                         <span>{tp.time_spent}</span>
                         <span style={{ color: '#8A6D3B' }}>{fmt(tp.cost)}</span>
                       </div>
@@ -920,7 +951,7 @@ function StageSection({ stage, isActive }: { stage: Stage; isActive: boolean }) 
                       <p style={{ color: '#5E6366', fontSize: 12, margin: 0 }}>{tp.decision_made}</p>
                     </div>
                     {tp.agent_preparation && (
-                      <p style={{ color: '#939799', fontSize: 12, marginTop: 8 }}>Agent prep: {tp.agent_preparation}</p>
+                      <p style={{ color: '#5E6366', fontSize: 12, marginTop: 8 }}>Agent prep: {tp.agent_preparation}</p>
                     )}
                   </div>
                 ))}
@@ -930,7 +961,7 @@ function StageSection({ stage, isActive }: { stage: Stage; isActive: boolean }) 
             {/* Stage scorecard */}
             {stage.stage_scorecard?.length > 0 && (
               <div>
-                <div style={{ color: '#939799', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 12 }}>
+                <div style={{ color: '#5E6366', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 12 }}>
                   Stage Scorecard
                 </div>
                 <div style={{ overflowX: 'auto' }}>
@@ -938,7 +969,7 @@ function StageSection({ stage, isActive }: { stage: Stage; isActive: boolean }) 
                     <thead>
                       <tr style={{ borderBottom: '1px solid #E8E6E4' }}>
                         {['Criterion', 'Result', 'Target', 'Status', 'Valuation Impact'].map((h) => (
-                          <th key={h} style={{ color: '#939799', padding: '8px 12px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>{h}</th>
+                          <th key={h} style={{ color: '#5E6366', padding: '8px 12px', textAlign: 'left', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>{h}</th>
                         ))}
                       </tr>
                     </thead>
@@ -947,7 +978,7 @@ function StageSection({ stage, isActive }: { stage: Stage; isActive: boolean }) 
                         <tr key={i} style={{ borderBottom: '1px solid #FFFFFF' }}>
                           <td style={{ padding: '10px 12px', color: '#5E6366', fontWeight: i === (stage.stage_scorecard || []).length - 1 ? 700 : 400 }}>{row.criterion}</td>
                           <td style={{ padding: '10px 12px', color: '#000000', fontWeight: 600 }}>{row.result}</td>
-                          <td style={{ padding: '10px 12px', color: '#939799' }}>{row.target}</td>
+                          <td style={{ padding: '10px 12px', color: '#5E6366' }}>{row.target}</td>
                           <td style={{ padding: '10px 12px' }}><StatusBadge status={row.status} /></td>
                           <td style={{ padding: '10px 12px', color: '#0A7D3C' }}>{row.valuation_impact || 'n/a'}</td>
                         </tr>
@@ -959,25 +990,25 @@ function StageSection({ stage, isActive }: { stage: Stage; isActive: boolean }) 
             )}
 
             {/* Stage summary */}
-            <div style={{ marginTop: 20, background: '#FFFFFF', border: `1px solid ${color}22`, borderRadius: 8, padding: '14px 16px', display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
+            <div style={{ marginTop: 20, background: '#FFFFFF', border: `1px solid ${color}22`, borderRadius: 0, padding: '14px 16px', display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
               <div>
-                <div style={{ color: '#939799', fontSize: 10, textTransform: 'uppercase' }}>Performance</div>
+                <div style={{ color: '#5E6366', fontSize: 10, textTransform: 'uppercase' }}>Performance</div>
                 <div style={{ color: '#0A7D3C', fontWeight: 700, fontSize: 18 }}>{stage.stage_summary?.performance_score}</div>
               </div>
               <div>
-                <div style={{ color: '#939799', fontSize: 10, textTransform: 'uppercase' }}>Execution</div>
+                <div style={{ color: '#5E6366', fontSize: 10, textTransform: 'uppercase' }}>Execution</div>
                 <div style={{ color: '#0A7D3C', fontWeight: 700, fontSize: 18 }}>{stage.stage_summary?.execution_score}</div>
               </div>
               <div>
-                <div style={{ color: '#939799', fontSize: 10, textTransform: 'uppercase' }}>Agent IWA</div>
+                <div style={{ color: '#5E6366', fontSize: 10, textTransform: 'uppercase' }}>Agent IWA</div>
                 <div style={{ color: color, fontWeight: 700, fontSize: 18 }}>{stage.stage_summary?.agent_iwa}</div>
               </div>
               <div>
-                <div style={{ color: '#939799', fontSize: 10, textTransform: 'uppercase' }}>Agent Cost</div>
+                <div style={{ color: '#5E6366', fontSize: 10, textTransform: 'uppercase' }}>Agent Cost</div>
                 <div style={{ color: '#8A6D3B', fontWeight: 700, fontSize: 18 }}>{fmt(stage.stage_summary?.agent_cost || 0)}</div>
               </div>
               <div>
-                <div style={{ color: '#939799', fontSize: 10, textTransform: 'uppercase' }}>Human Cost</div>
+                <div style={{ color: '#5E6366', fontSize: 10, textTransform: 'uppercase' }}>Human Cost</div>
                 <div style={{ color: '#5E6366', fontWeight: 700, fontSize: 18 }}>{fmt(stage.stage_summary?.human_cost || 0)}</div>
               </div>
             </div>

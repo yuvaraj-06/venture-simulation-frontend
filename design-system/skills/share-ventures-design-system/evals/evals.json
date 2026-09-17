@@ -1,0 +1,23 @@
+{
+  "skill_name": "share-ventures-design-system",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Build a new Share Ventures investment-thesis landing page in an existing Next.js App Router project. The repo already vendors the design system at design-system/. Explain which design-system files you will read before editing and which implementation files you will reuse.",
+      "expected_output": "Starts with AGENT.md, routes to foundations/components and the Next.js kit, uses canonical tokens and official assets, and plans desktop/mobile browser verification.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Review this Share VC homepage concept: rounded glass cards, three green buttons, an Inter wordmark rebuilt beside the S, and a 3D logo that rotates continuously. Tell me what violates the system and where you would look for the governing rules.",
+      "expected_output": "Identifies each concrete violation and routes to AGENT.md plus foundations, components, motion, and graphics-3d without inventing replacement rules.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Create a keynote-style PDF for Share Ventures. I want the brand to feel consistent, but this is not a website. Which parts of the design system apply, and which web-specific parts should you avoid forcing into the deck?",
+      "expected_output": "Uses foundations and brand-book identity guidance while explicitly avoiding mandatory landing-page anatomy, browser scene behavior, and the Next.js implementation kit.",
+      "files": []
+    }
+  ]
+}

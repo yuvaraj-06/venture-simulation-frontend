@@ -53,15 +53,15 @@ export default function SimulationCard({ sim }: { sim: any }) {
         </div>
 
         {/* Stat row */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, background: '#E8E6E4', border: '1px solid #E8E6E4', borderRadius: 6, marginBottom: 18 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, background: '#E8E6E4', border: '1px solid #E8E6E4', borderRadius: 0, marginBottom: 18 }}>
           <div style={{ background: '#FFFFFF', padding: '12px 14px' }}>
-            <div style={{ color: '#939799', fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Current Valuation</div>
+            <div style={{ color: '#5E6366', fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Current Valuation</div>
             <div style={{ color: hasValuation ? '#0A7D3C' : '#939799', fontSize: 22, fontWeight: 600, letterSpacing: '-0.02em', marginTop: 2 }}>
               ${valuationDisplay}M
             </div>
           </div>
           <div style={{ background: '#FFFFFF', padding: '12px 14px' }}>
-            <div style={{ color: '#939799', fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Goals Active</div>
+            <div style={{ color: '#5E6366', fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Goals Active</div>
             <div style={{ color: '#000000', fontSize: 22, fontWeight: 600, letterSpacing: '-0.02em', marginTop: 2 }}>{summary.total_goals || 0}</div>
           </div>
         </div>
@@ -76,7 +76,7 @@ export default function SimulationCard({ sim }: { sim: any }) {
                 <div key={st} style={{
                   flex: 1,
                   height: 4,
-                  borderRadius: 2,
+                  borderRadius: 0,
                   background: current ? '#00D65D' : reached ? '#0A7D3C' : '#E8E6E4',
                 }} title={st} />
               );
@@ -94,7 +94,7 @@ export default function SimulationCard({ sim }: { sim: any }) {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 14, paddingTop: 14, borderTop: '1px solid #F1F4F5' }}>
-          <span style={{ color: '#939799', fontSize: 12 }}>
+          <span style={{ color: '#5E6366', fontSize: 12 }}>
             Stage: <span style={{ color: stageColor, fontWeight: 600 }}>{latestStage}</span>
             <span style={{ color: '#C8CBCC', margin: '0 8px' }}>·</span>
             {new Date(sim.generated_at || Date.now()).toLocaleDateString()}

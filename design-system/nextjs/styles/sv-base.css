@@ -1,0 +1,197 @@
+/* ============================================================
+   Share Ventures Design System — base component styles 3.0.0
+   Import AFTER tokens/tokens.css. Class-for-class identical to
+   the living reference (demo/index.html) — that file is the
+   visual truth; this file is its importable distillation.
+   Interactive behavior lives in nextjs/components/*.tsx.
+   ============================================================ */
+
+/* ── Base ──────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+img, svg, canvas { display: block; max-width: 100%; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--sv-green); outline-offset: 2px; }
+::selection { background: var(--sv-green); color: var(--sv-black); }
+
+.sv-container { max-width: var(--sv-container); margin-inline: auto; padding-inline: var(--sv-gutter); }
+
+/* ── Type scale ────────────────────────────────────────────── */
+.sv-display { font-size: var(--sv-text-display); font-weight: 400; line-height: var(--sv-leading-display); letter-spacing: var(--sv-tracking-display); text-wrap: balance; }
+.sv-h1 { font-size: var(--sv-text-h1); font-weight: 500; line-height: var(--sv-leading-heading); letter-spacing: var(--sv-tracking-heading); text-wrap: balance; }
+.sv-h2 { font-size: var(--sv-text-h2); font-weight: 500; line-height: var(--sv-leading-heading); letter-spacing: var(--sv-tracking-heading); text-wrap: balance; }
+.sv-h3 { font-size: var(--sv-text-h3); font-weight: 500; line-height: 1.15; letter-spacing: var(--sv-tracking-heading); }
+.sv-h4 { font-size: var(--sv-text-h4); font-weight: 400; line-height: 1.3; }
+.sv-intro { font-size: var(--sv-text-intro); line-height: var(--sv-leading-intro); }
+.sv-small { font-size: var(--sv-text-small); line-height: 1.5; }
+.sv-caption { font-size: var(--sv-text-caption); font-weight: 300; line-height: 1.45; }
+.sv-secondary { color: var(--sv-ink-secondary); }
+.sv-measure { max-width: 70ch; }
+
+/* "Share ___" device: Share is always the prominent word */
+.sv-hero__share { color: var(--sv-ink); font-weight: 500; }
+.sv-hero__word { color: var(--sv-ink-secondary); }
+
+/* ── Navigation ────────────────────────────────────────────── */
+.sv-nav {
+  position: fixed; inset: 0 0 auto 0; z-index: var(--sv-z-nav);
+  display: flex; align-items: center; gap: var(--sv-space-8);
+  height: 88px; padding-inline: var(--sv-gutter);
+  color: var(--sv-white);
+  background: transparent; border-bottom: 1px solid transparent;
+  transition: background var(--sv-dur-base) var(--sv-ease-out), border-color var(--sv-dur-base) var(--sv-ease-out), color var(--sv-dur-base) var(--sv-ease-out);
+}
+.sv-nav.is-solid { background: var(--sv-home-bg); color: var(--sv-black); border-color: var(--sv-gray-light); }
+.sv-nav__brand { display: flex; align-items: center; text-decoration: none; color: inherit; }
+
+/* ── Wordmark (foundations.md §2): S symbol + bold "share" + light descriptor,
+   currentColor so it follows the surface ink — black or white only ── */
+.sv-wordmark { display: inline-flex; align-items: center; gap: .5em;
+  font-size: var(--sv-wordmark-size, 1.3125rem); line-height: 1; letter-spacing: -0.01em; white-space: nowrap; }
+.sv-wordmark__symbol { height: 1.6em; width: auto; flex: none; fill: currentColor; stroke: none; }
+.sv-wordmark__share { font-weight: 700; }
+.sv-wordmark__product { font-weight: 300; }
+.sv-wordmark__tm { font-size: .4em; vertical-align: .9em; letter-spacing: 0; margin-left: .08em; }
+.sv-nav__links { display: flex; flex: 1; justify-content: space-between; align-items: center;
+  margin-left: clamp(3rem, 9vw, 9rem); }
+.sv-nav__links a { position: relative; font-size: var(--sv-text-small); font-weight: 500; line-height: 1.25; text-decoration: none; padding-bottom: 6px; }
+.sv-nav__links a::after { content: ""; position: absolute; left: 0; bottom: 0; width: 100%; height: 1px; background: currentColor;
+  transform: scaleX(0); transform-origin: left; transition: transform var(--sv-dur-fast) var(--sv-ease-out); }
+.sv-nav__links a:hover::after, .sv-nav__links a[aria-current="page"]::after { transform: scaleX(1); }
+.sv-nav__menu-btn { display: none; }
+@media (max-width: 900px) {
+  .sv-nav { height: 64px; }
+  .sv-nav__links { display: none; }
+  .sv-nav .sv-wordmark { font-size: 1.125rem; }
+  .sv-nav__menu-btn { display: inline-flex; align-items: center; gap: 10px; margin-left: auto;
+    background: none; border: 0; padding: 8px 0; color: inherit; cursor: pointer;
+    font: 500 var(--sv-text-small)/1 var(--sv-font-sans); }
+}
+
+/* ── Mobile overlay menu ───────────────────────────────────── */
+.sv-menu { position: fixed; inset: 0; z-index: var(--sv-z-overlay); background: var(--sv-black); color: var(--sv-white);
+  clip-path: inset(0 0 100% 0); visibility: hidden;
+  transition: clip-path var(--sv-dur-base) var(--sv-ease-inout), visibility 0s var(--sv-dur-base);
+  display: flex; flex-direction: column; padding: var(--sv-gutter); }
+.sv-menu.is-open { clip-path: inset(0); visibility: visible; transition-delay: 0s; }
+.sv-menu__close { align-self: flex-end; background: none; border: 0; color: inherit; cursor: pointer; padding: 12px;
+  font: 500 var(--sv-text-small)/1 var(--sv-font-sans); display: inline-flex; align-items: center; gap: 10px; }
+.sv-menu__links { display: flex; flex-direction: column; gap: var(--sv-space-6); margin: auto 0; }
+.sv-menu__links a { font-size: var(--sv-text-h1); font-weight: 500; line-height: 1.1; text-decoration: none;
+  opacity: 0; transform: translateY(24px);
+  transition: opacity var(--sv-dur-slow) var(--sv-ease-out), transform var(--sv-dur-slow) var(--sv-ease-out);
+  transition-delay: calc(100ms + var(--i, 0) * var(--sv-stagger)); }
+.sv-menu.is-open .sv-menu__links a { opacity: 1; transform: none; }
+.sv-menu__links a:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 8px; }
+
+/* ── Buttons & links ───────────────────────────────────────── */
+.sv-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+  height: 48px; padding: 0 24px; border: 1px solid transparent; border-radius: var(--sv-radius);
+  font: 500 1rem/1 var(--sv-font-sans); text-decoration: none; cursor: pointer;
+  background: var(--sv-green); color: var(--sv-black);
+  transition: background var(--sv-dur-fast) var(--sv-ease-out), color var(--sv-dur-fast) var(--sv-ease-out), border-color var(--sv-dur-fast) var(--sv-ease-out);
+}
+.sv-btn--primary:hover { background: transparent; border-color: var(--sv-green); color: var(--sv-ink); }
+.sv-btn--ink { background: var(--sv-ink); color: var(--sv-surface); }
+.sv-btn--ink:hover { background: transparent; border-color: var(--sv-ink); color: var(--sv-ink); }
+.sv-link { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; transition: text-decoration-color var(--sv-dur-fast) var(--sv-ease-out); }
+.sv-link:hover { text-decoration-color: var(--sv-green); }
+.sv-link-arrow { display: inline-flex; align-items: center; gap: 12px; font-weight: 500; text-decoration: none; }
+.sv-link-arrow svg { transition: transform var(--sv-dur-fast) var(--sv-ease-out); }
+.sv-link-arrow:hover svg { transform: translateX(6px); }
+
+/* ── Sections: editorial split ─────────────────────────────── */
+.sv-section { padding-block: var(--sv-space-32); background: var(--sv-surface); color: var(--sv-ink); }
+.sv-scene-chapter { min-height: 100vh; min-height: 100svh; }
+.sv-split { display: grid; grid-template-columns: var(--sv-rail) 1fr; gap: var(--sv-space-16); }
+@media (max-width: 900px) { .sv-split { grid-template-columns: 1fr; gap: var(--sv-space-8); } }
+.sv-label { font-size: var(--sv-text-small); font-weight: 700; line-height: 1.4; }
+.sv-rail-copy { font-size: var(--sv-text-small); color: var(--sv-ink-secondary); margin-top: var(--sv-space-3); max-width: 26ch; }
+.sv-stack > * + * { margin-top: var(--sv-space-6); }
+
+/* ── Image band (Activating Share) ─────────────────────────── */
+.sv-band { position: relative; min-height: 72vh; display: flex; align-items: center; overflow: hidden; background: var(--sv-black); }
+.sv-band > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.sv-band__scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgb(0 0 0 / .4), transparent 55%),
+                  linear-gradient(to right, rgb(0 0 0 / .35), transparent 60%); }
+.sv-band__content { position: relative; z-index: 1; width: 100%; color: var(--sv-white); }
+.sv-band .sv-hero__share { color: var(--sv-white); }
+.sv-band .sv-hero__word { color: var(--sv-gray-light); }
+
+/* ── Media tiles (photographic, overlaid titles) ───────────── */
+.sv-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--sv-space-4); }
+.sv-tile { text-decoration: none; display: block; }
+.sv-tile__media { aspect-ratio: 3/2; overflow: hidden; position: relative; background: var(--sv-gray-xdark); }
+.sv-tile__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1); transition: transform var(--sv-dur-slow) var(--sv-ease-out); }
+.sv-tile:hover .sv-tile__media img { transform: scale(1.03); }
+.sv-tile__media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgb(0 0 0 / .45), transparent 60%); }
+.sv-tile__title { position: absolute; left: var(--sv-space-6); bottom: var(--sv-space-6); z-index: 1; color: var(--sv-white); font-size: var(--sv-text-h3); font-weight: 500; line-height: 1.1; }
+.sv-tile:hover .sv-tile__title { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+.sv-tile__meta { margin-top: var(--sv-space-3); font-size: var(--sv-text-small); color: var(--sv-ink-secondary); }
+
+/* ── Photostyle figures ────────────────────────────────────── */
+.sv-photos { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sv-space-4); }
+@media (max-width: 600px) { .sv-photos { grid-template-columns: 1fr; } }
+.sv-photo { margin: 0; }
+.sv-photo img { aspect-ratio: 3/2; width: 100%; object-fit: cover; background: var(--sv-gray-xdark); }
+.sv-photo figcaption { margin-top: var(--sv-space-3); font-size: var(--sv-text-small); line-height: 1.45; }
+.sv-photo figcaption strong { font-weight: 700; }
+.sv-photo figcaption span { display: block; color: var(--sv-ink-secondary); }
+
+/* ── Stats ─────────────────────────────────────────────────── */
+.sv-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--sv-space-16); }
+.sv-stat { display: flex; align-items: flex-end; gap: var(--sv-space-4); border-top: 1px solid var(--sv-hairline); padding-top: var(--sv-space-6); }
+.sv-stat__value { font-size: var(--sv-text-stat); font-weight: 400; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.sv-stat__label { font-size: var(--sv-text-small); color: var(--sv-ink-secondary); line-height: 1.35; padding-bottom: .6em; }
+
+/* ── Forms ─────────────────────────────────────────────────── */
+.sv-field { display: block; max-width: 480px; }
+.sv-field span { display: block; font-size: var(--sv-text-small); font-weight: 500; margin-bottom: var(--sv-space-2); }
+.sv-input {
+  width: 100%; height: 48px; padding: 0 16px; border-radius: var(--sv-radius);
+  border: 1px solid var(--sv-hairline); background: var(--sv-surface-raised);
+  font: 400 1rem/1 var(--sv-font-sans); color: var(--sv-ink);
+  transition: border-color var(--sv-dur-fast) var(--sv-ease-out);
+}
+.sv-input::placeholder { color: var(--sv-gray-dark); }
+.sv-input:focus { border-color: var(--sv-ink); outline-offset: 0; }
+.sv-form-row { display: flex; max-width: 480px; }
+.sv-form-row .sv-input { border-right: 0; }
+
+/* ── Footer ────────────────────────────────────────────────── */
+.sv-footer { padding-block: var(--sv-space-24) var(--sv-space-16); /* bottom clears the fixed HUD */ position: relative; overflow: hidden; background: var(--sv-surface); }
+.sv-footer::before { content: ""; position: absolute; inset: 0; z-index: 62; background: inherit; pointer-events: none; }
+.sv-footer__super { z-index: 63; }
+.sv-footer__grid { display: grid; grid-template-columns: 1fr auto auto; gap: var(--sv-space-24); position: relative; z-index: 1; }
+@media (max-width: 900px) { .sv-footer__grid { grid-template-columns: 1fr; gap: var(--sv-space-8); } }
+.sv-footer__col { display: flex; flex-direction: column; gap: var(--sv-space-3); }
+.sv-footer__col a { font-size: var(--sv-text-small); font-weight: 500; line-height: 1.3; text-decoration: none; }
+.sv-footer__col a:hover { opacity: .6; }
+.sv-footer__legal { margin-top: var(--sv-space-16); padding-top: var(--sv-space-6); border-top: 1px solid var(--sv-hairline);
+  display: flex; justify-content: space-between; gap: var(--sv-space-6); flex-wrap: wrap;
+  font-size: var(--sv-text-caption); font-weight: 300; color: var(--sv-gray-light); position: relative; z-index: 1; }
+
+/* ── Scroll reveal (activated by <RevealObserver/>) ────────── */
+html.sv-js [data-reveal] { opacity: 0; transform: translateY(var(--sv-reveal-distance));
+  transition: opacity var(--sv-dur-slow) var(--sv-ease-out), transform var(--sv-dur-slow) var(--sv-ease-out);
+  transition-delay: calc(min(var(--i, 0), 5) * var(--sv-stagger)); }
+html.sv-js [data-reveal].is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { html.sv-js [data-reveal] { opacity: 1; transform: none; } }
+
+/* ── Persistent teaching object + HUD (rendered by <Scene/>) ─ */
+.sv-scene { position: fixed; inset: 0; z-index: 50; pointer-events: none;
+  opacity: 0; transition: opacity var(--sv-dur-cine) var(--sv-ease-out); }
+.sv-scene.is-ready { opacity: 1; }
+.sv-scene canvas { width: 100%; height: 100%; }
+.sv-hud { position: fixed; left: var(--sv-gutter); bottom: 18px; z-index: 60; pointer-events: none;
+  color: var(--sv-white); font: 300 0.75rem/1 var(--sv-font-sans);
+  letter-spacing: var(--sv-tracking-caps); text-transform: uppercase;
+  transition: color var(--sv-dur-base) var(--sv-ease-out); }
+.sv-hud.on-light { color: var(--sv-black); }
+.sv-hud__label { white-space: nowrap; }
+/* Reading content clears the scene; footer content also clears the section readout. */
+.sv-hero__content,
+.sv-section > .sv-container,
+.sv-band__content { position: relative; z-index: 55; }
+.sv-footer__grid,
+.sv-footer__legal { position: relative; z-index: 65; }
