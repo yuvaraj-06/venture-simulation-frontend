@@ -107,8 +107,8 @@ function ProgressBar({ pct, color }: { pct: number; color: string }) {
 
 export default function SimulationDashboard({ simulation, ventureId }: { simulation: VentureSimulation; ventureId?: string }) {
   const [activeStage, setActiveStage] = useState(0);
-  const [activeSidebarItem, setActiveSidebarItem] = useState('exec-summary');
-  const [activeTab, setActiveTab] = useState<'simulation' | 'intelligence'>('simulation');
+  const [activeSidebarItem, setActiveSidebarItem] = useState('intel-brand');
+  const [activeTab, setActiveTab] = useState<'simulation' | 'intelligence'>('intelligence');
   const { isUnlocked, checkoutUrl, pipelineRunning } = useVentureAccess(ventureId || simulation?.simulation_metadata?.venture_name?.toLowerCase().replace(/[^a-z0-9]+/g, '_') || '');
 
   const { simulation_metadata: meta, executive_summary: summary, signal_origin: signal,
@@ -118,10 +118,42 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
   const currentStage = stagesArr[activeStage || 0];
   const stageColor = STAGE_COLORS[currentStage?.stage_name || 'Explore'] || '#0A7D3C';
 
+  // Empty-state guards. Venture docs come from two pipeline generations with
+  // different signal_origin shapes: the legacy scored shape
+  // (signal_strength_score / threshold / signals[] / vertical / subdomain / tam)
+  // and the v2 narrative shape (source / thesis / timing). Rendering the legacy
+  // fields against a v2 doc produced "NaN / 100", "Detection Signals ()" and
+  // blank paragraphs, so every block below is gated on data that actually
+  // exists and hidden entirely when it does not.
+  const sig: any = signal || {};
+  const hasSignalScore = Number.isFinite(Number(sig.signal_strength_score));
+  const hasThreshold = Number.isFinite(Number(sig.threshold));
+  const detectionSignals: any[] = Array.isArray(sig.signals) ? sig.signals : [];
+  const marketContext: Array<[string, string, boolean]> = [
+    ['Vertical', sig.vertical || meta?.vertical, false],
+    ['Subdomain', sig.subdomain, false],
+    ['TAM', sig.tam || meta?.tam_formatted, true],
+  ].filter((r) => !!r[1]) as Array<[string, string, boolean]>;
+  // v2 narrative fields, shown only when the legacy scored view has nothing
+  const signalNarrative: Array<[string, string]> = ([
+    ['Source', sig.source],
+    ['Thesis', sig.thesis || sig.core_scientific_thesis],
+    ['Timing', sig.timing],
+    ['Context', sig.domain_context],
+  ] as Array<[string, any]>).filter(([, v]) => typeof v === 'string' && v.trim()) as Array<[string, string]>;
+  const hasSignalSection =
+    hasSignalScore || detectionSignals.length > 0 || marketContext.length > 0 || signalNarrative.length > 0;
+
+  const teamArr: any[] = Array.isArray(team) ? team : [];
+  // A member with no description and no tags is a placeholder row, not a person
+  const hasRealTeam = teamArr.some(
+    (m) => (m?.description || '').trim() || (Array.isArray(m?.expertise_tags) && m.expertise_tags.length > 0)
+  );
+
   const simulationSections = [
     { id: 'exec-summary', label: 'Executive Summary' },
-    { id: 'signal-origin', label: 'Signal Origin' },
-    { id: 'founding-team', label: 'Founding Team' },
+    ...(hasSignalSection ? [{ id: 'signal-origin', label: 'Signal Origin' }] : []),
+    ...(hasRealTeam ? [{ id: 'founding-team', label: 'Founding Team' }] : []),
     { id: 'products', label: 'Products & Services' },
     ...((stages || []) as any[]).map((s: Stage) => ({ id: `stage-${s.stage_name.toLowerCase()}`, label: `Stage: ${s.stage_name}` })),
     { id: 'analysis', label: 'Analysis' },
@@ -351,14 +383,16 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
             </div>
           </SectionHeader>
 
+          {hasSignalSection && (<>
           <hr style={{ border: 'none', borderTop: '1px solid #E8E6E4', margin: '40px 0' }} />
 
           {/* SIGNAL ORIGIN */}
           <LockedSection isLocked={!isUnlocked} checkoutUrl={checkoutUrl} ventureId={ventureId} pipelineRunning={pipelineRunning} teaserHeight={160} label="Unlock Signal Analysis">
           <SectionHeader id="signal-origin" label="Signal Origin">
             <h2 style={{ fontSize: 28, fontWeight: 700, marginBottom: 20 }}>Signal Origin</h2>
-            <div className="sim-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 32 }}>
+            <div className="sim-grid-2" style={{ display: 'grid', gridTemplateColumns: detectionSignals.length > 0 ? '1fr 1fr' : '1fr', gap: 24, marginBottom: 32 }}>
               <div>
+                {hasSignalScore && (
                 <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 24, marginBottom: 16 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                     <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Signal Strength</div>
@@ -370,56 +404,66 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
                   </div>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 12 }}>
                     <span style={{ fontSize: 48, fontWeight: 800, color: '#0A7D3C' }}>
-                      {(signal.signal_strength_score * 100).toFixed(0)}
+                      {(Number(sig.signal_strength_score) * 100).toFixed(0)}
                     </span>
                     <span style={{ color: '#939799', fontSize: 18 }}>/ 100</span>
                   </div>
-                  <ProgressBar pct={signal.signal_strength_score * 100} color="#0A7D3C" />
-                  <div style={{ color: '#939799', fontSize: 12, marginTop: 8 }}>
-                    Threshold: {(signal.threshold * 100).toFixed(0)} · {signal.action_triggered}
-                  </div>
-                </div>
-
-                <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 24 }}>
-                  <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>Market Context</div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', columnGap: 20, rowGap: 12, marginBottom: 16, alignItems: 'start' }}>
-                    <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', paddingTop: 2 }}>Vertical</div>
-                    <div style={{ color: '#000000', fontSize: 14, fontWeight: 600 }}>{signal.vertical}</div>
-                    <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', paddingTop: 2 }}>Subdomain</div>
-                    <div style={{ color: '#000000', fontSize: 14, fontWeight: 600, lineHeight: 1.5, overflowWrap: 'anywhere' }}>{signal.subdomain}</div>
-                    <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', paddingTop: 2 }}>TAM</div>
-                    <div style={{ color: '#0A7D3C', fontSize: 14, fontWeight: 700 }}>{signal.tam}</div>
-                  </div>
-                  <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.6, marginBottom: 12 }}>{signal.domain_context}</p>
-                  {signal.core_scientific_thesis && (
-                    <div style={{ borderLeft: '3px solid #0A7D3C', paddingLeft: 12 }}>
-                      <div style={{ color: '#939799', fontSize: 11, marginBottom: 4 }}>CORE THESIS</div>
-                      <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.6, margin: 0 }}>{signal.core_scientific_thesis}</p>
+                  <ProgressBar pct={Number(sig.signal_strength_score) * 100} color="#0A7D3C" />
+                  {(hasThreshold || sig.action_triggered) && (
+                    <div style={{ color: '#939799', fontSize: 12, marginTop: 8 }}>
+                      {[hasThreshold ? `Threshold: ${(Number(sig.threshold) * 100).toFixed(0)}` : null, sig.action_triggered].filter(Boolean).join(' · ')}
                     </div>
                   )}
                 </div>
+                )}
+
+                {(marketContext.length > 0 || signalNarrative.length > 0) && (
+                <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 24 }}>
+                  {marketContext.length > 0 && (<>
+                  <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>Market Context</div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', columnGap: 20, rowGap: 12, marginBottom: signalNarrative.length > 0 ? 20 : 0, alignItems: 'start' }}>
+                    {marketContext.map(([label, value, accent]) => (
+                      <React.Fragment key={label}>
+                        <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', paddingTop: 2 }}>{label}</div>
+                        <div style={{ color: accent ? '#0A7D3C' : '#000000', fontSize: 14, fontWeight: accent ? 700 : 600, lineHeight: 1.5, overflowWrap: 'anywhere' }}>{value}</div>
+                      </React.Fragment>
+                    ))}
+                  </div>
+                  </>)}
+                  {signalNarrative.map(([label, value], i) => (
+                    <div key={label} style={{ borderLeft: '3px solid #0A7D3C', paddingLeft: 12, marginTop: i === 0 ? 0 : 16 }}>
+                      <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>{label}</div>
+                      <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.6, margin: 0 }}>{value}</p>
+                    </div>
+                  ))}
+                </div>
+                )}
               </div>
 
+              {detectionSignals.length > 0 && (
               <div style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 24 }}>
                 <div style={{ color: '#939799', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>
-                  Detection Signals ({signal.signals?.length})
+                  Detection Signals ({detectionSignals.length})
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  {signal.signals?.map((s, i) => (
+                  {detectionSignals.map((s: any, i: number) => (
                     <div key={i} style={{
                       background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 6,
                       padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center'
                     }}>
                       <span style={{ color: '#5E6366', fontSize: 13 }}>{s.signal}</span>
-                      <span style={{ color: '#0A7D3C', fontSize: 12, fontWeight: 700, whiteSpace: 'nowrap', marginLeft: 12 }}>{s.strength}</span>
+                      {s.strength && <span style={{ color: '#0A7D3C', fontSize: 12, fontWeight: 700, whiteSpace: 'nowrap', marginLeft: 12 }}>{s.strength}</span>}
                     </div>
                   ))}
                 </div>
               </div>
+              )}
             </div>
           </SectionHeader>
           </LockedSection>
+          </>)}
 
+          {hasRealTeam && (<>
           <hr style={{ border: 'none', borderTop: '1px solid #E8E6E4', margin: '40px 0' }} />
 
           {/* FOUNDING TEAM */}
@@ -427,29 +471,33 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
           <SectionHeader id="founding-team" label="Founding Team">
             <h2 style={{ fontSize: 28, fontWeight: 700, marginBottom: 20 }}>Founding Team</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
-              {team?.map((member, i) => (
+              {teamArr.map((member, i) => (
                 <div key={i} style={{ background: '#FFFFFF', border: '1px solid #E8E6E4', borderRadius: 8, padding: 24 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: (member.description || '').trim() ? 12 : 0 }}>
                     <div style={{
                       width: 44, height: 44, borderRadius: '50%',
                       background: `linear-gradient(135deg, ${['#0A7D3C', '#00D65D', '#0A7D3C', '#8A6D3B'][i % 4]}, #F1F4F5)`,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       fontSize: 16, fontWeight: 700, color: '#000000', flexShrink: 0
-                    }}>{member.name[0]}</div>
+                    }}>{(member.name || '?')[0]}</div>
                     <div>
                       <div style={{ color: '#000000', fontSize: 15, fontWeight: 700 }}>{member.name}</div>
                       <div style={{ color: '#939799', fontSize: 12 }}>{member.role}</div>
                     </div>
                   </div>
-                  <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.6, marginBottom: 12 }}>{member.description}</p>
+                  {(member.description || '').trim() && (
+                    <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.6, marginBottom: 12 }}>{member.description}</p>
+                  )}
+                  {member.expertise_tags?.length > 0 && (
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                    {member.expertise_tags?.map((tag, j) => (
+                    {member.expertise_tags.map((tag: string, j: number) => (
                       <span key={j} style={{
                         background: '#FFFFFF', border: '1px solid #E8E6E4',
                         color: '#5E6366', padding: '2px 8px', borderRadius: 3, fontSize: 11
                       }}>{tag}</span>
                     ))}
                   </div>
+                  )}
                   {member.hourly_rate && (
                     <div style={{ marginTop: 12, color: '#939799', fontSize: 12 }}>
                       ${member.hourly_rate}/hr
@@ -460,6 +508,7 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
             </div>
           </SectionHeader>
           </LockedSection>
+          </>)}
 
           <hr style={{ border: 'none', borderTop: '1px solid #E8E6E4', margin: '40px 0' }} />
 
@@ -474,7 +523,9 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
                       <div>
                         <div style={{ color: '#000000', fontSize: 18, fontWeight: 700 }}>{p.name}</div>
-                        <div style={{ color: '#939799', fontSize: 12 }}>{p.category}</div>
+                        {(p.category || (p as any).stage) && (
+                          <div style={{ color: '#939799', fontSize: 12 }}>{p.category || (p as any).stage}</div>
+                        )}
                       </div>
                       {p.evidence_score && (
                         <span style={{
@@ -484,7 +535,16 @@ export default function SimulationDashboard({ simulation, ventureId }: { simulat
                         }}>{p.evidence_score}</span>
                       )}
                     </div>
-                    <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.5, marginBottom: 10 }}>{p.outcome}</p>
+                    {/* v2 docs carry `description`; legacy docs carry `outcome` */}
+                    {(p.outcome || (p as any).description) && (
+                      <p style={{ color: '#5E6366', fontSize: 13, lineHeight: 1.5, marginBottom: 10 }}>{p.outcome || (p as any).description}</p>
+                    )}
+                    {(p as any).target_user && (
+                      <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', columnGap: 12, marginBottom: 10 }}>
+                        <div style={{ color: '#939799', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', paddingTop: 2 }}>Target</div>
+                        <div style={{ color: '#5E6366', fontSize: 12, lineHeight: 1.5 }}>{(p as any).target_user}</div>
+                      </div>
+                    )}
                     {p.mechanism && <p style={{ color: '#939799', fontSize: 12, lineHeight: 1.5, marginBottom: 10 }}>{p.mechanism}</p>}
                     {p.key_differentiator && (
                       <div style={{ borderLeft: '3px solid #0A7D3C', paddingLeft: 10 }}>
