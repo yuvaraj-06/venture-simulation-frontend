@@ -19,11 +19,17 @@ interface LockedSectionProps {
 }
 
 /**
- * Wraps a section with a glassmorphism paywall overlay.
- * Shows `teaserHeight` px of content clearly, then fades into blur + lock button.
- * If no checkoutUrl exists, clicking Unlock creates one on-demand via POST.
+ * Paywall DISABLED (2026-09-17, Yuvaraj): renders children unconditionally.
+ * Every gated block across SimulationDashboard and IntelligenceDashboard flows
+ * through here, so this one passthrough removes all blur overlays and Unlock
+ * buttons without touching the 20+ call sites or the Stripe/venture-status API.
+ * To re-enable the paywall, restore the isLocked early-return below.
  */
-export default function LockedSection({
+export default function LockedSection({ children }: LockedSectionProps) {
+  return <>{children}</>;
+}
+
+export function LockedSectionPaywalled({
   isLocked,
   checkoutUrl,
   children,
